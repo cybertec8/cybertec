@@ -1073,11 +1073,10 @@ def api_scoreboard():
 #     db.session.commit()
 #     return "You are now admin. Logout and login again."
 
-# ---------------- RUN ----------------
+# ---------------- DATABASE INIT ----------------
+with app.app_context():
+    db.create_all()
 
-if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-
+# ---------------- RUN LOCAL ----------------
 if __name__ == "__main__":
     app.run(debug=True)
