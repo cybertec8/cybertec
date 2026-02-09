@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+
+{% block title %}About Us – Cybertec8{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Hero Section */
+    .hero-section {
+        padding: 80px 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-img-box {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--border-primary);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-img-box::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(2, 6, 23, 0.4), transparent);
+        z-index: 1;
+    }
+
+    .hero-title span {
+        color: var(--accent-green);
+    }
+
+    .check-list li {
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        color: var(--text-secondary);
+        font-size: 15px;
+    }
+
+    .check-list i {
+        color: var(--accent-green);
+        font-size: 20px;
+        margin-right: 12px;
+        flex-shrink: 0;
+    }
+
+    /* Feature Grid */
+    .feature-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-primary);
+        padding: 30px;
+        border-radius: 12px;
+        transition: transform 0.3s ease, border-color 0.3s ease;
+        height: 100%;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--accent-green);
+    }
+
+    .feature-icon {
+        width: 48px;
+        height: 48px;
+        background: rgba(34, 197, 94, 0.1);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .feature-icon i {
+        font-size: 24px;
+        color: var(--accent-green);
+    }
+
+    /* Impact Section */
+    .impact-item {
+        text-align: center;
+        padding: 20px;
+    }
+
+    .impact-icon {
+        font-size: 32px;
+        color: var(--accent-green);
+        margin-bottom: 16px;
+        display: inline-block;
+    }
+
+    /* Typography Overrides */
+    h2 {
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+
+    p {
+        line-height: 1.7;
+        color: var(--text-secondary);
+    }
+
+    /* Override font globally for this page */
+    body,
+    * {
+        font-family: 'JetBrains Mono', monospace !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- HERO SECTION -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center gy-5">
+            <!-- Left: Image -->
+            <div class="col-lg-6">
+                <div class="hero-img-box">
+                    <img src="{{ url_for('static', filename='img/hacker.png') }}" alt="Cybertec8 Platform"
+                        class="img-fluid w-100">
+                </div>
+            </div>
+
+            <!-- Right: Content -->
+            <div class="col-lg-6 ps-lg-5">
+                <h1 class="display-5 fw-bold mb-4 hero-title">
+                    The Global <span>Arena</span> for Cyber Talent
+                </h1>
+                <p class="mb-4">
+                    At Cybertec8, we believe the best way to learn security is by doing.
+                    We are a dedicated platform bridging the gap between theoretical knowledge
+                    and real-world hacking skills.
+                </p>
+                <p class="mb-4">
+                    Our mission is to cultivate a global community of skilled cyber professionals
+                    through practical, competitive, and accessible challenge-based learning formats.
+                </p>
+
+                <ul class="list-unstyled check-list">
+                    <li><i class='bx bxs-check-circle'></i> Performance-based skill assessment</li>
+                    <li><i class='bx bxs-check-circle'></i> Realistic Attack/Defense simulation environments</li>
+                    <li><i class='bx bxs-check-circle'></i> Global network of community and academic partners</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DIFFERENTIATORS SECTION -->
+<section class="py-5" style="background: var(--bg-primary);">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="mb-3">What Makes Cybertec8 <span>Different?</span></h2>
+            <p class="mx-auto" style="max-width: 600px;">
+                We offer a robust, integrated set of solutions that go far beyond standard online training.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Card 1 -->
+            <div class="col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class='bx bx-crosshair'></i></div>
+                    <h4 class="fw-bold mb-3 text-white">Performance-Based Assessment</h4>
+                    <p class="mb-0 fs-6">
+                        We provide sophisticated tools allowing companies to assess technical
+                        proficiency in real-time. Forget the resume filter; our partners
+                        hire based on demonstrable, hands-on ability.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class='bx bx-desktop'></i></div>
+                    <h4 class="fw-bold mb-3 text-white">Realistic Simulation Environments</h4>
+                    <p class="mb-0 fs-6">
+                        Our Attack/Defense Simulations replicate complex, live networks.
+                        This provides users with the critical experience of managing,
+                        exploiting, and defending systems under pressure.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class='bx bx-group'></i></div>
+                    <h4 class="fw-bold mb-3 text-white">The Power of Community</h4>
+                    <p class="mb-0 fs-6">
+                        We actively partner with clubs, universities, and hacker collectives.
+                        This ensures Cybertec8 remains connected to the grassroots of cybersecurity,
+                        offering mentorship and real opportunities.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class='bx bx-layer'></i></div>
+                    <h4 class="fw-bold mb-3 text-white">Versatile Solutions</h4>
+                    <p class="mb-0 fs-6">
+                        Whether you need Learning Mission Labs for structured training or a
+                        custom-developed CTF Challenge, our tools are scalable and built for versatility.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- IMPACT SECTION -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="mb-3">Our Impact: Cultivating Next Gen Talent</h2>
+            <p style="max-width: 600px;" class="mx-auto">
+                Cybertec8 has rapidly grown into a vital resource for the global cybersecurity scene.
+            </p>
+        </div>
+
+        <div class="row g-5 text-center">
+            <div class="col-md-4 impact-item">
+                <div class="impact-icon"><i class='bx bx-briefcase-alt-2'></i></div>
+                <h5 class="fw-bold text-white mb-3">Talent Vetting</h5>
+                <p class="fs-6">
+                    Facilitating the hiring of skilled candidates for leading tech companies
+                    through merit-based, challenge-driven recruitment drives.
+                </p>
+            </div>
+
+            <div class="col-md-4 impact-item">
+                <div class="impact-icon"><i class='bx bx-chip'></i></div>
+                <h5 class="fw-bold text-white mb-3">Skill Development</h5>
+                <p class="fs-6">
+                    Hosting regular public CTFs and providing private training environments
+                    to help thousands of users level up their skills.
+                </p>
+            </div>
+
+            <div class="col-md-4 impact-item">
+                <div class="impact-icon"><i class='bx bx-world'></i></div>
+                <h5 class="fw-bold text-white mb-3">Community Growth</h5>
+                <p class="fs-6">
+                    Collaborating with over 50 academic and community partners to co-host events
+                    and distribute exclusive learning content.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

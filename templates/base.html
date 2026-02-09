@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}CYBERTEC8 | Capture The Flag Platform{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CyberTec8 - The ultimate CTF platform for cybersecurity enthusiasts.">
+
+    <!-- Global Theme System -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-system.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cyber-theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/features-ladder.css') }}">
+
+    <!-- Bootstrap & Fonts -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+    <!-- Theme Manager (must be in head to prevent FOUC) -->
+    <script src="{{ url_for('static', filename='js/theme-manager.js') }}"></script>
+
+    <style>
+        /* Global Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            overflow-x: hidden;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding-top: 68px;
+            /* Space for fixed navbar */
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            padding: 8px 60px;
+            background: var(--overlay);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-primary);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: auto;
+        }
+
+        .navbar-brand img {
+            height: 55px;
+            width: auto;
+        }
+
+        .nav-link {
+            color: var(--text-secondary) !important;
+            margin: 0 14px;
+            font-weight: 500;
+            font-size: 14px;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--accent-green) !important;
+        }
+
+        /* Active indicator for nav links */
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent-green);
+            border-radius: 2px;
+        }
+
+        .btn-join {
+            background: var(--accent-green);
+            color: #fff !important;
+            /* Ensure readable on light/dark */
+            font-weight: 600;
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.2s;
+            margin-left: 12px;
+            border: none;
+        }
+
+        .btn-join:hover {
+            background: var(--accent-green-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-primary);
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 0;
+            position: relative;
+        }
+
+        .theme-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent-green);
+            transform: translateY(-1px);
+        }
+
+        .theme-toggle-btn svg {
+            width: 18px;
+            height: 18px;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            position: absolute;
+        }
+
+        .theme-toggle-btn:hover svg {
+            color: var(--accent-green);
+        }
+
+        .theme-icon-moon {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
+        }
+
+        .theme-icon-sun {
+            opacity: 0;
+            transform: rotate(180deg) scale(0);
+        }
+
+        [data-theme="light"] .theme-icon-moon {
+            opacity: 0;
+            transform: rotate(-180deg) scale(0);
+        }
+
+        [data-theme="light"] .theme-icon-sun {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
+        }
+
+        /* Maintenance Banner */
+        .maintenance-banner {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            color: #fff;
+            text-align: center;
+            padding: 8px 12px;
+            font-weight: 600;
+            font-size: 13px;
+            position: fixed;
+            top: 68px;
+            /* Below navbar */
+            left: 0;
+            right: 0;
+            z-index: 999;
+        }
+
+        /* Page Layout */
+        .page-content {
+            min-height: 80vh;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .navbar {
+                padding: 10px 20px;
+            }
+        }
+
+        /* Ensure navbar interaction */
+        .navbar,
+        .navbar-nav,
+        .nav-item,
+        .nav-link {
+            pointer-events: auto;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- Fixed Navbar -->
+    {% include "includes/navbar.html" %}
+
+    <!-- Main Content -->
+    <main class="page-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Footer Script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Ensure navbar active state on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const path = window.location.pathname;
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('href') === path) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Custom Cursor Logic
+            const cursor = document.querySelector('.custom-cursor');
+            let mouseX = 0;
+            let mouseY = 0;
+            let cursorX = 0;
+            let cursorY = 0;
+            const speed = 0.15; // Smoothness factor (0.1 - 0.2 is usually good)
+
+            // Device detection for mobile/touch
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+            if (isTouchDevice) {
+                cursor.style.display = 'none';
+            } else {
+                document.addEventListener('mousemove', (e) => {
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+
+                    // Show cursor on first movement
+                    if (cursor.style.opacity === '0' || !cursor.style.opacity) {
+                        cursor.style.opacity = '1';
+                    }
+                });
+
+                // Smooth movement using requestAnimationFrame
+                function animate() {
+                    let distX = mouseX - cursorX;
+                    let distY = mouseY - cursorY;
+
+                    cursorX = cursorX + (distX * speed);
+                    cursorY = cursorY + (distY * speed);
+
+                    cursor.style.left = cursorX + 'px';
+                    cursor.style.top = cursorY + 'px';
+
+                    requestAnimationFrame(animate);
+                }
+                animate();
+
+                // Hide cursor when leaving window
+                document.addEventListener('mouseleave', () => {
+                    cursor.style.opacity = '0';
+                });
+
+                document.addEventListener('mouseenter', () => {
+                    cursor.style.opacity = '1';
+                });
+
+                // Hover effect for interactive elements
+                document.addEventListener('mouseover', (e) => {
+                    if (e.target.closest('a, button, .btn-cyber, .nav-link, input, select, textarea')) {
+                        cursor.classList.add('hovering');
+                    }
+                });
+
+                document.addEventListener('mouseout', (e) => {
+                    if (e.target.closest('a, button, .btn-cyber, .nav-link, input, select, textarea')) {
+                        cursor.classList.remove('hovering');
+                    }
+                });
+            }
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Verify OTP | CYBERTEC8{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background: radial-gradient(circle at top, #0f172a, #020617) !important;
+        min-height: 100vh;
+    }
+    .verify-container {
+         min-height: calc(100vh - 74px);
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         padding: 20px;
+    }
+    .verify-card {
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(14px);
+        border: 1px solid rgba(255,255,255,0.12);
+        box-shadow: 0 0 45px rgba(34,197,94,0.35);
+        padding: 30px;
+        border-radius: 18px;
+        width: 100%;
+        max-width: 400px;
+    }
+    .form-control {
+        background: rgba(2,6,23,0.75);
+        border: 1px solid #1e293b;
+        color: #fff;
+    }
+    .form-control:focus {
+        background: rgba(2,6,23,0.75);
+        color: #fff;
+        border-color: #22c55e;
+        box-shadow: 0 0 0 0.25rem rgba(34, 197, 94, 0.25);
+    }
+    .btn-verify {
+        background: #22c55e;
+        color: #020617;
+        font-weight: bold;
+        border: none;
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        margin-top: 20px;
+        transition: all 0.2s;
+    }
+    .btn-verify:hover {
+        background: #16a34a;
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="verify-container">
+    <div class="verify-card text-center">
+        <h2 class="mb-4" style="color: #22c55e;">Verify OTP</h2>
+        <p class="text-secondary mb-4">Please enter the One-Time Password sent to your registered method.</p>
+        
+        <form method="POST">
+            <div class="mb-3">
+                <input type="text" 
+                       name="otp" 
+                       class="form-control form-control-lg text-center fw-bold letter-spacing" 
+                       placeholder="Enter OTP" 
+                       required
+                       style="font-family: 'JetBrains Mono', monospace; letter-spacing: 4px;">
+            </div>
+            <button type="submit" class="btn btn-verify">Verify</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

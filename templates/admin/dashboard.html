@@ -1,0 +1,49 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Admin Dashboard - Cybertec8{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+  <h1 class="page-title">Admin Command Center</h1>
+  <p class="page-subtitle">Quick overview and management of the CTF platform.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 40px;">
+
+  <div class="cyber-card"
+    style="display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; transition: transform 0.2s;"
+    onclick="window.location.href='/admin/events'">
+    <i class='bx bx-calendar-event' style="font-size: 3rem; color: var(--admin-accent); margin-bottom: 15px;"></i>
+    <h3 style="margin: 0;">Events</h3>
+    <p style="font-size: 0.85rem; color: #94a3b8;">Manage tournament schedules</p>
+  </div>
+
+  <div class="cyber-card"
+    style="display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; transition: transform 0.2s;"
+    onclick="window.location.href='/admin/add-task'">
+    <i class='bx bx-task' style="font-size: 3rem; color: #4ade80; margin-bottom: 15px;"></i>
+    <h3 style="margin: 0;">CTF Tasks</h3>
+    <p style="font-size: 0.85rem; color: #94a3b8;">Add and edit challenges</p>
+  </div>
+
+  <div class="cyber-card"
+    style="display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; transition: transform 0.2s;"
+    onclick="window.location.href='/admin/manage-teams'">
+    <i class='bx bx-group' style="font-size: 3rem; color: #fbbf24; margin-bottom: 15px;"></i>
+    <h3 style="margin: 0;">Teams</h3>
+    <p style="font-size: 0.85rem; color: #94a3b8;">Monitor user teams</p>
+  </div>
+
+</div>
+
+<div class="cyber-card">
+  <h3 style="margin-top: 0; display: flex; align-items: center; gap: 10px;">
+    <i class='bx bx-info-circle'></i> Admin Status
+  </h3>
+  <p style="font-size: 0.95rem; line-height: 1.6; color: #cbd5e1;">
+    You are currently logged in with full administrative privileges. Use the tabs above to navigate through the
+    management modules.
+    Any changes made here will impact the live platform immediately.
+  </p>
+</div>
+{% endblock %}

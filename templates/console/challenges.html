@@ -1,0 +1,765 @@
+{% extends "console/base.html" %}
+
+{% block page_title %}Challenges{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ========================================
+       MINIMAL DARK THEME - PROFESSIONAL CTF
+       ======================================== */
+
+    body {
+        background: #0b1220;
+    }
+
+    .content {
+        position: relative;
+    }
+
+    /* ========================================
+       CATEGORY TABS - CLEAN MINIMAL
+       ======================================== */
+
+    .category-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        scrollbar-width: thin;
+        scrollbar-color: #1f2933 transparent;
+    }
+
+    .category-tabs::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .category-tabs::-webkit-scrollbar-thumb {
+        background: #1f2933;
+        border-radius: 4px;
+    }
+
+    .cat-tab {
+        background: #111827;
+        border: 1px solid #1f2933;
+        color: #9ca3af;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+
+    .cat-tab:hover {
+        background: #1f2937;
+        color: #d1d5db;
+    }
+
+    .cat-tab.active {
+        background: #16a34a;
+        color: #fff;
+        border-color: #16a34a;
+    }
+
+    /* ========================================
+       CHALLENGE CARDS - CLEAN & MINIMAL
+       ======================================== */
+
+    .challenges-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 20px;
+        margin-top: 25px;
+    }
+
+    .challenge-card {
+        background: #111827;
+        border: 1px solid #1f2933;
+        border-radius: 8px;
+        padding: 20px;
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .challenge-card:hover {
+        background: #1a1f2e;
+        transform: translateY(-2px);
+    }
+
+    /* Solved Challenge Styling */
+    .challenge-card.completed {
+        border-color: #16a34a;
+    }
+
+    .challenge-card.completed::after {
+        content: "✓ SOLVED";
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: #16a34a;
+        color: #fff;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 4px;
+        letter-spacing: 0.5px;
+    }
+
+    /* ========================================
+       BADGES - MINIMAL STYLE
+       ======================================== */
+
+    .cat-badge {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 4px 10px;
+        border-radius: 4px;
+        background: #1f2937;
+        color: #9ca3af;
+        border: 1px solid #374151;
+    }
+
+    /* Difficulty Badge Colors - Subtle */
+    .badge-easy {
+        background: rgba(22, 163, 74, 0.1);
+        color: #4ade80;
+        border-color: rgba(22, 163, 74, 0.3);
+    }
+
+    .badge-medium {
+        background: rgba(251, 191, 36, 0.1);
+        color: #fbbf24;
+        border-color: rgba(251, 191, 36, 0.3);
+    }
+
+    .badge-hard {
+        background: rgba(239, 68, 68, 0.1);
+        color: #f87171;
+        border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .badge-insane {
+        background: rgba(168, 85, 247, 0.1);
+        color: #c084fc;
+        border-color: rgba(168, 85, 247, 0.3);
+    }
+
+    .challenge-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #f9fafb;
+        margin-bottom: 10px;
+        line-height: 1.4;
+    }
+
+    .challenge-meta {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-size: 13px;
+        color: #9ca3af;
+        margin-bottom: 16px;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .meta-item i {
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+    /* ========================================
+       BUTTONS - SOLID & CLEAN
+       ======================================== */
+
+    .btn-start {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px;
+        border-radius: 6px;
+        background: #1f2937;
+        border: 1px solid #374151;
+        color: #d1d5db;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .btn-start:hover {
+        background: #374151;
+        color: #f9fafb;
+    }
+
+    .btn-start.completed {
+        background: #16a34a;
+        border-color: #16a34a;
+        color: #fff;
+    }
+
+    .btn-start.completed:hover {
+        background: #15803d;
+    }
+
+    /* ========================================
+       MODAL - FLAT & PROFESSIONAL
+       ======================================== */
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(11, 18, 32, 0.9);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .modal-overlay.show {
+        display: flex;
+        opacity: 1;
+    }
+
+    .modal-content {
+        background: #111827;
+        border: 1px solid #1f2933;
+        width: 90%;
+        max-width: 650px;
+        border-radius: 8px;
+        padding: 30px;
+        position: relative;
+        transform: translateY(20px);
+        transition: transform 0.2s ease;
+    }
+
+    .modal-overlay.show .modal-content {
+        transform: translateY(0);
+    }
+
+    .modal-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        color: #9ca3af;
+        font-size: 24px;
+        cursor: pointer;
+        transition: color 0.2s;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+    }
+
+    .modal-close:hover {
+        color: #f9fafb;
+        background: #1f2937;
+    }
+
+    .modal-header {
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #1f2933;
+    }
+
+    .modal-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #f9fafb;
+        margin-bottom: 12px;
+    }
+
+    .modal-badges {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .modal-body {
+        color: #d1d5db;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+
+    .modal-stats {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+        padding: 14px;
+        background: #0b1220;
+        border-radius: 6px;
+        font-size: 13px;
+        border: 1px solid #1f2933;
+    }
+
+    .hint-container {
+        margin-bottom: 20px;
+    }
+
+    .btn-hint {
+        background: #1f2937;
+        border: 1px solid #374151;
+        color: #9ca3af;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 13px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+        font-weight: 600;
+    }
+
+    .btn-hint:hover {
+        background: #374151;
+        color: #d1d5db;
+    }
+
+    .hint-text {
+        display: none;
+        margin-top: 12px;
+        padding: 14px;
+        background: rgba(99, 102, 241, 0.1);
+        border-left: 3px solid #6366f1;
+        border-radius: 4px;
+        font-size: 13px;
+        color: #d1d5db;
+    }
+
+    .flag-section {
+        border-top: 1px solid #1f2933;
+        padding-top: 20px;
+    }
+
+    .flag-group {
+        display: flex;
+        gap: 12px;
+    }
+
+    .flag-input {
+        flex: 1;
+        background: #0b1220;
+        border: 1px solid #1f2933;
+        color: #d1d5db;
+        padding: 12px 16px;
+        border-radius: 6px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 14px;
+        transition: all 0.2s;
+    }
+
+    .flag-input:focus {
+        border-color: #16a34a;
+        outline: none;
+        background: #111827;
+    }
+
+    .flag-input::placeholder {
+        color: #6b7280;
+    }
+
+    /* ========================================
+       SUBMIT BUTTON - SOLID GREEN
+       ======================================== */
+
+    .btn-submit-flag {
+        background: #16a34a;
+        color: #fff;
+        font-weight: 700;
+        padding: 12px 28px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 13px;
+    }
+
+    .btn-submit-flag:hover {
+        background: #15803d;
+    }
+
+    .btn-submit-flag:active {
+        transform: scale(0.98);
+    }
+
+    .feedback-msg {
+        margin-top: 14px;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+        padding: 10px;
+        border-radius: 6px;
+    }
+
+    /* ========================================
+       RESPONSIVE DESIGN
+       ======================================== */
+
+    @media (max-width: 768px) {
+        .challenges-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .modal-content {
+            width: 95%;
+            padding: 24px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+        }
+
+        .flag-group {
+            flex-direction: column;
+        }
+
+        .btn-submit-flag {
+            width: 100%;
+        }
+
+        .category-tabs {
+            gap: 8px;
+        }
+
+        .cat-tab {
+            padding: 7px 14px;
+            font-size: 12px;
+        }
+    }
+
+    /* ========================================
+       CARD IMAGE STYLING
+       ======================================== */
+
+    .card-image {
+        margin: -20px -20px 15px -20px;
+        height: 140px;
+        overflow: hidden;
+        position: relative;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .card-image::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to bottom, transparent 50%, rgba(17, 24, 39, 0.9));
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-lg">
+    <div>
+        <h1 class="text-xl font-bold text-primary mb-1">Challenges</h1>
+        <p class="text-sm text-secondary">Select a category to view and solve specific challenges.</p>
+    </div>
+</div>
+
+<!-- CATEGORY TABS -->
+<div class="category-tabs">
+    <div class="cat-tab active" data-category="all">All</div>
+    <div class="cat-tab" data-category="Web">Web</div>
+    <div class="cat-tab" data-category="Crypto">Crypto</div>
+    <div class="cat-tab" data-category="Forensics">Forensics</div>
+    <div class="cat-tab" data-category="Reverse">Reverse</div>
+    <div class="cat-tab" data-category="Binary">Binary</div>
+    <div class="cat-tab" data-category="OSINT">OSINT</div>
+    <div class="cat-tab" data-category="Mobile">Mobile</div>
+    <div class="cat-tab" data-category="Misc">Misc</div>
+</div>
+
+{% if not tasks %}
+<div class="empty-state text-center py-5">
+    <div style="font-size: 48px; color: var(--text-muted); margin-bottom: 16px;">
+        <i class='bx bx-ghost'></i>
+    </div>
+    <h3 class="text-lg font-bold text-secondary">No challenges found</h3>
+    <p class="text-sm text-muted">Check back later or join an event.</p>
+</div>
+{% else %}
+
+<div class="challenges-grid" id="challenges-grid">
+    {% for task in tasks %}
+    <div class="challenge-card {% if task.is_completed %}completed{% endif %}" data-category="{{ task.category }}">
+
+        {% if task.preview_image %}
+        <div class="card-image">
+            <img src="{{ url_for('static', filename=task.preview_image) }}" alt="Preview">
+        </div>
+        {% endif %}
+
+        <div style="display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+            <span class="cat-badge">{{ task.category }}</span>
+            <span class="cat-badge badge-{{ task.level|lower }}">{{ task.level }}</span>
+        </div>
+
+        <h3 class="challenge-title">{{ task.title }}</h3>
+
+        <div class="challenge-meta">
+            <div class="meta-item">
+                <i class='bx bx-target-lock'></i>
+                <span>{{ task.points }} pts</span>
+            </div>
+            <div class="meta-item">
+                <i class='bx bx-user-check'></i>
+                <span>{{ task.solved_count }} solves</span>
+            </div>
+        </div>
+
+        <button onclick="openChallenge('{{ task.id }}')"
+            class="btn-start {% if task.is_completed %}completed{% endif %}">
+            {% if task.is_completed %}
+            <i class='bx bx-check'></i> Solved
+            {% else %}
+            <i class='bx bx-play'></i> Start Challenge
+            {% endif %}
+        </button>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- CHALLENGE MODAL -->
+<div class="modal-overlay" id="challenge-modal">
+    <div class="modal-content">
+        <i class='bx bx-x modal-close' onclick="closeModal()"></i>
+
+        <div class="modal-header">
+            <h2 class="modal-title" id="modal-title">...</h2>
+            <div class="modal-badges">
+                <span class="cat-badge" id="modal-category">...</span>
+                <span class="cat-badge" id="modal-level">...</span>
+                <span class="cat-badge" id="modal-points"
+                    style="background: rgba(22, 163, 74, 0.1); color: #4ade80; border-color: rgba(22, 163, 74, 0.3);">...
+                    pts</span>
+            </div>
+        </div>
+
+        <!-- Modal Preview Image -->
+        <div id="modal-image-container"
+            style="display: none; margin-bottom: 20px; border-radius: 8px; overflow: hidden; border: 1px solid #1f2933;">
+            <img id="modal-image" src="" alt="Challenge Preview"
+                style="width: 100%; max-height: 250px; object-fit: cover;">
+        </div>
+
+        <div class="modal-stats">
+            <div class="meta-item"><i class='bx bx-user-check'></i> <span id="modal-solves">0</span> solves</div>
+            <div class="meta-item"><i class='bx bx-send'></i> <span id="modal-subs">0</span> attempts</div>
+        </div>
+
+        <div class="modal-body" id="modal-description">
+            ...
+        </div>
+
+        <!-- File Download Section -->
+        <div id="file-download-container" style="display: none; margin-bottom: 20px;">
+            <a id="file-download-link" href="#" target="_blank" class="btn-start"
+                style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-color: rgba(59, 130, 246, 0.3);">
+                <i class='bx bx-download'></i> Download Challenge Files
+            </a>
+        </div>
+
+        <div class="hint-container" id="hint-container">
+            <button class="btn-hint" onclick="revealHint()">
+                <i class='bx bx-bulb'></i> 💡 Reveal Hint
+            </button>
+            <div class="hint-text" id="hint-text">...</div>
+        </div>
+
+        <div class="flag-section">
+            <form id="flag-form" onsubmit="submitFlag(event)">
+                <input type="hidden" id="modal-task-id">
+                <div class="flag-group">
+                    <input type="text" id="flag-input" class="flag-input" placeholder="CTF{flag_goes_here}"
+                        autocomplete="off" required>
+                    <button type="submit" class="btn-submit-flag" id="btn-submit-flag">SUBMIT</button>
+                </div>
+                <div class="feedback-msg" id="feedback-msg"></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentTaskId = null;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Tab Filtering Logic
+        const tabs = document.querySelectorAll('.cat-tab');
+        const cards = document.querySelectorAll('.challenge-card');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const category = tab.getAttribute('data-category');
+                cards.forEach(card => {
+                    if (category === 'all' || card.getAttribute('data-category') === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Close modal on overlay click
+        const modal = document.getElementById('challenge-modal');
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+    });
+
+    async function openChallenge(taskId) {
+        currentTaskId = taskId;
+        const modal = document.getElementById('challenge-modal');
+        const feedback = document.getElementById('feedback-msg');
+        const hintText = document.getElementById('hint-text');
+
+        // Reset UI
+        feedback.innerText = '';
+        hintText.style.display = 'none';
+        document.getElementById('flag-input').value = '';
+        document.getElementById('flag-input').removeAttribute('disabled');
+        document.getElementById('btn-submit-flag').removeAttribute('disabled');
+
+        // Hide dynamic sections initially
+        document.getElementById('modal-image-container').style.display = 'none';
+        document.getElementById('file-download-container').style.display = 'none';
+
+        try {
+            const res = await fetch(`/api/task/${taskId}`);
+            const data = await res.json();
+
+            document.getElementById('modal-task-id').value = data.id;
+            document.getElementById('modal-title').innerText = data.title;
+            document.getElementById('modal-category').innerText = data.category;
+            document.getElementById('modal-level').innerText = data.level;
+            document.getElementById('modal-points').innerText = `${data.points} pts`;
+            document.getElementById('modal-solves').innerText = data.solved_count;
+            document.getElementById('modal-subs').innerText = data.submissions_count;
+            document.getElementById('modal-description').innerText = data.description;
+
+            // Show Preview Image
+            if (data.preview_image) {
+                document.getElementById('modal-image').src = "/static/" + data.preview_image;
+                document.getElementById('modal-image-container').style.display = 'block';
+            }
+
+            // Show File Download
+            if (data.challenge_file) {
+                const fileLink = document.getElementById('file-download-link');
+                const firstFile = data.challenge_file.split(',')[0];
+                fileLink.href = "/static/" + firstFile;
+                document.getElementById('file-download-container').style.display = 'block';
+            }
+
+            if (data.hint) {
+                document.getElementById('hint-container').style.display = 'block';
+                document.getElementById('hint-text').innerText = data.hint;
+            } else {
+                document.getElementById('hint-container').style.display = 'none';
+            }
+
+            if (data.already_solved) {
+                document.getElementById('flag-input').setAttribute('disabled', true);
+                document.getElementById('btn-submit-flag').setAttribute('disabled', true);
+                feedback.innerHTML = '<span style="color: #4ade80;">✅ You have already solved this challenge.</span>';
+            }
+
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        } catch (err) {
+            console.error(err);
+            alert('Error loading challenge data.');
+        }
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('challenge-modal');
+        modal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+    }
+
+    function revealHint() {
+        document.getElementById('hint-text').style.display = 'block';
+    }
+
+    async function submitFlag(e) {
+        e.preventDefault();
+        const taskId = document.getElementById('modal-task-id').value;
+        const flag = document.getElementById('flag-input').value;
+        const feedback = document.getElementById('feedback-msg');
+        const btn = document.getElementById('btn-submit-flag');
+
+        feedback.innerText = 'Submitting...';
+        feedback.style.color = '#9ca3af';
+
+        try {
+            const res = await fetch('/api/task/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ task_id: taskId, flag: flag })
+            });
+            const result = await res.json();
+
+            feedback.innerText = result.message;
+            if (result.success) {
+                feedback.style.color = '#4ade80';
+                document.getElementById('flag-input').setAttribute('disabled', true);
+                btn.setAttribute('disabled', true);
+
+                setTimeout(() => {
+                    location.reload();
+                }, 1500);
+            } else {
+                feedback.style.color = '#ef4444';
+            }
+        } catch (err) {
+            feedback.innerText = 'Error submitting flag.';
+            feedback.style.color = '#ef4444';
+        }
+    }
+</script>
+
+{% endif %}
+{% endblock %}

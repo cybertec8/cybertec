@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{ event.name }} | CTF Arena</title>
+
+<style>
+body{
+  margin:0;
+  background:#020617;
+  font-family:monospace;
+  color:#e5e7eb;
+}
+
+/* Layout */
+.container{
+  display:flex;
+  height:100vh;
+}
+
+/* LEFT */
+.sidebar{
+  width:260px;
+  background:#020617;
+  border-right:1px solid #1f2937;
+  padding:15px;
+  overflow-y:auto;
+}
+
+.task-item{
+  background:#0f172a;
+  border:1px solid #1f2937;
+  border-radius:8px;
+  padding:10px;
+  margin-bottom:10px;
+  cursor:pointer;
+}
+
+.task-item:hover{ border-color:#38bdf8; }
+.task-item.active{ border-color:#22c55e; }
+
+.task-title{color:#38bdf8;}
+.task-meta{font-size:12px;color:#9ca3af;}
+
+/* RIGHT */
+.content{
+  flex:1;
+  padding:20px;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  background:#020617;
+  position:relative;
+  z-index:10;
+}
+
+#task-content{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  position:relative;
+  z-index:20;
+}
+
+/* ===== CLICK FORCE FIX ===== */
+body, .container, .content, #task-content,
+.ctf-card, .flag-input, .flag-box button, form {
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 999999 !important;
+}
+
+/* Kill any overlay */
+.overlay, .modal, .backdrop, .screen, .cover {
+  display:none !important;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- LEFT -->
+  <div class="sidebar">
+    <h3>{{ event.name }}</h3>
+    {% for task in tasks %}
+    <div class="task-item" onclick="loadTask({{ task.id }}, this)">
+      <div class="task-title">{{ task.title }}</div>
+      <div class="task-meta">{{ task.category }} • {{ task.points }} pts</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- RIGHT -->
+  <div class="content">
+    <div id="task-content">
+      <p style="color:#9ca3af">Click any task from left</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function loadTask(taskId, el){
+  document.querySelectorAll(".task-item").forEach(i=>i.classList.remove("active"));
+  el.classList.add("active");
+
+  fetch(`/task/${taskId}`)
+  .then(r=>r.text())
+  .then(html=>{
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html,"text/html");
+    const card = doc.querySelector(".ctf-card");
+
+    const box = document.getElementById("task-content");
+    box.innerHTML = "";
+    box.appendChild(card);
+
+    bindTaskEvents(card);
+  });
+}
+
+function bindTaskEvents(card){
+
+  // Hint toggle
+  const hintBtn = card.querySelector(".hint-btn");
+  const hintBox = card.querySelector(".hint-box");
+  if(hintBtn && hintBox){
+    hintBtn.onclick = ()=>{
+      hintBox.style.display = hintBox.style.display==="none" ? "block" : "none";
+    };
+  }
+
+  // Flag submit AJAX
+  const form = card.querySelector(".flag-form");
+  const input = card.querySelector(".flag-input");
+  const taskId = card.dataset.taskId;
+
+  if(form){
+    form.onsubmit = function(e){
+      e.preventDefault();
+
+      fetch(`/task/${taskId}`,{
+        method:"POST",
+        headers:{"Content-Type":"application/x-www-form-urlencoded"},
+        body:"flag="+encodeURIComponent(input.value)
+      })
+      .then(r=>r.text())
+      .then(html=>{
+        const parser=new DOMParser();
+        const doc=parser.parseFromString(html,"text/html");
+        const newCard=doc.querySelector(".ctf-card");
+
+        const box=document.getElementById("task-content");
+        box.innerHTML="";
+        box.appendChild(newCard);
+        bindTaskEvents(newCard);
+      });
+    };
+  }
+}
+</script>
+
+</body>
+</html>

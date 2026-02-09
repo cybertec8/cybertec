@@ -1,0 +1,165 @@
+<div class="ctf-card" data-task-id="{{ task.id }}">
+
+<style>
+.ctf-card{
+  background:#0f172a;
+  border:1px solid #1f2937;
+  border-radius:14px;
+  padding:20px;
+  max-width:750px;
+  width:100%;
+}
+
+/* Header */
+.ctf-header{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:8px;
+}
+
+.ctf-title{
+  color:#38bdf8;
+  font-size:22px;
+  font-weight:bold;
+}
+
+.badges span{
+  background:#020617;
+  padding:4px 8px;
+  border-radius:10px;
+  font-size:12px;
+  margin-left:4px;
+}
+
+/* Stats */
+.stats{
+  display:flex;
+  gap:12px;
+  font-size:12px;
+  color:#9ca3af;
+  margin:10px 0;
+}
+
+/* Description */
+.desc{
+  margin:10px 0;
+  color:#e5e7eb;
+}
+
+/* Terminal */
+.terminal{
+  background:#020617;
+  border:1px solid #1f2937;
+  padding:10px;
+  border-radius:8px;
+  color:#38bdf8;
+  margin-bottom:10px;
+}
+
+/* Hint */
+.hint-btn{
+  background:#6366f1;
+  color:white;
+  border:none;
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  margin-bottom:5px;
+}
+
+.hint-box{
+  display:none;
+  background:#020617;
+  border:1px solid #38bdf8;
+  padding:10px;
+  border-radius:8px;
+  margin-bottom:10px;
+}
+
+/* Flag */
+.flag-box{
+  display:flex;
+  gap:10px;
+}
+
+.flag-input{
+  flex:1;
+  background:#020617;
+  border:1px solid #1f2937;
+  color:white;
+  padding:8px;
+  border-radius:6px;
+}
+
+.flag-box button{
+  background:#22c55e;
+  border:none;
+  color:#020617;
+  padding:8px 14px;
+  border-radius:6px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* Status */
+.status{
+  margin-top:10px;
+  font-weight:bold;
+}
+</style>
+
+<!-- HEADER -->
+<div class="ctf-header">
+  <div class="ctf-title">{{ task.title }}</div>
+  <div class="badges">
+    <span>{{ task.category }}</span>
+    <span>{{ task.points }} pts</span>
+    <span>{{ task.level }}</span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div>🏁 Solved: {{ solved_count }}</div>
+  <div>📨 Submissions: {{ submissions_count }}</div>
+  <div>❤️ Likes: {{ likes }}</div>
+  <div>👎 Dislikes: {{ dislikes }}</div>
+</div>
+
+<!-- DESCRIPTION -->
+<div class="desc">{{ task.description }}</div>
+
+<!-- TERMINAL -->
+<div class="terminal">
+  root@ctf:~$ Enter the correct flag
+</div>
+
+<!-- HINT -->
+{% if task.hint %}
+<button type="button" class="hint-btn">💡 Hint</button>
+<div class="hint-box">{{ task.hint }}</div>
+{% endif %}
+
+<!-- FLAG FORM -->
+<form class="flag-form">
+  <div class="flag-box">
+    <input type="text"
+           name="flag"
+           class="flag-input"
+           placeholder="CTF{flag_here}"
+           autocomplete="off"
+           {% if already_solved %}disabled{% endif %}>
+    <button type="submit" {% if already_solved %}disabled{% endif %}>
+      SUBMIT
+    </button>
+  </div>
+</form>
+
+<!-- MESSAGE -->
+<div class="status">
+{% if message %}
+  {{ message }}
+{% endif %}
+</div>
+
+</div>

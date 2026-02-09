@@ -1,0 +1,454 @@
+{% extends "console/base.html" %}
+
+{% block page_title %}Scoreboard{% endblock %}
+
+{% block extra_css %}
+<style>
+    .scoreboard-header {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .scoreboard-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: var(--radius-md);
+        background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        color: white;
+    }
+
+    .scoreboard-info h1 {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 4px;
+    }
+
+    .scoreboard-info p {
+        font-size: 14px;
+        color: var(--text-secondary);
+    }
+
+    .scoreboard-table-wrapper {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+    }
+
+    .scoreboard-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .scoreboard-table thead {
+        background: var(--bg-primary);
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .scoreboard-table th {
+        padding: 16px;
+        text-align: left;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .scoreboard-table th:first-child {
+        width: 80px;
+        text-align: center;
+    }
+
+    .scoreboard-table th:nth-child(3),
+    .scoreboard-table th:nth-child(4) {
+        text-align: center;
+    }
+
+    .scoreboard-table tbody tr {
+        border-bottom: 1px solid var(--border-color);
+        transition: all 0.2s ease;
+    }
+
+    .scoreboard-table tbody tr:hover {
+        background: var(--bg-primary);
+    }
+
+    .scoreboard-table tbody tr.current-user {
+        background: rgba(34, 197, 94, 0.1);
+        border: 1px solid var(--accent-green);
+        box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+    }
+
+    .scoreboard-table tbody tr.current-user:hover {
+        background: rgba(34, 197, 94, 0.15);
+    }
+
+    .scoreboard-table td {
+        padding: 16px;
+        font-size: 14px;
+        color: var(--text-primary);
+    }
+
+    .rank-cell {
+        text-align: center;
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    .rank-medal {
+        font-size: 20px;
+        margin-right: 4px;
+    }
+
+    .rank-1 {
+        color: #FFD700;
+    }
+
+    .rank-2 {
+        color: #C0C0C0;
+    }
+
+    .rank-3 {
+        color: #CD7F32;
+    }
+
+    .username-cell {
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .username-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        background: var(--accent-green);
+        color: white;
+        font-size: 10px;
+        font-weight: 600;
+        border-radius: 4px;
+        text-transform: uppercase;
+    }
+
+    .xp-cell {
+        text-align: center;
+        font-weight: 600;
+        color: var(--accent-green);
+        font-size: 15px;
+    }
+
+    .challenges-cell {
+        text-align: center;
+        font-weight: 600;
+        color: var(--accent-blue);
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        padding: 20px;
+        background: var(--bg-card);
+        border-top: 1px solid var(--border-color);
+    }
+
+    .pagination-info {
+        font-size: 13px;
+        color: var(--text-secondary);
+    }
+
+    .pagination-btn {
+        padding: 8px 16px;
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        color: var(--text-primary);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .pagination-btn:hover:not(:disabled) {
+        background: var(--accent-green);
+        border-color: var(--accent-green);
+        color: white;
+    }
+
+    .pagination-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    .loading-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-secondary);
+    }
+
+    .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid var(--border-color);
+        border-top-color: var(--accent-green);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-secondary);
+    }
+
+    .empty-state i {
+        font-size: 48px;
+        color: var(--text-muted);
+        margin-bottom: 16px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+
+        .scoreboard-table th,
+        .scoreboard-table td {
+            padding: 12px 8px;
+            font-size: 12px;
+        }
+
+        .scoreboard-table th:first-child {
+            width: 60px;
+        }
+
+        .rank-cell {
+            font-size: 14px;
+        }
+
+        .rank-medal {
+            font-size: 16px;
+        }
+
+        .username-cell {
+            font-size: 13px;
+        }
+
+        .xp-cell,
+        .challenges-cell {
+            font-size: 13px;
+        }
+
+        .scoreboard-header {
+            padding: 16px;
+        }
+
+        .scoreboard-icon {
+            width: 48px;
+            height: 48px;
+            font-size: 24px;
+        }
+
+        .scoreboard-info h1 {
+            font-size: 20px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .scoreboard-table {
+            font-size: 11px;
+        }
+
+        .scoreboard-table th,
+        .scoreboard-table td {
+            padding: 10px 6px;
+        }
+
+        .username-badge {
+            display: none;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Scoreboard Header -->
+<div class="scoreboard-header">
+    <div class="scoreboard-icon">
+        <i class='bx bx-trophy'></i>
+    </div>
+    <div class="scoreboard-info">
+        <h1>🏆 Global Scoreboard</h1>
+        <p>Top players ranked by total XP and challenges solved</p>
+    </div>
+</div>
+
+<!-- Scoreboard Table -->
+<div class="scoreboard-table-wrapper">
+    <div id="scoreboard-content">
+        <!-- Loading State -->
+        <div class="loading-state" id="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Loading scoreboard...</p>
+        </div>
+
+        <!-- Table (populated by JavaScript) -->
+        <table class="scoreboard-table" id="scoreboard-table" style="display: none;">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Username</th>
+                    <th>Points (XP)</th>
+                    <th>Challenges Solved</th>
+                </tr>
+            </thead>
+            <tbody id="scoreboard-body">
+                <!-- Rows will be inserted here -->
+            </tbody>
+        </table>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="empty-state" style="display: none;">
+            <i class='bx bx-trophy'></i>
+            <p>No users found on the scoreboard yet.</p>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination" style="display: none;">
+        <button class="pagination-btn" id="prev-btn" onclick="loadPage(currentPage - 1)">
+            <i class='bx bx-chevron-left'></i> Previous
+        </button>
+        <span class="pagination-info" id="pagination-info">Page 1 of 1</span>
+        <button class="pagination-btn" id="next-btn" onclick="loadPage(currentPage + 1)">
+            Next <i class='bx bx-chevron-right'></i>
+        </button>
+    </div>
+</div>
+
+<script>
+    let currentPage = 1;
+    let totalPages = 1;
+
+    async function loadScoreboard(page = 1) {
+        try {
+            // Show loading state
+            document.getElementById('loading-state').style.display = 'block';
+            document.getElementById('scoreboard-table').style.display = 'none';
+            document.getElementById('empty-state').style.display = 'none';
+            document.getElementById('pagination').style.display = 'none';
+
+            const response = await fetch(`/api/scoreboard?page=${page}&per_page=50`);
+            const data = await response.json();
+
+            currentPage = data.page;
+            totalPages = data.total_pages;
+
+            // Hide loading state
+            document.getElementById('loading-state').style.display = 'none';
+
+            if (data.users.length === 0) {
+                // Show empty state
+                document.getElementById('empty-state').style.display = 'block';
+                return;
+            }
+
+            // Populate table
+            const tbody = document.getElementById('scoreboard-body');
+            tbody.innerHTML = '';
+
+            data.users.forEach(user => {
+                const row = document.createElement('tr');
+                if (user.is_current_user) {
+                    row.classList.add('current-user');
+                }
+
+                // Rank cell with medals for top 3
+                let rankHTML = `<span class="rank-${user.rank}">${user.rank}</span>`;
+                if (user.rank === 1) {
+                    rankHTML = `<span class="rank-medal rank-1">🥇</span><span class="rank-1">${user.rank}</span>`;
+                } else if (user.rank === 2) {
+                    rankHTML = `<span class="rank-medal rank-2">🥈</span><span class="rank-2">${user.rank}</span>`;
+                } else if (user.rank === 3) {
+                    rankHTML = `<span class="rank-medal rank-3">🥉</span><span class="rank-3">${user.rank}</span>`;
+                }
+
+                // Username cell with "YOU" badge for current user
+                let usernameHTML = `<span>${user.username}</span>`;
+                if (user.is_current_user) {
+                    usernameHTML += `<span class="username-badge">YOU</span>`;
+                }
+
+                row.innerHTML = `
+          <td class="rank-cell">${rankHTML}</td>
+          <td><div class="username-cell">${usernameHTML}</div></td>
+          <td class="xp-cell">${user.xp.toLocaleString()}</td>
+          <td class="challenges-cell">${user.challenges_solved}</td>
+        `;
+
+                tbody.appendChild(row);
+            });
+
+            // Show table
+            document.getElementById('scoreboard-table').style.display = 'table';
+
+            // Update pagination
+            if (totalPages > 1) {
+                document.getElementById('pagination').style.display = 'flex';
+                document.getElementById('pagination-info').textContent = `Page ${currentPage} of ${totalPages}`;
+                document.getElementById('prev-btn').disabled = currentPage === 1;
+                document.getElementById('next-btn').disabled = currentPage === totalPages;
+            }
+
+            // Scroll current user into view if not on first page
+            if (page > 1) {
+                const currentUserRow = document.querySelector('.current-user');
+                if (currentUserRow) {
+                    currentUserRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+
+        } catch (error) {
+            console.error('Error loading scoreboard:', error);
+            document.getElementById('loading-state').innerHTML = `
+        <i class='bx bx-error' style="font-size: 48px; color: var(--text-muted);"></i>
+        <p>Failed to load scoreboard. Please try again.</p>
+      `;
+        }
+    }
+
+    function loadPage(page) {
+        if (page >= 1 && page <= totalPages) {
+            loadScoreboard(page);
+        }
+    }
+
+    // Initial load
+    loadScoreboard(1);
+
+    // Auto-refresh every 30 seconds
+    setInterval(() => {
+        loadScoreboard(currentPage);
+    }, 30000);
+</script>
+
+{% endblock %}

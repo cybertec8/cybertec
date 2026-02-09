@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+
+{% block title %}Platform Features – Cybertec8{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Force JetBrains Mono Globally for Features Page */
+    body,
+    * {
+        font-family: 'JetBrains Mono', monospace !important;
+    }
+
+    /* Hero Section */
+    .features-hero {
+        padding: 80px 0 60px;
+        position: relative;
+        text-align: center;
+    }
+
+    .features-hero::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: radial-gradient(circle at center, rgba(34, 197, 94, 0.03), transparent 60%);
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+        letter-spacing: -1px;
+    }
+
+    .hero-title span {
+        color: var(--accent-green);
+    }
+
+    .hero-subtitle {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    /* Features Grid */
+    .features-grid {
+        padding-bottom: 100px;
+    }
+
+    .feature-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-primary);
+        padding: 40px 30px;
+        border-radius: 16px;
+        height: 100%;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Hover Effects */
+    .feature-card:hover {
+        transform: translateY(-8px);
+        border-color: var(--accent-green);
+        box-shadow: 0 10px 30px -10px rgba(34, 197, 94, 0.15);
+    }
+
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent-green), transparent);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .feature-card:hover::before {
+        opacity: 1;
+    }
+
+    /* 3D Icon Container */
+    .feature-icon-box {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .feature-icon-3d {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.3));
+        transition: transform 0.3s ease;
+        animation: floatIcon 4s ease-in-out infinite;
+    }
+
+    .feature-card:hover .feature-icon-3d {
+        transform: scale(1.1) translateY(-5px);
+        filter: drop-shadow(0 0 15px rgba(34, 197, 94, 0.6));
+    }
+
+    @keyframes floatIcon {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-5px);
+        }
+    }
+
+    /* Content */
+    .feature-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: var(--text-primary);
+    }
+
+    .feature-desc {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        line-height: 1.7;
+        margin: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="features-hero">
+    <div class="container">
+        <h1 class="hero-title">System <span>Capabilities</span></h1>
+        <p class="hero-subtitle">
+            Advanced tools designed for the next generation of cybersecurity professionals.
+            Built for speed, scale, and precision.
+        </p>
+    </div>
+</section>
+
+<!-- Grid -->
+<section class="features-grid">
+    <div class="container">
+        <div class="row g-4">
+
+            <!-- Feature 1: Real-time CTF Scoring -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <img src="{{ url_for('static', filename='img/icon_trophy.png') }}" class="feature-icon-3d">
+                    </div>
+                    <h3 class="feature-title">Real-time CTF Scoring</h3>
+                    <p class="feature-desc">
+                        Instant flag validation and dynamic scoreboard updates. Visualise team progress with live graphs
+                        and kill-stream feeds.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Feature 2: Attack/Defense -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <img src="{{ url_for('static', filename='img/icon_shield.png') }}" class="feature-icon-3d">
+                    </div>
+                    <h3 class="feature-title">Attack/Defense Simulations</h3>
+                    <p class="feature-desc">
+                        Deploy isolated network environments for Red vs Blue team exercises. Simulate real-world APT
+                        scenarios safely.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Feature 3: Terminals -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <img src="{{ url_for('static', filename='img/icon_terminal.png') }}" class="feature-icon-3d">
+                    </div>
+                    <h3 class="feature-title">In-Browser Terminals</h3>
+                    <p class="feature-desc">
+                        No VPN required. Access Kali Linux instances directly from your browser with our low-latency
+                        cloud shells.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Feature 4: Analytics -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <img src="{{ url_for('static', filename='img/icon_analytics.png') }}" class="feature-icon-3d">
+                    </div>
+                    <h3 class="feature-title">Skill Analytics</h3>
+                    <p class="feature-desc">
+                        Track performance across MITRE ATT&CK categories. Identify strengths and weaknesses with
+                        detailed heatmaps.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Feature 5: Collaboration -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <img src="{{ url_for('static', filename='img/icon_team.png') }}" class="feature-icon-3d">
+                    </div>
+                    <h3 class="feature-title">Team Collaboration</h3>
+                    <p class="feature-desc">
+                        Built-in private channels, shared notes, and strategy boards for seamless team coordination
+                        during events.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Feature 6: Dockerized -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <img src="{{ url_for('static', filename='img/icon_docker.png') }}" class="feature-icon-3d">
+                    </div>
+                    <h3 class="feature-title">Dockerized Challenges</h3>
+                    <p class="feature-desc">
+                        Each challenge runs in its own ephemeral container. Ensures isolation, stability, and instant
+                        resets.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

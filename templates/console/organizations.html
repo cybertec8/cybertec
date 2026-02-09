@@ -1,0 +1,302 @@
+{% extends "console/base.html" %}
+
+{% block page_title %}Organizations{% endblock %}
+
+{% block extra_css %}
+<style>
+  .org-header {
+    margin-bottom: 32px;
+  }
+  
+  .page-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  
+  .page-subtitle {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  
+  .info-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  
+  .section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+  
+  .section-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+  
+  .feature-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    transition: all 0.2s ease;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-hover);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .feature-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    background: rgba(34, 197, 94, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: var(--accent-green);
+    margin-bottom: 12px;
+  }
+  
+  .feature-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+  
+  .feature-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  
+  .how-it-works {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .step-card {
+    text-align: center;
+    padding: 20px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+  }
+  
+  .step-number {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+  }
+  
+  .step-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+  
+  .step-text {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  
+  .cta-section {
+    background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    text-align: center;
+  }
+  
+  .cta-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+  
+  .cta-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+  }
+  
+  .org-types {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 16px;
+  }
+  
+  .org-type-badge {
+    padding: 8px 16px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="org-header">
+  <h1 class="page-title">Organizations on Cybertec8</h1>
+  <p class="page-subtitle">
+    Empowering colleges, institutes, and cybersecurity communities to build strong learning environments through practical CTF challenges
+  </p>
+</div>
+
+<!-- What is an Organization -->
+<div class="info-section">
+  <h2 class="section-title">
+    <i class='bx bx-buildings'></i> What is an Organization?
+  </h2>
+  <p class="section-text">
+    An organization on Cybertec8 represents a group such as a college, company, cyber club, or training institute that leverages our platform to train students and members through real-world Capture The Flag (CTF) challenges. Organizations get dedicated dashboards, custom events, and team management tools.
+  </p>
+</div>
+
+<!-- Why Organizations Use Cybertec8 -->
+<div class="info-section">
+  <h2 class="section-title">
+    <i class='bx bx-star'></i> Why Organizations Choose Cybertec8
+  </h2>
+  
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class='bx bx-terminal'></i>
+      </div>
+      <div class="feature-title">Hands-on Learning</div>
+      <p class="feature-text">Real cybersecurity challenges instead of just theoretical knowledge</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue);">
+        <i class='bx bx-group'></i>
+      </div>
+      <div class="feature-title">Team Collaboration</div>
+      <p class="feature-text">Foster teamwork and collaborative problem-solving skills</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--accent-yellow);">
+        <i class='bx bx-chart'></i>
+      </div>
+      <div class="feature-title">Skill Assessment</div>
+      <p class="feature-text">Track real performance using points, rankings, and achievements</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon" style="background: rgba(168, 85, 247, 0.1); color: #a855f7;">
+        <i class='bx bx-briefcase'></i>
+      </div>
+      <div class="feature-title">Industry Ready</div>
+      <p class="feature-text">Prepare learners for real-world cybersecurity roles</p>
+    </div>
+  </div>
+</div>
+
+<!-- How It Works -->
+<div class="how-it-works">
+  <h2 class="section-title">
+    <i class='bx bx-cog'></i> How It Works
+  </h2>
+  
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-number">1</div>
+      <div class="step-title">Request Access</div>
+      <p class="step-text">Submit organization details and verification</p>
+    </div>
+    
+    <div class="step-card">
+      <div class="step-number">2</div>
+      <div class="step-title">Admin Approves</div>
+      <p class="step-text">Our team reviews and activates your org</p>
+    </div>
+    
+    <div class="step-card">
+      <div class="step-number">3</div>
+      <div class="step-title">Create Events</div>
+      <p class="step-text">Build custom CTF challenges for your members</p>
+    </div>
+    
+    <div class="step-card">
+      <div class="step-number">4</div>
+      <div class="step-title">Track Progress</div>
+      <p class="step-text">Monitor leaderboards and performance metrics</p>
+    </div>
+  </div>
+</div>
+
+<!-- Who Can Create -->
+<div class="info-section">
+  <h2 class="section-title">
+    <i class='bx bx-check-circle'></i> Who Can Create an Organization?
+  </h2>
+  <p class="section-text" style="margin-bottom: 16px;">
+    Cybertec8 welcomes various types of educational and professional institutions:
+  </p>
+  
+  <div class="org-types">
+    <span class="org-type-badge"><i class='bx bx-buildings'></i> Colleges & Universities</span>
+    <span class="org-type-badge"><i class='bx bx-shield-alt-2'></i> Cybersecurity Training Institutes</span>
+    <span class="org-type-badge"><i class='bx bx-briefcase'></i> Corporate Security Teams</span>
+    <span class="org-type-badge"><i class='bx bx-group'></i> Cyber Clubs & Communities</span>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-title">Ready to Build Your Cybersecurity Community?</div>
+  <p class="cta-text">
+    Join hundreds of organizations already using Cybertec8 to train the next generation of cybersecurity professionals
+  </p>
+  <a href="#" class="btn btn-primary" style="padding: 12px 32px; font-size: 15px;">
+    <i class='bx bx-paper-plane'></i> Request Organization Access
+  </a>
+</div>
+
+{% endblock %}

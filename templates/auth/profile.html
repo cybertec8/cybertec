@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile | CYBERTEC8{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Profile Page Specific Styles */
+  body {
+    background: var(--cyber-bg-primary);
+    padding-top: 68px;
+  }
+
+  .profile-container {
+    min-height: calc(100vh - 68px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xl);
+  }
+
+  .profile-card {
+    width: 100%;
+    max-width: 1000px;
+    display: grid;
+    grid-template-columns: 1.1fr 1.3fr;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg), var(--shadow-glow-cyan);
+    min-height: 520px;
+  }
+
+  /* Left Panel - Image */
+  .profile-left {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.85)),
+      url('/static/img/hacker.png');
+    background-size: cover;
+    background-position: center;
+    padding: var(--space-2xl);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .profile-left::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyber-cyan), transparent);
+    opacity: 0.5;
+  }
+
+  .profile-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 6px;
+    color: var(--cyber-green);
+    font-family: var(--font-heading);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    width: fit-content;
+  }
+
+  .profile-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--cyber-green);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 0.5;
+      transform: scale(1.2);
+    }
+  }
+
+  .profile-quote {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--cyber-text-secondary);
+    opacity: 0.85;
+    line-height: 1.8;
+  }
+
+  .profile-quote::before {
+    content: '>';
+    color: var(--cyber-green);
+    margin-right: var(--space-sm);
+  }
+
+  /* Right Panel - Info */
+  .profile-right {
+    padding: var(--space-2xl);
+    background: rgba(10, 25, 41, 0.3);
+  }
+
+  .profile-title {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--cyber-green);
+    margin-bottom: var(--space-xl);
+  }
+
+  .profile-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--cyber-border);
+    font-size: 0.875rem;
+  }
+
+  .profile-label {
+    color: var(--cyber-text-muted);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    font-size: 0.75rem;
+  }
+
+  .profile-value {
+    color: var(--cyber-text-primary);
+    font-weight: 500;
+    text-align: right;
+  }
+
+  .profile-actions {
+    margin-top: var(--space-xl);
+    display: flex;
+    gap: var(--space-md);
+  }
+
+  .profile-actions a {
+    flex: 1;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .profile-card {
+      grid-template-columns: 1fr;
+    }
+
+    .profile-left {
+      min-height: 220px;
+    }
+
+    .profile-right {
+      padding: var(--space-lg);
+    }
+
+    .profile-actions {
+      flex-direction: column;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+  <div class="profile-card fade-in">
+
+    <!-- Left Panel -->
+    <div class="profile-left">
+      <div class="profile-badge">
+        CTF PLAYER
+      </div>
+
+      <div class="profile-quote">
+        Access Granted<br>
+        Mode: Learning<br>
+        Capture The Flag
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="profile-right">
+      <h2 class="profile-title">My Profile</h2>
+
+      <div class="profile-row">
+        <span class="profile-label">Username</span>
+        <span class="profile-value">{{ current_user.username }}</span>
+      </div>
+
+      <div class="profile-row">
+        <span class="profile-label">Email</span>
+        <span class="profile-value">{{ current_user.email or "NOT ADDED" }}</span>
+      </div>
+
+      <div class="profile-row">
+        <span class="profile-label">Mobile</span>
+        <span class="profile-value">{{ current_user.mobile or "NOT ADDED" }}</span>
+      </div>
+
+      <div class="profile-row">
+        <span class="profile-label">Team</span>
+        <span class="profile-value">{{ current_user.teams or "-" }}</span>
+      </div>
+
+      <div class="profile-row">
+        <span class="profile-label">Events</span>
+        <span class="profile-value">{{ current_user.events or "-" }}</span>
+      </div>
+
+      <div class="profile-row">
+        <span class="profile-label">Bio</span>
+        <span class="profile-value">{{ current_user.bio or "-" }}</span>
+      </div>
+
+      <div class="profile-actions">
+        <a href="{{ url_for('edit_profile') }}" class="btn-cyber btn-cyber-primary">
+          Edit Profile
+        </a>
+        <a href="{{ url_for('dashboard') }}" class="btn-cyber btn-cyber-secondary">
+          Dashboard
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

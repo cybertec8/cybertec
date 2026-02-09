@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}Secure Login | CYBERTEC8{% endblock %}
+
+{% block extra_css %}
+<link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono:wght@300;500;700&display=swap"
+    rel="stylesheet">
+<style>
+    :root {
+        --neon-cyan: #00f3ff;
+        --teal-green: #008080;
+        --deep-navy: #020c1b;
+        --glass-bg: rgba(2, 12, 27, 0.85);
+        --accent-teal: #2dd4bf;
+    }
+
+    /* Hide Navigation Bar */
+    .navbar {
+        display: none !important;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background: #000;
+        color: #fff;
+        font-family: 'JetBrains Mono', monospace;
+        overflow: hidden;
+    }
+
+    /* Static Background */
+    .static-bg {
+        position: fixed;
+        inset: 0;
+        background: url("{{ url_for('static', filename='images/bg.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        z-index: -2;
+    }
+
+    .bg-filter {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.25);
+        /* Lighter dark overlay (25%) */
+        /* backdrop-filter removed for maximum sharpness */
+        z-index: -1;
+    }
+
+    /* Centered Container */
+    .login-viewport {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        width: 100%;
+        position: relative;
+        z-index: 10;
+        padding: 20px;
+    }
+
+    /* Refined Glassmorphism Card */
+    .login-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(25px) saturate(160%);
+        -webkit-backdrop-filter: blur(25px) saturate(160%);
+        border: 1px solid rgba(45, 212, 191, 0.2);
+        border-radius: 4px;
+        /* Sharper, more professional corners */
+        padding: 40px;
+        width: 420px;
+        max-width: 100%;
+        position: relative;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6),
+            0 0 15px rgba(0, 243, 255, 0.1);
+        text-align: center;
+    }
+
+    /* Soft Neon Border Glow */
+    .login-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 10%;
+        right: 10%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+        box-shadow: 0 0 10px var(--neon-cyan);
+    }
+
+    /* Logo inside Card */
+    .card-logo {
+        height: 60px;
+        margin-bottom: 25px;
+        filter: drop-shadow(0 0 10px rgba(0, 243, 255, 0.2));
+    }
+
+    .login-header h1 {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 20px;
+        letter-spacing: 5px;
+        color: #fff;
+        text-transform: uppercase;
+        margin: 0 0 15px 0;
+        font-weight: 700;
+    }
+
+    .login-header p {
+        font-size: 11px;
+        color: var(--accent-teal);
+        opacity: 0.6;
+        letter-spacing: 3px;
+        margin-bottom: 35px;
+    }
+
+    /* Minimal Google Button */
+    .btn-google {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(45, 212, 191, 0.3);
+        padding: 14px;
+        color: #fff;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 2px;
+        transition: all 0.3s ease;
+        border-radius: 2px;
+    }
+
+    .btn-google:hover {
+        background: rgba(45, 212, 191, 0.08);
+        border-color: var(--neon-cyan);
+        box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+        color: #fff;
+    }
+
+    .google-icon {
+        width: 18px;
+        height: 18px;
+        filter: brightness(1.2);
+    }
+
+    .auth-status {
+        margin-top: 35px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .status-indicator {
+        font-size: 9px;
+        color: #00ff88;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        opacity: 0.5;
+    }
+
+    /* Meta Info */
+    .viewport-meta {
+        position: absolute;
+        bottom: 30px;
+        right: 30px;
+        font-size: 10px;
+        color: var(--accent-teal);
+        opacity: 0.3;
+        text-align: right;
+        font-family: 'JetBrains Mono', monospace;
+        pointer-events: none;
+    }
+
+    @media (max-width: 480px) {
+        .login-card {
+            padding: 35px 25px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="static-bg"></div>
+<div class="bg-filter"></div>
+
+<div class="login-viewport">
+    <div class="login-card">
+        <img src="{{ url_for('static', filename='img/cybertec8-logo.png') }}" alt="CYBERTEC8" class="card-logo">
+
+        <div class="login-header">
+            <h1>SYSTEM ACCESS</h1>
+            <p>ENCRYPTED AUTHENTICATION HUB</p>
+        </div>
+
+        <a href="{{ url_for('google_login') }}" class="btn-google">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"
+                class="google-icon">
+            <span>SYNC DATA CORE</span>
+        </a>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="mt-4 p-2"
+            style="background: rgba(255, 77, 77, 0.05); border-left: 2px solid #ff4d4d; color: #ff4d4d; font-size: 10px; text-align: left;">
+            <span class="me-1">[!]</span> ERROR: {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="auth-status">
+            <div class="status-indicator">
+                CONNECTED // SECURE HANDSHAKE ACTIVE
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="viewport-meta">
+    PROTOCOL: CT8-X2<br>
+    AUTH_STAGE: 01<br>
+    NODE: PHOENIX_SEC
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Removed canvas animations as per request -->
+{% endblock %}

@@ -1,0 +1,86 @@
+<footer class="footer-global" style="background: var(--bg-secondary); border-top: 1px solid var(--border-primary); padding-top: 80px; padding-bottom: 40px; margin-top: auto;">
+    <div class="container">
+        <div class="row g-5">
+            <!-- Navigation Columns -->
+            <div class="col-lg-2 col-6">
+                <h5 class="fw-bold mb-4" style="color: var(--text-primary); font-size: 16px;">Platform</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="{{ url_for('about') }}" class="text-decoration-none" style="color: var(--text-secondary); font-size: 14px; transition: 0.2s;">About Us</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: var(--text-secondary); font-size: 14px; transition: 0.2s;">Leaderboard</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: var(--text-secondary); font-size: 14px; transition: 0.2s;">Wall of Fame</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: var(--text-secondary); font-size: 14px; transition: 0.2s;">Code of Conduct</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: var(--text-secondary); font-size: 14px; transition: 0.2s;">Careers</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-2 col-6">
+                <h5 class="fw-bold mb-4" style="color: var(--text-primary); font-size: 16px;">Solutions</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: var(--text-secondary); font-size: 14px; transition: 0.2s;">Hiring CTF</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: var(--text-secondary); font-size: 14px; transition: 0.2s;">Hackathons</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: var(--text-secondary); font-size: 14px; transition: 0.2s;">Simulations</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: var(--text-secondary); font-size: 14px; transition: 0.2s;">Conference Hosting</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-2 col-6">
+                <h5 class="fw-bold mb-4" style="color: var(--text-primary); font-size: 16px;">Resources</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="{{ url_for('blog') }}" class="text-decoration-none" style="color: var(--text-secondary); font-size: 14px; transition: 0.2s;">Blog</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: var(--text-secondary); font-size: 14px; transition: 0.2s;">Forum</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: var(--text-secondary); font-size: 14px; transition: 0.2s;">Writeups</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: var(--text-secondary); font-size: 14px; transition: 0.2s;">Glossary</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-2 col-6">
+                <h5 class="fw-bold mb-4" style="color: var(--text-primary); font-size: 16px;">Legal</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: var(--text-secondary); font-size: 14px; transition: 0.2s;">Privacy Policy</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: var(--text-secondary); font-size: 14px; transition: 0.2s;">Terms of Service</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: var(--text-secondary); font-size: 14px; transition: 0.2s;">Cookie Policy</a></li>
+                </ul>
+            </div>
+
+            <!-- Brand Column -->
+            <div class="col-lg-4 text-lg-end text-start">
+                <div class="mb-3">
+                    <span style="font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 32px; color: var(--accent-green); letter-spacing: -1px;">
+                        CTF<span style="color: var(--text-primary);">8</span>
+                    </span>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6;" class="mb-4">
+                    The Ultimate Platform to Connect, Compete, and Create.<br>
+                    Hackathons, CTFs, talks, and more.
+                </p>
+                <div class="d-flex gap-3 justify-content-lg-end justify-content-start social-links">
+                    <a href="#" class="text-decoration-none" style="color: var(--text-muted); font-size: 20px;"><i class='bx bxl-facebook'></i></a>
+                    <a href="#" class="text-decoration-none" style="color: var(--text-muted); font-size: 20px;"><i class='bx bxl-github'></i></a>
+                    <a href="#" class="text-decoration-none" style="color: var(--text-muted); font-size: 20px;"><i class='bx bxl-linkedin'></i></a>
+                    <a href="#" class="text-decoration-none" style="color: var(--text-muted); font-size: 20px;"><i class='bx bxl-twitter'></i></a>
+                    <a href="#" class="text-decoration-none" style="color: var(--text-muted); font-size: 20px;"><i class='bx bxl-instagram'></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5 pt-4" style="border-top: 1px solid var(--border-primary);">
+            <div class="col-md-6 text-center text-md-start">
+                <p style="color: var(--text-muted); font-size: 13px; margin: 0;">&copy; 2026 Cybertec8. All Rights Reserved.</p>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <p style="color: var(--text-muted); font-size: 13px; margin: 0;">Designed for Hackers</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+    /* Footer Hover Effects */
+    .footer-global a:hover {
+        color: var(--accent-green) !important;
+    }
+    .social-links a:hover {
+        color: var(--accent-green) !important;
+        transform: translateY(-2px);
+    }
+</style>

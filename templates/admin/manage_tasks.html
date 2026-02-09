@@ -1,0 +1,434 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Manage CTF Tasks - Admin{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ========================================
+       MINIMAL DARK THEME - ADMIN DASHBOARD
+       ======================================== */
+
+    body {
+        background: #0b1220;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: #d1d5db;
+    }
+
+    .admin-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+
+    /* ========================================
+       PAGE HEADER
+       ======================================== */
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #1f2933;
+    }
+
+    .header-left h1 {
+        font-size: 24px;
+        font-weight: 700;
+        color: #f9fafb;
+        margin: 0 0 6px 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .header-left h1 i {
+        color: #16a34a;
+        font-size: 28px;
+    }
+
+    .header-left p {
+        color: #9ca3af;
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .btn-create {
+        background: #16a34a;
+        color: #fff;
+        font-weight: 700;
+        padding: 10px 20px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+    }
+
+    .btn-create:hover {
+        background: #15803d;
+    }
+
+    .btn-create i {
+        font-size: 18px;
+    }
+
+    /* ========================================
+       TABLE LAYOUT
+       ======================================== */
+
+    .tasks-table-container {
+        background: #111827;
+        border: 1px solid #1f2933;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .tasks-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .tasks-table thead {
+        background: #0b1220;
+    }
+
+    .tasks-table th {
+        text-align: left;
+        padding: 14px 16px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #9ca3af;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid #1f2933;
+    }
+
+    .tasks-table tbody tr {
+        border-bottom: 1px solid #1f2933;
+        transition: background 0.2s;
+    }
+
+    .tasks-table tbody tr:hover {
+        background: #1a1f2e;
+    }
+
+    .tasks-table tbody tr:last-child {
+        border-bottom: none;
+    }
+
+    .tasks-table td {
+        padding: 16px;
+        font-size: 14px;
+        color: #d1d5db;
+    }
+
+    /* ========================================
+       TABLE CELLS
+       ======================================== */
+
+    .task-title {
+        font-weight: 600;
+        color: #f9fafb;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .task-title i {
+        color: #6b7280;
+        font-size: 18px;
+    }
+
+    .category-badge {
+        display: inline-block;
+        background: #1f2937;
+        color: #9ca3af;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: 1px solid #374151;
+    }
+
+    .difficulty-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .difficulty-easy {
+        background: rgba(22, 163, 74, 0.1);
+        color: #4ade80;
+        border: 1px solid rgba(22, 163, 74, 0.3);
+    }
+
+    .difficulty-medium {
+        background: rgba(251, 191, 36, 0.1);
+        color: #fbbf24;
+        border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+    .difficulty-hard {
+        background: rgba(239, 68, 68, 0.1);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .difficulty-insane {
+        background: rgba(168, 85, 247, 0.1);
+        color: #c084fc;
+        border: 1px solid rgba(168, 85, 247, 0.3);
+    }
+
+    .points-cell {
+        font-weight: 700;
+        color: #16a34a;
+        font-size: 15px;
+    }
+
+    .stats-cell {
+        color: #9ca3af;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .stats-cell i {
+        font-size: 14px;
+    }
+
+    .event-cell {
+        color: #9ca3af;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .event-cell i {
+        font-size: 14px;
+    }
+
+    /* ========================================
+       ACTION BUTTONS
+       ======================================== */
+
+    .actions-cell {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-action {
+        padding: 6px 12px;
+        border-radius: 4px;
+        border: 1px solid;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: all 0.2s;
+    }
+
+    .btn-edit {
+        background: rgba(59, 130, 246, 0.1);
+        border-color: rgba(59, 130, 246, 0.3);
+        color: #3b82f6;
+    }
+
+    .btn-edit:hover {
+        background: rgba(59, 130, 246, 0.2);
+    }
+
+    .btn-delete {
+        background: rgba(239, 68, 68, 0.1);
+        border-color: rgba(239, 68, 68, 0.3);
+        color: #ef4444;
+    }
+
+    .btn-delete:hover {
+        background: rgba(239, 68, 68, 0.2);
+    }
+
+    .btn-action i {
+        font-size: 14px;
+    }
+
+    /* ========================================
+       EMPTY STATE
+       ======================================== */
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #6b7280;
+    }
+
+    .empty-state i {
+        font-size: 64px;
+        color: #374151;
+        margin-bottom: 16px;
+    }
+
+    .empty-state h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #9ca3af;
+        margin: 0 0 8px 0;
+    }
+
+    .empty-state p {
+        font-size: 14px;
+        color: #6b7280;
+        margin: 0;
+    }
+
+    /* ========================================
+       RESPONSIVE
+       ======================================== */
+
+    @media (max-width: 1024px) {
+        .tasks-table-container {
+            overflow-x: auto;
+        }
+
+        .tasks-table {
+            min-width: 800px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .btn-create {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .admin-container {
+            padding: 24px 16px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block admin_content %}
+<div class="admin-container">
+
+    <div class="page-header">
+        <div class="header-left">
+            <h1>
+                <i class='bx bx-list-ul'></i>
+                Manage Tasks
+            </h1>
+            <p>Overview of all deployed challenges</p>
+        </div>
+        <a href="{{ url_for('admin_add_task') }}" class="btn-create">
+            <i class='bx bx-plus-circle'></i>
+            Create New Task
+        </a>
+    </div>
+
+    {% if tasks %}
+    <div class="tasks-table-container">
+        <table class="tasks-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Points</th>
+                    <th>Difficulty</th>
+                    <th>Solves</th>
+                    <th>Event</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>
+                        <div class="task-title">
+                            <i class='bx bx-flag'></i>
+                            {{ task.title }}
+                        </div>
+                    </td>
+                    <td>
+                        <span class="category-badge">{{ task.category }}</span>
+                    </td>
+                    <td>
+                        <span class="points-cell">{{ task.points }}</span>
+                    </td>
+                    <td>
+                        <span class="difficulty-badge difficulty-{{ task.level|lower }}">
+                            {{ task.level }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="stats-cell">
+                            <i class='bx bx-check-circle'></i>
+                            {{ task.solved_count }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="event-cell">
+                            {% if task.event %}
+                            <i class='bx bx-calendar'></i>
+                            {{ task.event.name }}
+                            {% else %}
+                            <i class='bx bx-globe'></i>
+                            Global
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="actions-cell">
+                            <button class="btn-action btn-edit"
+                                onclick="location.href='{{ url_for('admin_add_task') }}?edit={{ task.id }}'">
+                                <i class='bx bx-edit'></i>
+                                Edit
+                            </button>
+                            <a href="{{ url_for('admin_delete_task', task_id=task.id) }}"
+                                onclick="return confirm('Are you sure you want to delete this task? This action cannot be undone.')"
+                                class="btn-action btn-delete">
+                                <i class='bx bx-trash'></i>
+                                Delete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="tasks-table-container">
+        <div class="empty-state">
+            <i class='bx bx-ghost'></i>
+            <h3>No Tasks Deployed Yet</h3>
+            <p>Click "Create New Task" above to deploy your first CTF challenge</p>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

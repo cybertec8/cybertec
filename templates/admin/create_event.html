@@ -1,0 +1,71 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Create Event - Admin{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+  <a href="{{ url_for('admin_events') }}" class="btn-back">
+    <i class='bx bx-left-arrow-alt'></i> Back to Events
+  </a>
+  <h1 class="page-title">Create New Event</h1>
+  <p class="page-subtitle">Schedule and configure a new CTF tournament.</p>
+</div>
+
+<div class="cyber-card" style="max-width: 800px;">
+  <form method="POST">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 20px;">
+      <div style="grid-column: span 2;">
+        <label style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 8px;">Event Title</label>
+        <input type="text" name="name" class="form-control" placeholder="e.g. Operation Cyber Storm" required
+          style="width: 100%; background: #020617; border: 1px solid var(--admin-border); border-radius: 8px; padding: 12px; color: #fff; font-family: inherit;">
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 8px;">Difficulty Level</label>
+        <select name="level" required
+          style="width: 100%; background: #020617; border: 1px solid var(--admin-border); border-radius: 8px; padding: 12px; color: #fff;">
+          <option value="" disabled selected>Select Level</option>
+          <option value="Beginner">Beginner</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Advanced">Advanced</option>
+          <option value="Pro">Pro</option>
+        </select>
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 8px;">Event Status</label>
+        <select name="status"
+          style="width: 100%; background: #020617; border: 1px solid var(--admin-border); border-radius: 8px; padding: 12px; color: #fff;">
+          <option value="Upcoming">Upcoming</option>
+          <option value="Live">Live</option>
+          <option value="Ended">Ended</option>
+        </select>
+      </div>
+
+      <div style="grid-column: span 2;">
+        <label style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 8px;">Event Date & Time</label>
+        <input type="text" name="date" class="form-control" placeholder="e.g. Oct 25, 2026 @ 10:00 AM UTC" required
+          style="width: 100%; background: #020617; border: 1px solid var(--admin-border); border-radius: 8px; padding: 12px; color: #fff;">
+      </div>
+
+      <div style="grid-column: span 2;">
+        <label style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 8px;">Banner Image URL
+          (Optional)</label>
+        <input type="text" name="image" class="form-control" placeholder="https://example.com/banner.png"
+          style="width: 100%; background: #020617; border: 1px solid var(--admin-border); border-radius: 8px; padding: 12px; color: #fff;">
+      </div>
+
+      <div style="grid-column: span 2;">
+        <label style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 8px;">Description</label>
+        <textarea name="description" placeholder="Enter a brief description of the event..."
+          style="width: 100%; background: #020617; border: 1px solid var(--admin-border); border-radius: 8px; padding: 12px; color: #fff; min-height: 120px; resize: vertical;"></textarea>
+      </div>
+    </div>
+
+    <button type="submit"
+      style="width: 100%; background: var(--admin-accent); color: #020617; font-weight: 700; padding: 14px; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-transform: uppercase; letter-spacing: 0.5px;">
+      <i class='bx bx-check'></i> Create Event
+    </button>
+  </form>
+</div>
+{% endblock %}

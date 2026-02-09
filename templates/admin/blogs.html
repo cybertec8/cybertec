@@ -1,0 +1,99 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Manage Blogs - Admin Panel{% endblock %}
+
+{% block admin_content %}
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title text-white">Manage Blogs</h1>
+        <p class="page-subtitle text-muted">Curate and publish security intelligence.</p>
+    </div>
+    <a href="{{ url_for('admin_add_blog') }}" class="btn btn-primary px-4">
+        <i class='bx bx-plus'></i> Add New Blog
+    </a>
+</div>
+
+<div class="row g-4">
+    {% for blog in blogs %}
+    <div class="col-lg-4 col-md-6">
+        <div class="cyber-card h-100 d-flex flex-column" style="position: relative; transition: transform 0.3s ease;">
+            <!-- Category Badge -->
+            <span class="badge position-absolute"
+                style="top: 15px; right: 15px; z-index: 2; background: rgba(0,0,0,0.7); border: 1px solid var(--admin-accent); color: var(--admin-accent);">
+                {{ blog.category }}
+            </span>
+
+            <!-- Thumbnail -->
+            <div class="card-img-wrapper"
+                style="height: 180px; overflow: hidden; border-radius: 8px 8px 0 0; border-bottom: 1px solid var(--admin-border); background: #000;">
+                {% if blog.thumbnail %}
+                <img src="{{ url_for('static', filename='uploads/blogs/' + blog.thumbnail) }}" alt="{{ blog.title }}"
+                    style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;">
+                {% else %}
+                <div class="w-100 h-100 d-flex align-items-center justify-content-center text-muted">
+                    <i class='bx bx-image-alt' style="font-size: 3rem;"></i>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Content -->
+            <div class="p-4 flex-grow-1 d-flex flex-column">
+                <div class="mb-2 text-muted" style="font-size: 0.8rem;">
+                    <i class='bx bx-calendar'></i> {{ blog.published_at.strftime('%b %d, %Y') }}
+                    <span class="mx-1">•</span>
+                    <i class='bx bx-time'></i> {{ blog.read_time }}
+                </div>
+                <h3 class="h5 text-white mb-2">{{ blog.title }}</h3>
+                <p class="text-secondary small mb-4"
+                    style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5; line-clamp: 3;">
+                    {{ blog.short_description }}
+                </p>
+
+                <!-- Actions -->
+                <div class="mt-auto d-flex gap-2">
+                    <a href="{{ url_for('admin_edit_blog', blog_id=blog.id) }}"
+                        class="btn btn-sm btn-outline-info flex-grow-1">
+                        <i class='bx bx-edit'></i> Edit
+                    </a>
+                    <form action="{{ url_for('admin_delete_blog', blog_id=blog.id) }}" method="POST" class="flex-grow-1"
+                        onsubmit="return confirm('Permanently delete this blog?')">
+                        <button type="submit" class="btn btn-sm btn-outline-danger w-100">
+                            <i class='bx bx-trash'></i> Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-5">
+        <div class="cyber-card py-5">
+            <i class='bx bx-news' style="font-size: 4rem; color: #4b5563; margin-bottom: 20px;"></i>
+            <h2 class="h4 text-secondary">No Blogs Found</h2>
+            <p class="text-muted mb-4">You haven't uploaded any security intel yet.</p>
+            <a href="{{ url_for('admin_add_blog') }}" class="btn btn-primary">
+                <i class='bx bx-plus'></i> Create Your First Blog
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    .cyber-card:hover {
+        transform: translateY(-8px);
+        border-color: var(--admin-accent);
+        box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.3);
+    }
+
+    .btn-outline-info {
+        border-color: #0ea5e9;
+        color: #0ea5e9;
+    }
+
+    .btn-outline-info:hover {
+        background-color: #0ea5e9;
+        color: white;
+    }
+</style>
+{% endblock %}

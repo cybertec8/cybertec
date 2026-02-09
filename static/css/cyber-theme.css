@@ -1,0 +1,761 @@
+/* ========================================
+   CYBERTEC8 - UNIFIED CYBER SECURITY THEME
+   Professional CTF Platform Design System
+   ======================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* ========================================
+   CSS VARIABLES - CYBER THEME
+   ======================================== */
+
+:root {
+  /* Background Colors - Deep Navy */
+  --cyber-bg-primary: #020c1b;
+  --cyber-bg-secondary: #0a1929;
+  --cyber-bg-tertiary: #0e1626;
+  --cyber-bg-card: rgba(10, 25, 41, 0.6);
+  --cyber-bg-card-solid: #0d1421;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(10, 25, 41, 0.7);
+  --glass-border: rgba(0, 243, 255, 0.15);
+  --glass-blur: blur(20px) saturate(180%);
+
+  /* Accent Colors */
+  --cyber-green: #00ff88;
+  --cyber-green-hover: #00cc6a;
+  --cyber-green-glow: rgba(0, 255, 136, 0.2);
+
+  --cyber-cyan: #00f3ff;
+  --cyber-cyan-hover: #00d4e6;
+  --cyber-cyan-glow: rgba(0, 243, 255, 0.2);
+
+  --cyber-blue: #06b6d4;
+  --cyber-purple: #a855f7;
+  --cyber-red: #ef4444;
+  --cyber-yellow: #fbbf24;
+
+  /* Text Colors */
+  --cyber-text-primary: #ffffff;
+  --cyber-text-secondary: #e5e7eb;
+  --cyber-text-muted: #9ca3af;
+  --cyber-text-dim: #6b7280;
+
+  /* Borders & Dividers */
+  --cyber-border: rgba(0, 243, 255, 0.1);
+  --cyber-border-hover: rgba(0, 243, 255, 0.3);
+  --cyber-border-glow: rgba(0, 255, 136, 0.3);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.6);
+  --shadow-glow-green: 0 0 20px var(--cyber-green-glow);
+  --shadow-glow-cyan: 0 0 20px var(--cyber-cyan-glow);
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  /* Typography */
+  --font-heading: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ========================================
+   GLOBAL STYLES
+   ======================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--cyber-bg-primary);
+  color: var(--cyber-text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark Gradient Background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(0, 243, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 0% 100%, rgba(0, 255, 136, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Subtle Grid Pattern */
+.cyber-grid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 243, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 243, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.5;
+}
+
+/* ========================================
+   TYPOGRAPHY
+   ======================================== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--cyber-text-primary);
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+h5 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+h6 {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+p {
+  font-family: var(--font-body);
+  color: var(--cyber-text-secondary);
+  line-height: 1.7;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--cyber-cyan), var(--cyber-green));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========================================
+   GLASSMORPHISM CARDS
+   ======================================== */
+
+.cyber-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyber-cyan), transparent);
+  opacity: 0.5;
+}
+
+.cyber-card:hover {
+  border-color: var(--cyber-border-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg), var(--shadow-glow-cyan);
+}
+
+/* Card Variants */
+.cyber-card-solid {
+  background: var(--cyber-bg-card-solid);
+  backdrop-filter: none;
+}
+
+.cyber-card-green {
+  border-color: rgba(0, 255, 136, 0.2);
+}
+
+.cyber-card-green:hover {
+  border-color: var(--cyber-green);
+  box-shadow: var(--shadow-lg), var(--shadow-glow-green);
+}
+
+/* ========================================
+   BUTTONS
+   ======================================== */
+
+.btn-cyber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: 12px 24px;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  border: 1px solid;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Primary Button - Green */
+.btn-cyber-primary {
+  background: var(--cyber-green);
+  border-color: var(--cyber-green);
+  color: var(--cyber-bg-primary);
+}
+
+.btn-cyber-primary:hover {
+  background: var(--cyber-green-hover);
+  box-shadow: var(--shadow-glow-green);
+  transform: translateY(-2px);
+}
+
+/* Secondary Button - Outlined */
+.btn-cyber-secondary {
+  background: transparent;
+  border-color: var(--cyber-cyan);
+  color: var(--cyber-cyan);
+}
+
+.btn-cyber-secondary:hover {
+  background: rgba(0, 243, 255, 0.1);
+  box-shadow: var(--shadow-glow-cyan);
+  transform: translateY(-2px);
+}
+
+/* Ghost Button */
+.btn-cyber-ghost {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--cyber-border);
+  color: var(--cyber-text-primary);
+}
+
+.btn-cyber-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--cyber-border-hover);
+}
+
+/* Danger Button */
+.btn-cyber-danger {
+  background: var(--cyber-red);
+  border-color: var(--cyber-red);
+  color: white;
+}
+
+.btn-cyber-danger:hover {
+  background: #dc2626;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+}
+
+/* Button Sizes */
+.btn-cyber-sm {
+  padding: 8px 16px;
+  font-size: 0.75rem;
+}
+
+.btn-cyber-lg {
+  padding: 16px 32px;
+  font-size: 1rem;
+}
+
+/* ========================================
+   FORM INPUTS
+   ======================================== */
+
+.cyber-input,
+.cyber-textarea,
+.cyber-select {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(10, 25, 41, 0.5);
+  border: 1px solid var(--cyber-border);
+  border-radius: var(--radius-md);
+  color: var(--cyber-text-primary);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+.cyber-input:focus,
+.cyber-textarea:focus,
+.cyber-select:focus {
+  outline: none;
+  border-color: var(--cyber-cyan);
+  box-shadow: 0 0 0 3px var(--cyber-cyan-glow);
+  background: rgba(10, 25, 41, 0.7);
+}
+
+.cyber-input::placeholder,
+.cyber-textarea::placeholder {
+  color: var(--cyber-text-dim);
+}
+
+.cyber-label {
+  display: block;
+  margin-bottom: var(--space-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--cyber-text-secondary);
+  letter-spacing: 0.01em;
+}
+
+/* ========================================
+   BADGES
+   ======================================== */
+
+.cyber-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: 6px;
+  border: 1px solid;
+}
+
+.cyber-badge-success {
+  background: rgba(0, 255, 136, 0.1);
+  border-color: rgba(0, 255, 136, 0.3);
+  color: var(--cyber-green);
+}
+
+.cyber-badge-info {
+  background: rgba(0, 243, 255, 0.1);
+  border-color: rgba(0, 243, 255, 0.3);
+  color: var(--cyber-cyan);
+}
+
+.cyber-badge-warning {
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.3);
+  color: var(--cyber-yellow);
+}
+
+.cyber-badge-danger {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: var(--cyber-red);
+}
+
+/* ========================================
+   NAVIGATION
+   ======================================== */
+
+.cyber-nav {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--cyber-border);
+  padding: var(--space-md) var(--space-xl);
+}
+
+.cyber-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  color: var(--cyber-text-secondary);
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  border-radius: var(--radius-md);
+  transition: all 0.3s ease;
+}
+
+.cyber-nav-link:hover {
+  color: var(--cyber-cyan);
+  background: rgba(0, 243, 255, 0.1);
+}
+
+.cyber-nav-link.active {
+  color: var(--cyber-green);
+  background: rgba(0, 255, 136, 0.1);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+/* ========================================
+   UTILITIES
+   ======================================== */
+
+/* Flex */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-between {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+/* Grid */
+.grid {
+  display: grid;
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.grid-auto {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Gap */
+.gap-xs {
+  gap: var(--space-xs);
+}
+
+.gap-sm {
+  gap: var(--space-sm);
+}
+
+.gap-md {
+  gap: var(--space-md);
+}
+
+.gap-lg {
+  gap: var(--space-lg);
+}
+
+.gap-xl {
+  gap: var(--space-xl);
+}
+
+/* Spacing */
+.p-sm {
+  padding: var(--space-sm);
+}
+
+.p-md {
+  padding: var(--space-md);
+}
+
+.p-lg {
+  padding: var(--space-lg);
+}
+
+.p-xl {
+  padding: var(--space-xl);
+}
+
+.m-sm {
+  margin: var(--space-sm);
+}
+
+.m-md {
+  margin: var(--space-md);
+}
+
+.m-lg {
+  margin: var(--space-lg);
+}
+
+.m-xl {
+  margin: var(--space-xl);
+}
+
+.mb-sm {
+  margin-bottom: var(--space-sm);
+}
+
+.mb-md {
+  margin-bottom: var(--space-md);
+}
+
+.mb-lg {
+  margin-bottom: var(--space-lg);
+}
+
+.mb-xl {
+  margin-bottom: var(--space-xl);
+}
+
+.mt-sm {
+  margin-top: var(--space-sm);
+}
+
+.mt-md {
+  margin-top: var(--space-md);
+}
+
+.mt-lg {
+  margin-top: var(--space-lg);
+}
+
+.mt-xl {
+  margin-top: var(--space-xl);
+}
+
+/* Text */
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.text-primary {
+  color: var(--cyber-text-primary);
+}
+
+.text-secondary {
+  color: var(--cyber-text-secondary);
+}
+
+.text-muted {
+  color: var(--cyber-text-muted);
+}
+
+.text-green {
+  color: var(--cyber-green);
+}
+
+.text-cyan {
+  color: var(--cyber-cyan);
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 10px var(--cyber-cyan-glow);
+  }
+
+  50% {
+    box-shadow: 0 0 20px var(--cyber-cyan-glow);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.glow-animation {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .cyber-card {
+    padding: var(--space-md);
+  }
+}
+
+/* ========================================
+   CUSTOM CURSOR
+   ======================================== */
+
+.custom-cursor {
+  width: 18px;
+  height: 18px;
+  background: transparent;
+  border: 2px solid var(--cyber-green);
+  border-radius: 2px;
+  position: fixed;
+  pointer-events: none;
+  z-index: 10000;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease, border-color 0.3s ease, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  opacity: 0;
+  box-shadow: 0 0 8px var(--cyber-green-glow);
+}
+
+.custom-cursor.hovering {
+  transform: translate(-50%, -50%) scale(1.5);
+  border-color: var(--cyber-purple);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
+}
+
+/* Hide default cursor on desktop for professional feel */
+@media (pointer: fine) {
+
+  body,
+  a,
+  button,
+  .btn-cyber,
+  .nav-link,
+  input,
+  textarea,
+  select {
+    cursor: none !important;
+  }
+}
+
+/* Disable on mobile/touch devices */
+@media (pointer: coarse) {
+  .custom-cursor {
+    display: none !important;
+  }
+
+  body,
+  a,
+  button,
+  .btn-cyber,
+  .nav-link,
+  input,
+  textarea,
+  select {
+    cursor: auto !important;
+  }
+}
+
+/* ========================================
+   SCROLLBAR
+   ======================================== */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cyber-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--cyber-bg-tertiary);
+  border-radius: 5px;
+  border: 2px solid var(--cyber-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 243, 255, 0.3);
+}

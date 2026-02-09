@@ -1,0 +1,86 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Manage Teams - Admin{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+    <h1 class="page-title">Manage Teams</h1>
+    <p class="page-subtitle">Oversee all registered teams and their captains.</p>
+</div>
+
+<div class="cyber-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3 style="margin: 0;">Team Registry</h3>
+        <span style="font-size: 0.85rem; color: #94a3b8;">Total Registered: {{ team_data|length }}</span>
+    </div>
+
+    {% if team_data %}
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 2px solid var(--admin-border);">
+                    <th
+                        style="padding: 15px; text-align: left; color: #94a3b8; font-size: 0.8rem; text-transform: uppercase;">
+                        ID</th>
+                    <th
+                        style="padding: 15px; text-align: left; color: #94a3b8; font-size: 0.8rem; text-transform: uppercase;">
+                        Team Name</th>
+                    <th
+                        style="padding: 15px; text-align: left; color: #94a3b8; font-size: 0.8rem; text-transform: uppercase;">
+                        Captain</th>
+                    <th
+                        style="padding: 15px; text-align: left; color: #94a3b8; font-size: 0.8rem; text-transform: uppercase;">
+                        Invite Code</th>
+                    <th
+                        style="padding: 15px; text-align: left; color: #94a3b8; font-size: 0.8rem; text-transform: uppercase;">
+                        Members</th>
+                    <th
+                        style="padding: 15px; text-align: center; color: #94a3b8; font-size: 0.8rem; text-transform: uppercase;">
+                        Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for team in team_data %}
+                <tr style="border-bottom: 1px solid var(--admin-border); transition: background 0.2s;">
+                    <td
+                        style="padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #64748b;">
+                        #{{ team.id }}
+                    </td>
+                    <td style="padding: 15px;">
+                        <span style="font-weight: 700; color: #f8fafc;">{{ team.name }}</span>
+                    </td>
+                    <td style="padding: 15px;">
+                        <span
+                            style="background: rgba(56, 189, 248, 0.1); color: var(--admin-accent); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 500;">
+                            {{ team.captain_username }}
+                        </span>
+                    </td>
+                    <td style="padding: 15px;">
+                        <code
+                            style="background: #020617; border: 1px solid var(--admin-border); padding: 4px 8px; border-radius: 4px; color: #fbbf24; font-weight: 600;">
+                            {{ team.invite_code }}
+                        </code>
+                    </td>
+                    <td style="padding: 15px; font-size: 0.85rem; color: #cbd5e1;">
+                        {{ team.used_count }} users
+                    </td>
+                    <td style="padding: 15px; text-align: center;">
+                        <a href="{{ url_for('admin_delete_team', team_id=team.id) }}"
+                            onclick="return confirm('WARNING: Permanently delete this team and all memberships?')"
+                            style="background: #dc2626; color: white; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; text-decoration: none; display: inline-block; transition: background 0.2s;">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 60px 20px; color: #64748b;">
+        <i class='bx bx-group' style="font-size: 4rem; margin-bottom: 20px; display: block;"></i>
+        <p>No teams have been created yet.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

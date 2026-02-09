@@ -1,0 +1,51 @@
+{% extends "console/base.html" %}
+
+{% block page_title %}Cyber Security Tools{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Educational Security Tools</h1>
+    <p class="page-subtitle">A curated list of industry-standard tools for cybersecurity research and learning.</p>
+</div>
+
+<div class="grid grid-3 gap-lg">
+    <div class="card">
+        <h3>Nmap</h3>
+        <p class="text-secondary">Network Mapper (Nmap) is a free and open source utility for network discovery and
+            security auditing.</p>
+        <a href="https://nmap.org/" target="_blank" class="btn btn-primary" style="margin-top: 15px;">Official Site</a>
+    </div>
+
+    <div class="card">
+        <h3>Wireshark</h3>
+        <p class="text-secondary">The world's foremost and widely-used network protocol analyzer. It lets you see what's
+            happening on your network at a microscopic level.</p>
+        <a href="https://www.wireshark.org/" target="_blank" class="btn btn-primary" style="margin-top: 15px;">Official
+            Site</a>
+    </div>
+
+    <div class="card">
+        <h3>Burp Suite</h3>
+        <p class="text-secondary">A leading software for web application security testing. The community edition is
+            widely used by students and professionals.</p>
+        <a href="https://portswigger.net/burp" target="_blank" class="btn btn-primary"
+            style="margin-top: 15px;">Official Site</a>
+    </div>
+
+    <div class="card">
+        <h3>Metasploit</h3>
+        <p class="text-secondary">A powerful platform for penetration testing, security auditing, and vulnerability
+            research.</p>
+        <a href="https://www.metasploit.com/" target="_blank" class="btn btn-primary" style="margin-top: 15px;">Official
+            Site</a>
+    </div>
+</div>
+
+<div class="mt-lg p-md"
+    style="background: rgba(34, 197, 94, 0.05); border-radius: 8px; border: 1px solid var(--border-color);">
+    <p style="margin: 0; font-size: 0.9rem; color: var(--text-secondary);">
+        <strong>Disclaimer:</strong> All tools listed above are for ethical and educational purposes only. Always ensure
+        you have explicit permission before testing any network or application.
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Panel - Cybertec8{% endblock %}</title>
+
+    <!-- Fonts & Icons -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+    <!-- Global Theme CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-system.css') }}">
+
+    <style>
+        :root {
+            --admin-accent: #38bdf8;
+            --admin-bg: #020617;
+            --admin-card-bg: #0f172a;
+            --admin-border: #1f2937;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--admin-bg);
+            color: #e5e7eb;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .admin-layout {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header / Tabs Navigation */
+        .admin-header {
+            background: var(--admin-card-bg);
+            border-bottom: 1px solid var(--admin-border);
+            padding: 0 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .admin-nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .admin-brand {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--admin-accent);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 5px;
+        }
+
+        .admin-tab {
+            padding: 20px 15px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-tab i {
+            font-size: 1.1rem;
+        }
+
+        .admin-tab:hover {
+            color: #f8fafc;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .admin-tab.active {
+            color: var(--admin-accent);
+            border-bottom-color: var(--admin-accent);
+        }
+
+        /* Main Content Area */
+        .admin-main {
+            flex: 1;
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 0 0 5px 0;
+            color: #f8fafc;
+        }
+
+        .page-subtitle {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        /* Utility Classes */
+        .cyber-card {
+            background: var(--admin-card-bg);
+            border: 1px solid var(--admin-border);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            transition: color 0.2s;
+        }
+
+        .btn-back:hover {
+            color: var(--admin-accent);
+        }
+
+            {
+            % block extra_css %
+        }
+
+            {
+            % endblock %
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="admin-layout">
+        <header class="admin-header">
+            <div class="admin-nav-container">
+                <a href="{{ url_for('admin_panel') }}" class="admin-brand">
+                    <i class='bx bxs-shield-quarter'></i>
+                    CORE_ADMIN
+                </a>
+
+                <nav class="admin-tabs">
+                    <a href="{{ url_for('admin_events') }}"
+                        class="admin-tab {% if request.endpoint == 'admin_events' %}active{% endif %}">
+                        <i class='bx bx-calendar-event'></i> Events
+                    </a>
+                    <a href="{{ url_for('admin_create_event') }}"
+                        class="admin-tab {% if request.endpoint == 'admin_create_event' %}active{% endif %}">
+                        <i class='bx bx-plus-circle'></i> Create Event
+                    </a>
+                    <a href="{{ url_for('admin_add_task') }}"
+                        class="admin-tab {% if request.endpoint == 'admin_add_task' %}active{% endif %}">
+                        <i class='bx bx-task'></i> Create Task
+                    </a>
+                    <a href="{{ url_for('admin_manage_tasks') }}"
+                        class="admin-tab {% if request.endpoint == 'admin_manage_tasks' %}active{% endif %}">
+                        <i class='bx bx-list-ul'></i> Manage Tasks
+                    </a>
+                    <a href="{{ url_for('admin_manage_teams') }}"
+                        class="admin-tab {% if request.endpoint == 'admin_manage_teams' %}active{% endif %}">
+                        <i class='bx bx-group'></i> Teams
+                    </a>
+                    <a href="{{ url_for('admin_blogs') }}"
+                        class="admin-tab {% if request.endpoint == 'admin_blogs' %}active{% endif %}">
+                        <i class='bx bxl-medium-old'></i> Blogs
+                    </a>
+                </nav>
+
+                <div class="admin-user">
+                    <a href="{{ url_for('dashboard') }}" class="admin-tab" title="Back to User Dashboard">
+                        <i class='bx bx-arrow-back'></i> Exit
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <main class="admin-main">
+            {% block admin_content %}{% endblock %}
+        </main>
+    </div>
+
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

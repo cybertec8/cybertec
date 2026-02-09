@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>CYBERTEC8 | Capture The Flag Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/theme-system.css') }}" rel="stylesheet">
+
+  <style>
+    /* ========================================
+   GLOBAL STYLES
+   ======================================== */
+    :root {
+      /* Inherit shared variables from theme-system.css */
+      /* Additional custom variables for home page */
+      --accent-mint: #10b981;
+      --accent-emerald: #059669;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+
+    /* ========================================
+   NAVBAR
+   ======================================== */
+    .navbar {
+      padding: 8px 60px;
+      background: var(--overlay);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-primary);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    .navbar-brand img {
+      height: 55px;
+      width: auto;
+    }
+
+    .nav-link {
+      color: var(--text-secondary) !important;
+      margin: 0 14px;
+      font-weight: 500;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--accent-green) !important;
+    }
+
+    .btn-join {
+      background: var(--accent-green);
+      color: #020617;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .btn-join:hover {
+      background: var(--accent-mint);
+      transform: translateY(-1px);
+    }
+
+    /* ========================================
+   3D CYBER HERO BACKGROUND
+   ======================================== */
+    .hero-container {
+      position: relative;
+      min-height: 100vh;
+      padding-top: 68px;
+      /* Account for fixed navbar */
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Noise/grain texture overlay */
+    .hero-container::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* 3D Perspective Grid Floor */
+    .cyber-grid {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%) perspective(500px) rotateX(60deg);
+      width: 200%;
+      height: 60vh;
+      background-image:
+        linear-gradient(to right, rgba(34, 197, 94, 0.15) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(34, 197, 94, 0.15) 1px, transparent 1px);
+      background-size: 80px 80px;
+      transform-origin: bottom center;
+      animation: gridPulse 8s ease-in-out infinite;
+      mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 80%);
+      -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 80%);
+      z-index: 1;
+    }
+
+    @keyframes gridPulse {
+
+      0%,
+      100% {
+        opacity: 0.6;
+      }
+
+      50% {
+        opacity: 0.9;
+      }
+    }
+
+    /* Fog/Glow in distance */
+    .distant-glow {
+      position: absolute;
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120%;
+      height: 300px;
+      background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.12) 0%, transparent 60%);
+      filter: blur(60px);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Floating Glass Panels */
+    .glass-panel {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease-out;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .glass-panel-1 {
+      width: 200px;
+      height: 300px;
+      top: 15%;
+      right: 8%;
+      transform: perspective(800px) rotateY(-15deg) rotateX(5deg);
+      animation: floatPanel1 6s ease-in-out infinite;
+    }
+
+    .glass-panel-2 {
+      width: 160px;
+      height: 220px;
+      top: 25%;
+      right: 3%;
+      transform: perspective(800px) rotateY(-20deg) rotateX(8deg);
+      animation: floatPanel2 7s ease-in-out infinite;
+      animation-delay: 1s;
+    }
+
+    .glass-panel-3 {
+      width: 120px;
+      height: 180px;
+      bottom: 20%;
+      left: 5%;
+      transform: perspective(800px) rotateY(15deg) rotateX(-5deg);
+      animation: floatPanel3 5s ease-in-out infinite;
+      animation-delay: 0.5s;
+    }
+
+    @keyframes floatPanel1 {
+
+      0%,
+      100% {
+        transform: perspective(800px) rotateY(-15deg) rotateX(5deg) translateY(0);
+      }
+
+      50% {
+        transform: perspective(800px) rotateY(-15deg) rotateX(5deg) translateY(-15px);
+      }
+    }
+
+    @keyframes floatPanel2 {
+
+      0%,
+      100% {
+        transform: perspective(800px) rotateY(-20deg) rotateX(8deg) translateY(0);
+      }
+
+      50% {
+        transform: perspective(800px) rotateY(-20deg) rotateX(8deg) translateY(-20px);
+      }
+    }
+
+    @keyframes floatPanel3 {
+
+      0%,
+      100% {
+        transform: perspective(800px) rotateY(15deg) rotateX(-5deg) translateY(0);
+      }
+
+      50% {
+        transform: perspective(800px) rotateY(15deg) rotateX(-5deg) translateY(-12px);
+      }
+    }
+
+    /* Glass panel inner content - HUD style */
+    .glass-panel::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-green), transparent);
+      opacity: 0.5;
+    }
+
+    /* Circuit Lines with Pulse */
+    .circuit-container {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .circuit-line {
+      position: absolute;
+      background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.4), transparent);
+      height: 1px;
+    }
+
+    .circuit-line::after {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      top: -3px;
+      animation: pulseDot 3s linear infinite;
+      box-shadow: 0 0 10px var(--accent-green);
+    }
+
+    .circuit-line-1 {
+      width: 300px;
+      top: 30%;
+      left: -50px;
+      transform: rotate(15deg);
+    }
+
+    .circuit-line-2 {
+      width: 250px;
+      bottom: 35%;
+      right: -30px;
+      transform: rotate(-10deg);
+    }
+
+    .circuit-line-3 {
+      width: 200px;
+      top: 50%;
+      left: 10%;
+      transform: rotate(5deg);
+    }
+
+    @keyframes pulseDot {
+      0% {
+        left: 0;
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      90% {
+        opacity: 1;
+      }
+
+      100% {
+        left: 100%;
+        opacity: 0;
+      }
+    }
+
+    /* HUD Microtext */
+    .hud-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      color: rgba(34, 197, 94, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      position: absolute;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .hud-text-1 {
+      top: 12%;
+      left: 4%;
+      animation: hudFlicker 4s ease-in-out infinite;
+    }
+
+    .hud-text-2 {
+      top: 18%;
+      left: 4%;
+      animation: hudFlicker 4s ease-in-out infinite;
+      animation-delay: 0.5s;
+    }
+
+    .hud-text-3 {
+      bottom: 15%;
+      right: 4%;
+      text-align: right;
+      animation: hudFlicker 4s ease-in-out infinite;
+      animation-delay: 1s;
+    }
+
+    .hud-text-4 {
+      bottom: 20%;
+      right: 4%;
+      text-align: right;
+      animation: hudFlicker 4s ease-in-out infinite;
+      animation-delay: 1.5s;
+    }
+
+    @keyframes hudFlicker {
+
+      0%,
+      90%,
+      100% {
+        opacity: 0.6;
+      }
+
+      95% {
+        opacity: 0.3;
+      }
+    }
+
+    /* Pixel Blocks Decoration */
+    .pixel-block {
+      position: absolute;
+      background: var(--accent-green);
+      opacity: 0.15;
+      z-index: 2;
+    }
+
+    .pixel-block-1 {
+      width: 8px;
+      height: 8px;
+      top: 8%;
+      left: 2%;
+    }
+
+    .pixel-block-2 {
+      width: 6px;
+      height: 6px;
+      top: 10%;
+      left: 3.5%;
+    }
+
+    .pixel-block-3 {
+      width: 10px;
+      height: 10px;
+      bottom: 8%;
+      right: 2%;
+    }
+
+    .pixel-block-4 {
+      width: 6px;
+      height: 6px;
+      bottom: 10%;
+      right: 4%;
+    }
+
+    /* Vertical scan line effect */
+    .scan-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(180deg, transparent, rgba(34, 197, 94, 0.3), transparent);
+      animation: scanMove 8s linear infinite;
+      opacity: 0.4;
+      z-index: 1;
+    }
+
+    @keyframes scanMove {
+      0% {
+        left: 0;
+      }
+
+      100% {
+        left: 100%;
+      }
+    }
+
+    /* ========================================
+   HERO CONTENT
+   ======================================== */
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      padding: 40px 40px;
+      max-width: 650px;
+      flex: 0 0 auto;
+    }
+
+    @media (min-width: 992px) {
+      .hero-content {
+        padding: 40px 60px 40px 80px;
+      }
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: var(--accent-green);
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      animation: badgePulse 2s ease-in-out infinite;
+    }
+
+    @keyframes badgePulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+      }
+    }
+
+    .hero-title {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 24px;
+      letter-spacing: -1px;
+    }
+
+    @media (min-width: 768px) {
+      .hero-title {
+        font-size: 52px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .hero-title {
+        font-size: 58px;
+      }
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, var(--accent-green), var(--accent-mint));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: 18px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 36px;
+      max-width: 550px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary-cyber {
+      background: var(--accent-green);
+      border: none;
+      color: #020617;
+      padding: 14px 28px;
+      font-weight: 600;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary-cyber:hover {
+      background: var(--accent-mint);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(34, 197, 94, 0.25);
+      color: #020617;
+    }
+
+    .btn-outline-cyber {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.03);
+      padding: 14px 28px;
+      font-weight: 600;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-outline-cyber:hover {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+      background: rgba(34, 197, 94, 0.05);
+    }
+
+    /* Social Links */
+    .social-links {
+      margin-top: 32px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .social {
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.2s;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .social:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      color: var(--text-primary);
+      transform: translateY(-2px);
+    }
+
+    /* Hacker Image */
+    .hacker-box {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      flex: 1;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 992px) {
+      .hacker-box {
+        padding: 80px 60px 80px 20px;
+      }
+    }
+
+    .hacker-box img {
+      width: 100%;
+      max-width: 340px;
+      height: auto;
+      filter: drop-shadow(0 0 60px rgba(34, 197, 94, 0.3));
+      animation: hackerFloat 5s ease-in-out infinite;
+    }
+
+    @keyframes hackerFloat {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-20px) rotate(1deg);
+      }
+    }
+
+    /* Hero Wrapper for Two-Column Layout */
+    .hero-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+    }
+
+    @media (min-width: 992px) {
+      .hero-wrapper {
+        flex-direction: row;
+        align-items: flex-start;
+      }
+
+      .hero-content {
+        flex: 0 0 55%;
+      }
+
+      .hacker-box {
+        flex: 0 0 45%;
+        align-self: center;
+        margin-top: 150px;
+      }
+    }
+
+    /* ========================================
+   FEATURES SECTION - LADDER DESIGN
+   ======================================== */
+    .features-section {
+      padding: 120px 80px;
+      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+      position: relative;
+    }
+
+    .features-title {
+      font-size: 42px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .features-title span {
+      color: var(--accent-green);
+    }
+
+    .features-subtitle {
+      color: var(--text-secondary);
+      text-align: center;
+      font-size: 16px;
+      margin-bottom: 80px;
+    }
+
+    /* Ladder Container */
+    .features-list-container {
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 0;
+    }
+
+    /* Central vertical line */
+    .features-list-container::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, transparent, rgba(34, 197, 94, 0.3), transparent);
+      transform: translateX(-50%);
+    }
+
+    /* Feature Item */
+    .feature-item {
+      position: relative;
+      margin-bottom: 80px;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    /* Odd items (1, 3) - Left side */
+    .feature-item:nth-child(odd) {
+      flex-direction: row;
+      padding-right: 50%;
+    }
+
+    /* Even items (2, 4) - Right side */
+    .feature-item:nth-child(even) {
+      flex-direction: row-reverse;
+      padding-left: 50%;
+    }
+
+    /* Feature Number Badge */
+    .feature-number {
+      flex-shrink: 0;
+      width: 60px;
+      height: 60px;
+      background: rgba(34, 197, 94, 0.1);
+      border: 2px solid var(--accent-green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent-green);
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Connecting line from number to center */
+    .feature-item::after {
+      content: '';
+      position: absolute;
+      top: 30px;
+      width: 40px;
+      height: 2px;
+      background: rgba(34, 197, 94, 0.3);
+      z-index: 1;
+    }
+
+    /* Left items - line goes right */
+    .feature-item:nth-child(odd)::after {
+      right: calc(50% - 40px);
+    }
+
+    /* Right items - line goes left */
+    .feature-item:nth-child(even)::after {
+      left: calc(50% - 40px);
+    }
+
+    /* Feature Content Box */
+    .feature-content {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border-primary);
+      border-radius: 12px;
+      padding: 24px 28px;
+      transition: all 0.3s ease;
+    }
+
+    .feature-content:hover {
+      transform: translateY(-5px);
+      border-color: rgba(34, 197, 94, 0.5);
+      background: rgba(34, 197, 94, 0.03);
+      box-shadow: 0 10px 30px rgba(34, 197, 94, 0.15);
+    }
+
+    .feature-item h5 {
+      font-weight: 700;
+      margin-bottom: 10px;
+      font-size: 18px;
+      color: var(--text-primary);
+    }
+
+    .feature-item p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .features-list-container::before {
+        left: 30px;
+      }
+
+      .feature-item:nth-child(odd),
+      .feature-item:nth-child(even) {
+        flex-direction: row;
+        padding-right: 0;
+        padding-left: 70px;
+      }
+
+      .feature-item::after {
+        display: none;
+      }
+
+      .feature-number {
+        position: absolute;
+        left: 0;
+        width: 50px;
+        height: 50px;
+        font-size: 16px;
+      }
+    }
+
+    /* ========================================
+   FOOTER
+   ======================================== */
+    .cyber-footer {
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      margin-top: 0;
+    }
+
+    .footer-cta {
+      background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), var(--bg-secondary));
+      text-align: center;
+      padding: 80px 20px;
+      border-bottom: 1px solid var(--border-primary);
+    }
+
+    .footer-cta h3 {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .footer-cta h3 span {
+      color: var(--accent-green);
+    }
+
+    .footer-cta p {
+      color: var(--text-secondary);
+      font-size: 16px;
+    }
+
+    .footer-cta a {
+      display: inline-block;
+      margin-top: 28px;
+      background: var(--accent-green);
+      color: #020617;
+      padding: 14px 32px;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .footer-cta a:hover {
+      background: var(--accent-mint);
+      transform: translateY(-2px);
+    }
+
+    .footer-main {
+      padding: 80px 60px;
+    }
+
+    .footer-logo {
+      height: 40px;
+      margin-bottom: 18px;
+    }
+
+    .footer-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      max-width: 320px;
+      line-height: 1.7;
+    }
+
+    .footer-title {
+      color: var(--accent-green);
+      font-weight: 700;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .footer-main ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-main ul li {
+      margin-bottom: 10px;
+    }
+
+    .footer-main ul li a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .footer-main ul li a:hover {
+      color: var(--accent-green);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 24px;
+      text-align: center;
+    }
+
+    .footer-bottom p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ========================================
+   MAINTENANCE BANNER
+   ======================================== */
+    .maintenance-banner {
+      background: linear-gradient(135deg, #dc2626, #991b1b);
+      color: #fff;
+      text-align: center;
+      padding: 12px 20px;
+      font-weight: 600;
+      font-size: 13px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    .maintenance-banner::before {
+      content: "⚠️";
+      margin-right: 8px;
+    }
+
+    /* ========================================
+   RESPONSIVE
+   ======================================== */
+    @media (max-width: 1100px) {
+      .hacker-box {
+        display: none;
+      }
+
+      .hero-content {
+        max-width: 100%;
+        padding: 140px 40px;
+      }
+
+      .hero-title {
+        font-size: 44px;
+      }
+
+      .glass-panel-1,
+      .glass-panel-2 {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 12px 20px;
+      }
+
+      .hero-container {
+        min-height: auto;
+        padding-bottom: 40px;
+      }
+
+      .hero-wrapper {
+        flex-direction: column;
+      }
+
+      .hero-content {
+        text-align: center;
+        max-width: 100%;
+        padding: 40px 24px 20px;
+      }
+
+      .hero-title {
+        font-size: 36px;
+      }
+
+      .hero-desc {
+        font-size: 16px;
+        max-width: 100%;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .social-links {
+        justify-content: center;
+      }
+
+      .hacker-box {
+        padding: 20px 24px 40px;
+        max-width: 350px;
+      }
+
+      .hacker-box img {
+        max-width: 250px;
+      }
+
+      /* Hide heavy decorative elements on mobile */
+      .glass-panel,
+      .circuit-line,
+      .hud-text,
+      .pixel-block {
+        display: none;
+      }
+
+      .btn-primary-cyber,
+      .btn-outline-cyber {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .features-section {
+        padding: 80px 24px;
+      }
+
+      .features-title {
+        font-size: 32px;
+      }
+
+      .footer-main {
+        padding: 60px 24px;
+        text-align: center;
+      }
+
+      .footer-desc {
+        margin: 0 auto 30px;
+      }
+    }
+
+
+
+    /* Override font globally for this page */
+    body,
+    * {
+      font-family: 'JetBrains Mono', monospace !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  {% include "includes/navbar.html" %}
+
+  <!-- 3D CYBER HERO SECTION -->
+  <section class="hero-container" id="heroContainer">
+
+    <!-- 3D Grid Floor -->
+    <div class="cyber-grid" id="cyberGrid"></div>
+
+    <!-- Distant Fog/Glow -->
+    <div class="distant-glow"></div>
+
+    <!-- Floating Glass Panels -->
+    <div class="glass-panel glass-panel-1" id="panel1"></div>
+    <div class="glass-panel glass-panel-2" id="panel2"></div>
+    <div class="glass-panel glass-panel-3" id="panel3"></div>
+
+    <!-- Circuit Lines with Pulse -->
+    <div class="circuit-container">
+      <div class="circuit-line circuit-line-1"></div>
+      <div class="circuit-line circuit-line-2"></div>
+      <div class="circuit-line circuit-line-3"></div>
+    </div>
+
+    <!-- HUD Microtext -->
+    <div class="hud-text hud-text-1">INITIALIZING SEQUENCE...</div>
+    <div class="hud-text hud-text-2">MODE: <span style="color: var(--accent-green);">ACTIVE</span></div>
+    <div class="hud-text hud-text-3">NODE STATUS: ONLINE</div>
+    <div class="hud-text hud-text-4">SECURITY: <span style="color: var(--accent-green);">VERIFIED</span></div>
+
+    <!-- Pixel Block Decorations -->
+    <div class="pixel-block pixel-block-1"></div>
+    <div class="pixel-block pixel-block-2"></div>
+    <div class="pixel-block pixel-block-3"></div>
+    <div class="pixel-block pixel-block-4"></div>
+
+    <!-- Scan Line -->
+    <div class="scan-line"></div>
+
+    <!-- Hero Wrapper: Two-Column Responsive Layout -->
+    <div class="hero-wrapper">
+
+      <!-- Left Column: Text & Buttons -->
+      <div class="hero-content" id="heroContent">
+        <div class="hero-badge">
+          <span>CTF Platform</span>
+        </div>
+
+        <h1 class="hero-title">
+          Host or Join<br>
+          <span>Capture The Flag</span><br>
+          Cybersecurity Events
+        </h1>
+
+        <p class="hero-desc">
+          Practice real-world hacking skills, compete in CTFs, and grow as an ethical hacker with hands-on challenges
+          and live competitions.
+        </p>
+
+        <div class="hero-buttons">
+          {% if auth_enabled %}
+          <a href="/login" class="btn-primary-cyber">
+            Join an Event <span>→</span>
+          </a>
+          <a href="/register" class="btn-outline-cyber">Create Account</a>
+          {% endif %}
+        </div>
+
+        <div class="social-links">
+          <a href="https://www.youtube.com/@cybertec9999" target="_blank" class="social">YouTube</a>
+          <a href="https://www.instagram.com/cyber_tec8/" target="_blank" class="social">Instagram</a>
+          <a href="https://www.linkedin.com/in/khushal-bhoyar-b98690241/" target="_blank" class="social">LinkedIn</a>
+        </div>
+      </div>
+
+      <!-- Right Column: Hacker Image -->
+      <div class="hacker-box" id="hackerBox">
+        <img src="{{ url_for('static', filename='img/hacker.png') }}" id="hackerImg" alt="Hacker">
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <h2 class="features-title">Why <span>CYBERTEC8</span>?</h2>
+    <p class="features-subtitle">Everything you need to learn and compete</p>
+
+    <div class="features-list-container">
+      <div class="feature-item">
+        <span class="feature-number">01</span>
+        <div class="feature-content">
+          <h5>Live CTF Events</h5>
+          <p>Timed competitions with real-world scenarios and challenges designed to test your skills under pressure.
+          </p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <span class="feature-number">02</span>
+        <div class="feature-content">
+          <h5>Hands-on Challenges</h5>
+          <p>Practical exercises spanning Web, Crypto, Network, OSINT, and Forensics domains for comprehensive learning.
+          </p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <span class="feature-number">03</span>
+        <div class="feature-content">
+          <h5>Live Scoreboards</h5>
+          <p>Track progress and compete globally in real-time.</p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <span class="feature-number">04</span>
+        <div class="feature-content">
+          <h5>Training & Labs</h5>
+          <p>Guided learning paths with practical labs and tutorials.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Footer -->
+  <footer class="cyber-footer">
+    <div class="footer-cta">
+      <h3>Join the <span>Revolution</span></h3>
+      <p>Start competing, collaborating, and creating today. It's free to sign up.</p>
+      {% if auth_enabled %}
+      <a href="/register">Get Started →</a>
+      {% endif %}
+    </div>
+
+    <div class="footer-main">
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <img src="{{ url_for('static', filename='img/cybertec8-logo.png') }}" class="footer-logo" alt="Cybertec8">
+          <p class="footer-desc">
+            The ultimate platform to connect, compete, and create through CTFs, hackathons, and hands-on cybersecurity
+            learning.
+          </p>
+        </div>
+
+        <div class="col-md-2 mb-4">
+          <h6 class="footer-title">Platform</h6>
+          <ul>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="#">Leaderboard</a></li>
+            <li><a href="#">Wall of Fame</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-2 mb-4">
+          <h6 class="footer-title">Programs</h6>
+          <ul>
+            <li><a href="#">Campus Ambassador</a></li>
+            <li><a href="#">Community Partners</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-2 mb-4">
+          <h6 class="footer-title">Solutions</h6>
+          <ul>
+            <li><a href="#">Hiring CTF</a></li>
+            <li><a href="#">Hackathons</a></li>
+            <li><a href="#">Attack / Defence</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-2 mb-4">
+          <h6 class="footer-title">Legal</h6>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms</a></li>
+            <li><a href="#">Bug Reporting</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 CYBERTEC8. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- 3D Parallax Effect Script -->
+  <script>
+    (function () {
+      const heroContainer = document.getElementById('heroContainer');
+      const cyberGrid = document.getElementById('cyberGrid');
+      const heroContent = document.getElementById('heroContent');
+      const hackerBox = document.getElementById('hackerBox');
+      const panel1 = document.getElementById('panel1');
+      const panel2 = document.getElementById('panel2');
+      const panel3 = document.getElementById('panel3');
+
+      // Parallax on mouse move
+      heroContainer.addEventListener('mousemove', (e) => {
+        const rect = heroContainer.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+        // Grid parallax (subtle)
+        cyberGrid.style.transform = `translateX(calc(-50% + ${x * 30}px)) perspective(500px) rotateX(60deg) rotateZ(${x * 2}deg)`;
+
+        // Content parallax (very subtle)
+        heroContent.style.transform = `translate(${x * 15}px, ${y * 10}px)`;
+
+        // Hacker image parallax
+        if (hackerBox) {
+          hackerBox.style.transform = `translateY(-50%) translate(${x * 25}px, ${y * 20}px)`;
+        }
+
+        // Glass panels parallax (stronger for 3D effect)
+        if (panel1) {
+          panel1.style.transform = `perspective(800px) rotateY(${-15 + x * 10}deg) rotateX(${5 + y * 5}deg) translate(${x * 40}px, ${y * 30}px)`;
+        }
+        if (panel2) {
+          panel2.style.transform = `perspective(800px) rotateY(${-20 + x * 15}deg) rotateX(${8 + y * 8}deg) translate(${x * 50}px, ${y * 40}px)`;
+        }
+        if (panel3) {
+          panel3.style.transform = `perspective(800px) rotateY(${15 - x * 10}deg) rotateX(${-5 - y * 5}deg) translate(${-x * 35}px, ${-y * 25}px)`;
+        }
+      });
+
+      // Reset on mouse leave
+      heroContainer.addEventListener('mouseleave', () => {
+        cyberGrid.style.transform = 'translateX(-50%) perspective(500px) rotateX(60deg)';
+        heroContent.style.transform = 'translate(0, 0)';
+        if (hackerBox) hackerBox.style.transform = 'translateY(-50%)';
+        if (panel1) panel1.style.transform = 'perspective(800px) rotateY(-15deg) rotateX(5deg)';
+        if (panel2) panel2.style.transform = 'perspective(800px) rotateY(-20deg) rotateX(8deg)';
+        if (panel3) panel3.style.transform = 'perspective(800px) rotateY(15deg) rotateX(-5deg)';
+      });
+
+      // Smooth transition for parallax
+      const elements = [cyberGrid, heroContent, hackerBox, panel1, panel2, panel3].filter(Boolean);
+      elements.forEach(el => {
+        el.style.transition = 'transform 0.15s ease-out';
+      });
+    })();
+  </script>
+
+  <script src="{{ url_for('static', filename='js/theme-manager.js') }}"></script>
+
+</body>
+
+</html>

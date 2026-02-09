@@ -1,0 +1,77 @@
+/* ========================================
+   FEATURES LIST SECTION
+   ======================================== */
+.features-section {
+  padding: 120px 20px;
+  background: var(--bg-secondary);
+  position: relative;
+}
+
+.features-title {
+  font-size: 42px;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.features-title span {
+  color: var(--accent-green);
+}
+
+.features-subtitle {
+  color: var(--text-secondary);
+  text-align: center;
+  font-size: 16px;
+  margin-bottom: 80px;
+}
+
+.features-list-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.feature-item {
+  position: relative;
+  padding-left: 80px;
+  margin-bottom: 50px;
+}
+
+.feature-number {
+  position: absolute;
+  left: 0;
+  top: 2px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.feature-item h5 {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.feature-item p {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .features-section {
+    padding: 80px 15px;
+  }
+  .feature-item {
+    padding-left: 60px;
+  }
+  .feature-item h5 {
+    font-size: 20px;
+  }
+  .feature-item p {
+    font-size: 15px;
+  }
+}

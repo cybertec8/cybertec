@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Cybertec8 Console{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Global Theme System -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-system.css') }}">
+  <script src="{{ url_for('static', filename='js/theme-manager.js') }}"></script>
+
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/terminal-style.css') }}">
+
+  {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+  <div class="dashboard">
+
+    <!-- ========================================
+       SIDEBAR
+       ======================================== -->
+    <aside class="sidebar">
+      <div class="logo">
+        <h1>Cybertec8</h1>
+        <small>Cyber CTF Platform</small>
+      </div>
+
+      <nav class="nav">
+        <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">
+          <i class='bx bx-grid-alt'></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="/challenges" class="{% if request.path == '/challenges' %}active{% endif %}">
+          <i class='bx bx-trophy'></i>
+          <span>Challenges</span>
+        </a>
+        <a href="/dashboard/events" class="{% if request.path == '/dashboard/events' %}active{% endif %}">
+          <i class='bx bx-calendar-event'></i>
+          <span>Events</span>
+        </a>
+        <a href="/scoreboard" class="{% if request.path == '/scoreboard' %}active{% endif %}">
+          <i class='bx bx-bar-chart-alt-2'></i>
+          <span>Scoreboard</span>
+        </a>
+        <a href="/teams" class="{% if request.path == '/teams' %}active{% endif %}">
+          <i class='bx bx-group'></i>
+          <span>My Teams</span>
+        </a>
+        <a href="/organizations" class="{% if request.path == '/organizations' %}active{% endif %}">
+          <i class='bx bx-buildings'></i>
+          <span>Organizations</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- ========================================
+       MAIN CONTENT
+       ======================================== -->
+    <main class="main">
+
+      <!-- Topbar -->
+      <div class="topbar">
+        <h2>{% block page_title %}Dashboard{% endblock %}</h2>
+
+        <div class="topbar-right">
+
+          <!-- Theme Toggle -->
+          <button class="theme-toggle-btn" data-theme-toggle title="Toggle Light/Dark Mode">
+            <svg class="theme-icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+            <svg class="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+          </button>
+
+          <!-- Notifications -->
+          <div class="notifications">
+            <div class="icon-btn" onclick="toggleDropdown('notif')">
+              <i class='bx bx-bell'></i>
+            </div>
+            <div class="dropdown" id="notif">
+              <a href="#" style="color: var(--text-muted); cursor: default;">No notifications</a>
+            </div>
+          </div>
+
+          <!-- Profile -->
+          <div class="profile">
+            <div class="icon-btn avatar-btn" onclick="toggleDropdown('profile')">
+              <img src="{{ url_for('static', filename='avatars/default.png') }}" alt="Avatar">
+            </div>
+            <div class="dropdown" id="profile">
+              <a href="{{ url_for('profile') }}">View Profile</a>
+              <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Page Content -->
+      <div class="content">
+        {% block content %}{% endblock %}
+      </div>
+
+    </main>
+
+  </div>
+
+  <script>
+    function toggleDropdown(id) {
+      const dropdown = document.getElementById(id);
+      dropdown.classList.toggle('show');
+
+      // Close other dropdowns
+      document.querySelectorAll('.dropdown').forEach(d => {
+        if (d.id !== id) d.classList.remove('show');
+      });
+    }
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.notifications') && !e.target.closest('.profile')) {
+        document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
+      }
+    });
+  </script>
+
+  {% block extra_js %}{% endblock %}
+
+</body>
+
+</html>
