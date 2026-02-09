@@ -159,7 +159,8 @@ def admin_required(f):
 
 @app.route("/")
 def home():
-    return render_template("home.html", auth_enabled=AUTH_ENABLED)
+    return "Server Running 🚀"
+
 
 @app.route("/blog")
 def blog():
