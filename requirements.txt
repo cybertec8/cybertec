@@ -2,3 +2,4 @@ flask
 gunicorn
 jinja2
 requests
+python-dotenv
