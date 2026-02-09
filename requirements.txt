@@ -3,3 +3,6 @@ gunicorn
 jinja2
 requests
 python-dotenv
+authlib
+flask-login
+flask-sqlalchemy
