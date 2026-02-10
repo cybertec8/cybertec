@@ -1079,6 +1079,16 @@ def api_scoreboard():
 with app.app_context():
     db.create_all()
 
+
+# ---- TEMP ADMIN ROUTE ----
+@app.route("/make-admin")
+@login_required
+def make_admin():
+    current_user.is_admin = True
+    db.session.commit()
+    return "You are now admin"
+
+
 # ---------------- RUN LOCAL ----------------
 if __name__ == "__main__":
     app.run(debug=True)
