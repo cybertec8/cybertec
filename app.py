@@ -1080,10 +1080,13 @@ with app.app_context():
     db.create_all()
 
 
-# ---- TEMP ADMIN ROUTE ----
+# -------- TEMP SAFE ADMIN ROUTE --------
 @app.route("/make-admin")
 @login_required
 def make_admin():
+    if current_user.email != "bhoyarkartik145@gmail.com":
+        return "Not Allowed"
+
     current_user.is_admin = True
     db.session.commit()
     return "You are now admin"
@@ -1092,3 +1095,4 @@ def make_admin():
 # ---------------- RUN LOCAL ----------------
 if __name__ == "__main__":
     app.run(debug=True)
+
