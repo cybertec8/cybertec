@@ -38,8 +38,9 @@ app = Flask(
 )
 
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "cybertec8_secret")
-app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{os.path.join(BASE_DIR, 'ctf.db')}"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
 
 load_dotenv()
 
