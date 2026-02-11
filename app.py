@@ -515,6 +515,11 @@ def admin_add_blog():
             file = request.files['thumbnail']
             if file and file.filename != "":
                 filename = secure_filename(file.filename)
+
+                # SAVE IMAGE IN STATIC FOLDER
+                file.save(os.path.join(UPLOAD_FOLDER, filename))
+
+                # STORE PATH IN DATABASE
                 thumbnail_filename = f"/static/uploads/blogs/{filename}"
 
         new_blog = Blog(
@@ -550,14 +555,17 @@ def admin_edit_blog(blog_id):
             file = request.files['thumbnail']
             if file and file.filename != "":
                 filename = secure_filename(file.filename)
-                file.save(os.path.join(app.static_folder, "uploads/blogs", filename))
+
+                # SAVE IMAGE
+                file.save(os.path.join(UPLOAD_FOLDER, filename))
+
+                # UPDATE DB PATH
                 blog_item.thumbnail = f"/static/uploads/blogs/{filename}"
 
         db.session.commit()
         return redirect(url_for("admin_blogs"))
 
     return render_template("admin/add_blog.html", blog=blog_item)
-
 
 
 @app.route("/admin/delete-blog/<int:blog_id>", methods=["POST"])
@@ -567,6 +575,7 @@ def admin_delete_blog(blog_id):
     db.session.delete(blog_item)
     db.session.commit()
     return redirect(url_for("admin_blogs"))
+
 
 # ---------------- ADMIN EVENTS LIST ----------------
 
