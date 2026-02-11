@@ -26,6 +26,13 @@ from models import (
     TaskSolve, TaskLike, TaskSubmission, Activity, Blog
 )
 
+# ---------------- FLASK APP ----------------
+app = Flask(__name__)
+
+# -------- IMAGE UPLOAD FOLDER --------
+UPLOAD_FOLDER = os.path.join(app.static_folder, "uploads/blogs")
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 
 # ---------------- BASIC SETUP ----------------
 
