@@ -711,14 +711,23 @@ def admin_delete_event(event_id):
 
 # ---------------- ADMIN DELETE TASK ----------------
 
-@app.route("/admin/delete-task/<int:task_id>")
+@app.route("/admin/delete-task/<int:task_id>", methods=["POST"])
 @admin_required
 def admin_delete_task(task_id):
 
     task = CTFTask.query.get_or_404(task_id)
+
+    # related records delete karo
+    TaskSolve.query.filter_by(task_id=task.id).delete()
+    TaskSubmission.query.filter_by(task_id=task.id).delete()
+    TaskLike.query.filter_by(task_id=task.id).delete()
+
+    # main task delete
     db.session.delete(task)
     db.session.commit()
-    return redirect(url_for("admin_add_task"))
+
+    return redirect(url_for("admin_manage_tasks"))
+
 
 # ---------------- ADMIN MANAGE TEAMS ----------------
 
