@@ -519,8 +519,8 @@ def admin_add_blog():
                 # SAVE IMAGE IN STATIC FOLDER
                 file.save(os.path.join(UPLOAD_FOLDER, filename))
 
-                # STORE PATH IN DATABASE
-                thumbnail_filename = f"/static/uploads/blogs/{filename}"
+                # STORE ONLY FILENAME IN DB
+                thumbnail_filename = filename
 
         new_blog = Blog(
             title=title,
@@ -559,8 +559,8 @@ def admin_edit_blog(blog_id):
                 # SAVE IMAGE
                 file.save(os.path.join(UPLOAD_FOLDER, filename))
 
-                # UPDATE DB PATH
-                blog_item.thumbnail = f"/static/uploads/blogs/{filename}"
+                # STORE ONLY FILENAME
+                blog_item.thumbnail = filename
 
         db.session.commit()
         return redirect(url_for("admin_blogs"))
