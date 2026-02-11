@@ -490,27 +490,25 @@ def admin_blogs():
     blogs = Blog.query.order_by(Blog.published_at.desc()).all()
     return render_template("admin/blogs.html", blogs=blogs)
 
+
 @app.route("/admin/add-blog", methods=["GET", "POST"])
 @admin_required
 def admin_add_blog():
-        
+
     if request.method == "POST":
         title = request.form.get("title")
         short_description = request.form.get("short_description")
         category = request.form.get("category")
         read_time = request.form.get("read_time")
         external_url = request.form.get("external_url")
-        
-        # Handle thumbnail upload
+
+        # -------- THUMBNAIL HANDLE --------
         thumbnail_filename = None
         if 'thumbnail' in request.files:
             file = request.files['thumbnail']
-            if file and allowed_file(file.filename):
+            if file and file.filename != "":
                 filename = secure_filename(file.filename)
-                from datetime import datetime
-                filename = f"{int(datetime.utcnow().timestamp())}_{filename}"
-                file.save(os.path.join(UPLOAD_FOLDER, filename))
-                thumbnail_filename = filename
+                thumbnail_filename = f"/static/uploads/blogs/{filename}"
 
         new_blog = Blog(
             title=title,
@@ -526,33 +524,32 @@ def admin_add_blog():
 
     return render_template("admin/add_blog.html")
 
+
 @app.route("/admin/edit-blog/<int:blog_id>", methods=["GET", "POST"])
 @admin_required
 def admin_edit_blog(blog_id):
-        
+
     blog_item = Blog.query.get_or_404(blog_id)
-    
+
     if request.method == "POST":
         blog_item.title = request.form.get("title")
         blog_item.short_description = request.form.get("short_description")
         blog_item.category = request.form.get("category")
         blog_item.read_time = request.form.get("read_time")
         blog_item.external_url = request.form.get("external_url")
-        
-        # Handle thumbnail upload
+
+        # -------- THUMBNAIL HANDLE --------
         if 'thumbnail' in request.files:
             file = request.files['thumbnail']
-            if file and allowed_file(file.filename):
+            if file and file.filename != "":
                 filename = secure_filename(file.filename)
-                from datetime import datetime
-                filename = f"{int(datetime.utcnow().timestamp())}_{filename}"
-                file.save(os.path.join(UPLOAD_FOLDER, filename))
-                blog_item.thumbnail = filename
+                blog_item.thumbnail = f"/static/uploads/blogs/{filename}"
 
         db.session.commit()
         return redirect(url_for("admin_blogs"))
 
-    return render_template("admin/add_blog.html", blog=blog_item) # REUSING add_blog.html for edit
+    return render_template("admin/add_blog.html", blog=blog_item)
+
 
 @app.route("/admin/delete-blog/<int:blog_id>", methods=["POST"])
 @admin_required
