@@ -543,12 +543,14 @@ def admin_edit_blog(blog_id):
             file = request.files['thumbnail']
             if file and file.filename != "":
                 filename = secure_filename(file.filename)
+                file.save(os.path.join(app.static_folder, "uploads/blogs", filename))
                 blog_item.thumbnail = f"/static/uploads/blogs/{filename}"
 
         db.session.commit()
         return redirect(url_for("admin_blogs"))
 
     return render_template("admin/add_blog.html", blog=blog_item)
+
 
 
 @app.route("/admin/delete-blog/<int:blog_id>", methods=["POST"])
