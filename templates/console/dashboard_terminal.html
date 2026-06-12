@@ -1,0 +1,524 @@
+{% extends "console/base.html" %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* System initialization text */
+  .init-sequence {
+    font-size: 9px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
+    font-weight: 400;
+  }
+  
+  .init-sequence span {
+    color: var(--accent-lime);
+  }
+  
+  /* Dashboard header */
+  .dashboard-header {
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border-color);
+  }
+  
+  /* Stats cards */
+  .stat-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    padding: 16px;
+    position: relative;
+    transition: all 0.2s ease;
+  }
+  
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 6px;
+    height: 6px;
+    background: var(--accent-lime);
+  }
+  
+  .stat-card:hover {
+    border-color: var(--text-primary);
+    box-shadow: 4px 4px 0 var(--border-color);
+  }
+  
+  .stat-label {
+    font-size: 9px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  
+  .stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  
+  .stat-meta {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  /* Progress bar */
+  .progress-wrapper {
+    margin-top: 10px;
+  }
+  
+  .progress-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    margin-top: 6px;
+    position: relative;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: var(--accent-lime);
+    transition: width 0.3s ease;
+  }
+  
+  .progress-text {
+    font-size: 9px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  /* Activity list */
+  .activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 8px;
+    background: var(--bg-secondary);
+    transition: all 0.15s ease;
+  }
+  
+  .activity-item:hover {
+    border-color: var(--text-primary);
+  }
+  
+  .activity-icon {
+    width: 6px;
+    height: 6px;
+    background: var(--accent-lime);
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+  
+  .activity-content {
+    flex: 1;
+  }
+  
+  .activity-text {
+    font-size: 11px;
+    color: var(--text-primary);
+    margin-bottom: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  
+  .activity-time {
+    font-size: 9px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  /* Challenge cards */
+  .challenge-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    padding: 16px;
+    position: relative;
+    transition: all 0.2s ease;
+  }
+  
+  .challenge-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    background: var(--text-primary);
+  }
+  
+  .challenge-card:hover {
+    border-color: var(--text-primary);
+    box-shadow: 4px 4px 0 var(--border-color);
+  }
+  
+  .challenge-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .challenge-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  
+  .challenge-category {
+    font-size: 9px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .challenge-points {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent-lime);
+  }
+  
+  .challenge-desc {
+    font-size: 10px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 12px;
+    letter-spacing: 0.3px;
+  }
+  
+  .challenge-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-color);
+  }
+  
+  /* Announcements */
+  .announcement-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  
+  .announcement-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--accent-lime);
+  }
+  
+  .announcement-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    margin-left: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .announcement-text {
+    font-size: 10px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-left: 10px;
+  }
+  
+  /* Welcome user card */
+  .welcome-card {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    padding: 20px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  
+  .welcome-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    background: var(--accent-lime);
+  }
+  
+  .welcome-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    background: var(--text-primary);
+  }
+  
+  .welcome-user {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  
+  .welcome-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  
+  .welcome-id {
+    font-size: 9px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- System initialization -->
+<div class="init-sequence">
+  <span>[OK]</span> INITIALIZING SEQUENCE... SYSTEM READY
+</div>
+
+<!-- Dashboard header -->
+<div class="dashboard-header">
+  <div class="page-title">Cybertec8 Dashboard</div>
+</div>
+
+<!-- Welcome card -->
+<div class="welcome-card">
+  <div class="welcome-user">Authenticated User</div>
+  <div class="welcome-name">{{ current_user.username }}</div>
+  <div class="welcome-id">Player ID: #{{ current_user.id }} | Access Level: STANDARD</div>
+</div>
+
+<!-- Stats Grid -->
+<div class="grid grid-4 mb-lg">
+  
+  <div class="stat-card">
+    <div class="stat-label">XP Points</div>
+    <div class="stat-value">350</div>
+    <div class="stat-meta">Total Experience</div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-label">Current Rank</div>
+    <div class="stat-value">BEGINNER</div>
+    <div class="progress-wrapper">
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: 35%;"></div>
+      </div>
+      <div class="progress-text">350 / 1000 XP</div>
+    </div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-label">Active Matches</div>
+    <div class="stat-value">0</div>
+    <div class="stat-meta">Ongoing Challenges</div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-label">Squads</div>
+    <div class="stat-value">{{ my_teams|length if my_teams else 0 }}</div>
+    <div class="stat-meta">Team Memberships</div>
+  </div>
+  
+</div>
+
+<!-- Additional stats row -->
+<div class="grid grid-3 mb-lg">
+  
+  <div class="stat-card">
+    <div class="stat-label">Missions Completed</div>
+    <div class="stat-value">0</div>
+    <div class="stat-meta">Solved Challenges</div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-label">Success Rate</div>
+    <div class="stat-value">0%</div>
+    <div class="stat-meta">Challenge Completion</div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-label">Streak</div>
+    <div class="stat-value">0</div>
+    <div class="stat-meta">Days Active</div>
+  </div>
+  
+</div>
+
+<!-- Main Content Grid -->
+<div class="grid grid-3 gap-lg">
+  
+  <!-- Recent Activity -->
+  <div style="grid-column: span 2;">
+    <div class="card">
+      <h3 class="section-title">Recent Activity</h3>
+      
+      <div class="activity-item">
+        <div class="activity-icon"></div>
+        <div class="activity-content">
+          <div class="activity-text">Solved challenge: SQL Injection Basics</div>
+          <div class="activity-time">2 hours ago</div>
+        </div>
+      </div>
+      
+      <div class="activity-item">
+        <div class="activity-icon"></div>
+        <div class="activity-content">
+          <div class="activity-text">Joined team: Elite Hackers</div>
+          <div class="activity-time">1 day ago</div>
+        </div>
+      </div>
+      
+      <div class="activity-item">
+        <div class="activity-icon"></div>
+        <div class="activity-content">
+          <div class="activity-text">Started challenge: XSS Attack Workshop</div>
+          <div class="activity-time">2 days ago</div>
+        </div>
+      </div>
+      
+      <div class="activity-item">
+        <div class="activity-icon"></div>
+        <div class="activity-content">
+          <div class="activity-text">Account created and verified</div>
+          <div class="activity-time">3 days ago</div>
+        </div>
+      </div>
+      
+      <div class="activity-item">
+        <div class="activity-icon"></div>
+        <div class="activity-content">
+          <div class="activity-text">Achievement unlocked: First Steps</div>
+          <div class="activity-time">3 days ago</div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <!-- Upcoming Events -->
+  <div>
+    <div class="card">
+      <h3 class="section-title">Upcoming Events</h3>
+      
+      <div class="announcement-item">
+        <div class="announcement-title">Weekly CTF Challenge</div>
+        <div class="announcement-text">Competition starts Friday 18:00 UTC</div>
+      </div>
+      
+      <div class="announcement-item">
+        <div class="announcement-title">New Challenges Added</div>
+        <div class="announcement-text">5 new cryptography missions available</div>
+      </div>
+      
+      <div class="announcement-item">
+        <div class="announcement-title">Season Rankings</div>
+        <div class="announcement-text">Top 10 players earn special badges</div>
+      </div>
+      
+      <a href="/events" class="btn btn-primary" style="width: 100%; margin-top: 12px;">
+        View All Events
+      </a>
+    </div>
+  </div>
+  
+</div>
+
+<!-- Recommended Challenges -->
+<div class="mt-lg">
+  <h3 class="section-title">Recommended Challenges</h3>
+  
+  <div class="grid grid-3 gap-md">
+    
+    <div class="challenge-card">
+      <div class="challenge-header">
+        <div>
+          <div class="challenge-title">Web Security Basics</div>
+          <div class="challenge-category">Web Security</div>
+        </div>
+        <div class="challenge-points">100</div>
+      </div>
+      <p class="challenge-desc">
+        Learn fundamental web application security concepts and common vulnerability patterns used in real-world scenarios.
+      </p>
+      <div class="challenge-footer">
+        <span class="badge badge-success">EASY</span>
+        <a href="/events" class="btn btn-sm btn-primary">Start</a>
+      </div>
+    </div>
+    
+    <div class="challenge-card">
+      <div class="challenge-header">
+        <div>
+          <div class="challenge-title">Crypto 101</div>
+          <div class="challenge-category">Cryptography</div>
+        </div>
+        <div class="challenge-points">150</div>
+      </div>
+      <p class="challenge-desc">
+        Crack basic encryption algorithms and understand core cryptographic principles used in secure communications.
+      </p>
+      <div class="challenge-footer">
+        <span class="badge badge-warning">MEDIUM</span>
+        <a href="/events" class="btn btn-sm btn-primary">Start</a>
+      </div>
+    </div>
+    
+    <div class="challenge-card">
+      <div class="challenge-header">
+        <div>
+          <div class="challenge-title">Network Analysis</div>
+          <div class="challenge-category">Networking</div>
+        </div>
+        <div class="challenge-points">120</div>
+      </div>
+      <p class="challenge-desc">
+        Analyze network traffic patterns and identify security vulnerabilities in packet capture files from real networks.
+      </p>
+      <div class="challenge-footer">
+        <span class="badge badge-success">EASY</span>
+        <a href="/events" class="btn btn-sm btn-primary">Start</a>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+{% endblock %}

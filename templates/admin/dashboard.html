@@ -1,0 +1,130 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Dashboard - CYBERTEC8 Admin{% endblock %}
+{% block breadcrumb %}Dashboard{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+  <h1 class="page-title">Command Center</h1>
+  <p class="page-subtitle">Platform overview and quick management actions.</p>
+</div>
+
+<!-- ===== KPI STAT CARDS ===== -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon green"><i class='bx bx-calendar-event'></i></div>
+    <div class="stat-info">
+      <div class="stat-label">Total Events</div>
+      <div class="stat-value text-glow">{{ total_events }}</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon blue"><i class='bx bx-shield-quarter'></i></div>
+    <div class="stat-info">
+      <div class="stat-label">Challenges</div>
+      <div class="stat-value text-glow">{{ total_tasks }}</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon yellow"><i class='bx bx-user'></i></div>
+    <div class="stat-info">
+      <div class="stat-label">Active Players</div>
+      <div class="stat-value text-glow">{{ active_users }}</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon red"><i class='bx bx-target-lock'></i></div>
+    <div class="stat-info">
+      <div class="stat-label">Flag Submissions</div>
+      <div class="stat-value text-glow">{{ total_submissions }}</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONTENT GRID: Activity + System Status ===== -->
+<div class="content-grid">
+
+  <!-- Recent Activity -->
+  <div class="cyber-card">
+    <div class="card-header">
+      <div class="card-title"><i class='bx bx-pulse'></i> Recent Activity</div>
+      <span class="card-action">Last 10</span>
+    </div>
+    {% if recent_activities %}
+    <ul class="activity-list">
+      {% for act in recent_activities %}
+      <li class="activity-item">
+        <span class="activity-dot {{ act.type or 'other' }}"></span>
+        <div>
+          <div class="activity-text">
+            <strong>{{ act.user.username }}</strong> — {{ act.action }}
+          </div>
+          <div class="activity-time">{{ act.created_at.strftime('%b %d, %Y • %I:%M %p') }}</div>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <div class="activity-empty">
+      <i class='bx bx-ghost'></i>
+      No recent activity yet.
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- System Status -->
+  <div class="cyber-card">
+    <div class="card-header">
+      <div class="card-title"><i class='bx bx-server'></i> System Status</div>
+    </div>
+    <div class="status-item">
+      <span class="status-label"><i class='bx bx-check-shield'></i> Platform</span>
+      <span class="status-badge online">Online</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label"><i class='bx bx-data'></i> Database</span>
+      <span class="status-badge online">Connected</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label"><i class='bx bx-calendar'></i> Events</span>
+      <span class="status-value">{{ total_events }}</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label"><i class='bx bx-shield'></i> Challenges</span>
+      <span class="status-value">{{ total_tasks }}</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label"><i class='bx bx-group'></i> Users</span>
+      <span class="status-value">{{ active_users }}</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== QUICK ACTIONS ===== -->
+<div class="cyber-card">
+  <div class="card-header">
+    <div class="card-title"><i class='bx bx-rocket'></i> Quick Actions</div>
+  </div>
+  <div class="quick-grid">
+    <a href="{{ url_for('admin.admin_create_event') }}" class="quick-btn">
+      <i class='bx bx-calendar-plus'></i> Create Event
+    </a>
+    <a href="{{ url_for('admin.admin_add_task') }}" class="quick-btn">
+      <i class='bx bx-shield-plus'></i> Add Task
+    </a>
+    <a href="{{ url_for('admin.admin_manage_tasks') }}" class="quick-btn">
+      <i class='bx bx-list-check'></i> Manage Tasks
+    </a>
+    <a href="{{ url_for('admin.admin_manage_teams') }}" class="quick-btn">
+      <i class='bx bx-group'></i> Manage Teams
+    </a>
+    <a href="{{ url_for('admin.admin_blogs') }}" class="quick-btn">
+      <i class='bx bx-news'></i> Manage Blogs
+    </a>
+    <a href="{{ url_for('admin.manage_users') }}" class="quick-btn">
+      <i class='bx bx-user-circle'></i> Manage Users
+    </a>
+  </div>
+</div>
+{% endblock %}

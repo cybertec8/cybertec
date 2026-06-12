@@ -1,0 +1,73 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Initialize Battle - Admin Panel{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+    <h1 class="page-title">Initialize CTF Battle</h1>
+    <p class="page-subtitle">Configure the core parameters for a new intensive hacking event.</p>
+</div>
+
+<div class="cyber-card" style="max-width: 800px;">
+    <form method="POST">
+        <div class="form-group mb-4">
+            <label
+                style="color: var(--admin-accent); font-weight: 700; text-transform: uppercase; font-size: 0.8rem; display: block; margin-bottom: 8px;">Battle
+                Name</label>
+            <input type="text" name="name" class="form-control"
+                style="background: #020617; border: 1px solid var(--admin-border); color: #fff; width: 100%; padding: 12px; border-radius: 8px;"
+                placeholder="e.g. Midnight Siege 2026" required>
+        </div>
+
+        <div class="form-group mb-4">
+            <label
+                style="color: var(--admin-accent); font-weight: 700; text-transform: uppercase; font-size: 0.8rem; display: block; margin-bottom: 8px;">Operation
+                Objectives (Description)</label>
+            <textarea name="description" class="form-control"
+                style="background: #020617; border: 1px solid var(--admin-border); color: #fff; width: 100%; padding: 12px; border-radius: 8px;"
+                rows="4" placeholder="Briefing for the participants..."></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;" class="mb-4">
+            <div class="form-group">
+                <label
+                    style="color: var(--admin-accent); font-weight: 700; text-transform: uppercase; font-size: 0.8rem; display: block; margin-bottom: 8px;">Deployment
+                    Time (Start)</label>
+                <input type="datetime-local" name="start_time" class="form-control"
+                    style="background: #020617; border: 1px solid var(--admin-border); color: #fff; width: 100%; padding: 12px; border-radius: 8px;"
+                    required>
+            </div>
+            <div class="form-group">
+                <label
+                    style="color: var(--admin-accent); font-weight: 700; text-transform: uppercase; font-size: 0.8rem; display: block; margin-bottom: 8px;">Extraction
+                    Time (End)</label>
+                <input type="datetime-local" name="end_time" class="form-control"
+                    style="background: #020617; border: 1px solid var(--admin-border); color: #fff; width: 100%; padding: 12px; border-radius: 8px;"
+                    required>
+            </div>
+        </div>
+
+        <div class="form-group mb-4">
+            <label
+                style="color: var(--admin-accent); font-weight: 700; text-transform: uppercase; font-size: 0.8rem; display: block; margin-bottom: 8px;">Visibility
+                Scale</label>
+            <select name="visibility" class="form-control"
+                style="background: #020617; border: 1px solid var(--admin-border); color: #fff; width: 100%; padding: 12px; border-radius: 8px;">
+                <option value="Public">Public (Display in Portal)</option>
+                <option value="Private">Private (Direct Invite Only)</option>
+            </select>
+        </div>
+
+        <div style="display: flex; gap: 15px; margin-top: 30px;">
+            <button type="submit" class="cyber-btn"
+                style="background: var(--admin-accent); color: #000; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+                CONFIRM INITIALIZATION
+            </button>
+            <a href="{{ url_for('ctf_battle.admin_dashboard') }}" class="cyber-btn"
+                style="background: rgba(255,255,255,0.05); color: #fff; padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                ABORT
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

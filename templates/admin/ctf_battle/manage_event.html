@@ -1,0 +1,152 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Manage Battle - Admin Panel{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 class="page-title">{{ event.name }}</h1>
+            <p class="page-subtitle">Tactical management for battle categories and challenge deployment.</p>
+        </div>
+        <div>
+            <form method="POST" style="display: flex; gap: 10px; align-items: center;">
+                <input type="hidden" name="action" value="update_status">
+                <select name="status" class="form-control"
+                    style="background: #020617; border: 1px solid var(--admin-border); color: #fff; padding: 5px 10px; border-radius: 4px;">
+                    <option value="Upcoming" {% if event.status=='Upcoming' %}selected{% endif %}>Upcoming</option>
+                    <option value="Live" {% if event.status=='Live' %}selected{% endif %}>Live</option>
+                    <option value="Paused" {% if event.status=='Paused' %}selected{% endif %}>Paused</option>
+                    <option value="Ended" {% if event.status=='Ended' %}selected{% endif %}>Ended</option>
+                </select>
+                <button type="submit" class="cyber-btn"
+                    style="background: var(--admin-accent); color: #000; border: none; padding: 5px 15px; border-radius: 4px; font-weight: 700; cursor: pointer;">SYNC
+                    STATUS</button>
+            </form>
+            <div style="margin-top: 10px; display: flex; gap: 10px;">
+                <a href="{{ url_for('ctf_battle.event_hub', event_id=event.id, tab='overview') }}" class="cyber-btn"
+                    style="background: #ef4444; color: #fff; text-decoration: none; padding: 10px 15px; border-radius: 4px; font-weight: 700;">LIVE
+                    MONITORING</a>
+                <a href="{{ url_for('ctf_battle.event_hub', event_id=event.id, tab='scoreboard') }}" class="cyber-btn"
+                    style="background: #facc15; color: #000; text-decoration: none; padding: 10px 15px; border-radius: 4px; font-weight: 700;">SCOREBOARD</a>
+                <a href="{{ url_for('ctf_battle.event_hub', event_id=event.id, tab='security') }}" class="cyber-btn"
+                    style="background: #1e293b; color: #fff; text-decoration: none; padding: 10px 15px; border-radius: 4px; font-weight: 700;">LOGS</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 350px; gap: 25px;">
+    <!-- Main Management Area -->
+    <div style="display: flex; flex-direction: column; gap: 25px;">
+
+        <!-- Categories & Challenges Section -->
+        <div class="cyber-card">
+            <h3 style="margin-top: 0; color: #fff;"><i class='bx bx-category'></i> Categories & Tasks</h3>
+            <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.05); margin: 15px 0;">
+
+            {% if not event.categories %}
+            <div style="text-align: center; padding: 40px;">
+                <p style="color: #64748b;">No categories initialized. Start by defining a combat theater.</p>
+            </div>
+            {% endif %}
+
+            {% for cat in event.categories %}
+            <div
+                style="margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden;">
+                <div
+                    style="background: rgba(255,255,255,0.02); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center;">
+                    <h4 style="margin: 0; color: var(--admin-accent);">{{ cat.name }} [{{ cat.challenges|length }}
+                        Tasks]</h4>
+                </div>
+                <div style="padding: 15px;">
+                    <table class="table table-dark table-sm mb-0">
+                        <thead>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <th>Title</th>
+                                <th>Points</th>
+                                <th>Solves</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for chal in cat.challenges %}
+                            <tr>
+                                <td>{{ chal.title }}</td>
+                                <td style="color: #4ade80; font-weight: 700;">{{ chal.points }}</td>
+                                <td>{{ chal.solves|length }}</td>
+                                <td>
+                                    <i class='bx bx-edit-alt' style="cursor: pointer;" title="Edit"></i>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Sidebar: Rapid Action Panels -->
+    <div style="display: flex; flex-direction: column; gap: 25px;">
+
+        <!-- Add Category -->
+        <div class="cyber-card">
+            <h4 style="margin-top: 0; font-size: 0.9rem; color: #fff; text-transform: uppercase;">Initialize Category
+            </h4>
+            <form method="POST">
+                <input type="hidden" name="action" value="add_category">
+                <input type="text" name="cat_name" class="form-control mb-3" placeholder="Category Name" required
+                    style="background: #020617; border: 1px solid var(--admin-border); color: #fff; width: 100%; padding: 8px; border-radius: 4px;">
+                <button type="submit" class="cyber-btn"
+                    style="width: 100%; background: #2dd4bf; color: #000; border: none; padding: 8px; border-radius: 4px; font-weight: 700; cursor: pointer;">ADD
+                    CATEGORY</button>
+            </form>
+        </div>
+
+        <!-- Add Challenge (Simplified for now) -->
+        <div class="cyber-card">
+            <h4 style="margin-top: 0; font-size: 0.9rem; color: #fff; text-transform: uppercase;">Manual Deployment</h4>
+            <form method="POST">
+                <input type="hidden" name="action" value="add_challenge">
+                <select name="category_id" class="form-control mb-3" required
+                    style="background: #020617; border: 1px solid var(--admin-border); color: #fff; width: 100%; padding: 8px; border-radius: 4px;">
+                    <option value="">Select Category</option>
+                    {% for cat in event.categories %}
+                    <option value="{{ cat.id }}">{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="text" name="title" class="form-control mb-3" placeholder="Challenge Title" required
+                    style="background: #020617; border: 1px solid var(--admin-border); color: #fff; width: 100%; padding: 8px; border-radius: 4px;">
+                <input type="number" name="points" class="form-control mb-3" value="100"
+                    style="background: #020617; border: 1px solid var(--admin-border); color: #fff; width: 100%; padding: 8px; border-radius: 4px;">
+                <input type="text" name="flag" class="form-control mb-3" placeholder="CTF{...}" required
+                    style="background: #020617; border: 1px solid var(--admin-border); color: #fff; width: 100%; padding: 8px; border-radius: 4px;">
+                <textarea name="description" class="form-control mb-3" rows="3" placeholder="Instructions..."
+                    style="background: #020617; border: 1px solid var(--admin-border); color: #fff; width: 100%; padding: 8px; border-radius: 4px;"></textarea>
+                <button type="submit" class="cyber-btn"
+                    style="width: 100%; background: var(--admin-accent); color: #000; border: none; padding: 8px; border-radius: 4px; font-weight: 700; cursor: pointer;">DEPLOY
+                    CHALLENGE</button>
+            </form>
+        </div>
+
+        <!-- Bulk Upload -->
+        <div class="cyber-card">
+            <h4 style="margin-top: 0; font-size: 0.9rem; color: #fff; text-transform: uppercase;">Mass Deployment (JSON)
+            </h4>
+            <form action="{{ url_for('ctf_battle.admin_bulk_upload', event_id=event.id) }}" method="POST"
+                enctype="multipart/form-data">
+                <input type="file" name="json_file" accept=".json" class="form-control mb-3"
+                    style="background: #020617; border: 1px solid var(--admin-border); color: #fff; width: 100%; padding: 8px; border-radius: 4px;">
+                <button type="submit" class="cyber-btn"
+                    style="width: 100%; background: #facc15; color: #000; border: none; padding: 8px; border-radius: 4px; font-weight: 700; cursor: pointer;">START
+                    BULK UPLOAD</button>
+            </form>
+            <small style="color: #64748b; margin-top: 10px; display: block;">Upload structured JSON to deploy entire
+                theater at once.</small>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

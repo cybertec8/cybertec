@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CTF Command | Cybertec8{% endblock %}</title>
+
+    <!-- Fonts & Icons -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --ctf-bg: #030a16;
+            --ctf-sidebar-bg: #05101c;
+            --ctf-accent: #00f2ff;
+            --ctf-accent-dim: rgba(0, 242, 255, 0.1);
+            --ctf-border: #112a45;
+            --ctf-text: #e2e8f0;
+            --ctf-text-dim: #94a3b8;
+            --ctf-success: #10b981;
+            --ctf-danger: #f43f5e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--ctf-bg);
+            color: var(--ctf-text);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 260px;
+            background: var(--ctf-sidebar-bg);
+            border-right: 1px solid var(--ctf-border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 1000;
+        }
+
+        .sidebar-brand {
+            padding: 30px;
+            font-family: 'Orbitron';
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--ctf-accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--ctf-border);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 30px;
+            color: var(--ctf-text-dim);
+            text-decoration: none;
+            font-family: 'JetBrains Mono';
+            font-size: 0.85rem;
+            transition: 0.3s;
+            border-left: 3px solid transparent;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        .nav-link i {
+            font-size: 1.2rem;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--ctf-accent);
+            background: var(--ctf-accent-dim);
+            border-left-color: var(--ctf-accent);
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid var(--ctf-border);
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 40px;
+            background: radial-gradient(circle at top right, #0a192f 0%, var(--ctf-bg) 100%);
+        }
+
+        .header {
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title h1 {
+            font-family: 'Orbitron';
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .header-title p {
+            color: var(--ctf-text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* --- Components --- */
+        .cyber-card {
+            background: rgba(10, 25, 47, 0.4);
+            border: 1px solid var(--ctf-border);
+            border-radius: 4px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class='bx bx-shield-quarter'></i>
+            <span>CTF_ADM</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('admin.dashboard') }}"
+                class="nav-link {% if request.endpoint == 'admin.dashboard' %}active{% endif %}">
+                <i class='bx bx-grid-alt'></i> CTF Dashboard
+            </a>
+            <a href="{{ url_for('admin.admin_add_task') }}"
+                class="nav-link {% if request.endpoint == 'admin.admin_add_task' %}active{% endif %}">
+                <i class='bx bx-plus-circle'></i> Create Task
+            </a>
+            <a href="{{ url_for('admin.admin_manage_tasks') }}"
+                class="nav-link {% if request.endpoint == 'admin.admin_manage_tasks' %}active{% endif %}">
+                <i class='bx bx-list-ul'></i> Manage Tasks
+            </a>
+            <a href="{{ url_for('admin.admin_manage_teams') }}"
+                class="nav-link {% if request.endpoint == 'admin.admin_manage_teams' %}active{% endif %}">
+                <i class='bx bx-group'></i> Teams
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="{{ url_for('participant.dashboard') }}" class="nav-link"
+                style="padding: 0; color: var(--ctf-danger);">
+                <i class='bx bx-log-out'></i> EXIT_TO_CTF
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <div class="header-title">
+                <h1>{% block page_title %}SYSTEM_OVERVIEW{% endblock %}</h1>
+                <p>{% block page_subtitle %}REAL_TIME_INTEL_STREAM{% endblock %}</p>
+            </div>
+
+            <div class="header-status">
+                <span
+                    style="display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono'; font-size: 0.75rem; color: var(--ctf-success);">
+                    <span
+                        style="width: 8px; height: 8px; background: var(--ctf-success); border-radius: 50%; box-shadow: 0 0 10px var(--ctf-success);"></span>
+                    SYSTEM_ONLINE
+                </span>
+            </div>
+        </header>
+
+        {% block ctf_content %}{% endblock %}
+    </main>
+</body>
+
+</html>

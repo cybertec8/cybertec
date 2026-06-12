@@ -1,0 +1,146 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Create Task - Admin{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-form {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 25px;
+    }
+
+    .form-box {
+        background: var(--admin-card-bg);
+        border: 1px solid var(--admin-border);
+        padding: 25px;
+        border-radius: 12px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #94a3b8;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+    }
+
+    .form-control {
+        width: 100%;
+        background: #020617;
+        border: 1px solid var(--admin-border);
+        color: #fff;
+        padding: 12px;
+        border-radius: 8px;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .form-control:focus {
+        border-color: var(--admin-accent);
+    }
+
+    .btn-primary {
+        background: var(--admin-accent);
+        color: #020617;
+        border: none;
+        padding: 15px;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        width: 100%;
+        transition: transform 0.2s, background 0.2s;
+    }
+
+    .btn-primary:hover {
+        background: #7dd3fc;
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+    <h1 class="page-title">Create CTF Task</h1>
+    <p class="page-subtitle">Configure and deploy a new security challenge.</p>
+</div>
+
+<form method="POST" enctype="multipart/form-data" class="admin-form">
+    <div class="form-box">
+        <div class="form-group">
+            <label>Challenge Title</label>
+            <input type="text" name="title" class="form-control" placeholder="e.g. SQL Injection Mastery" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label>Category</label>
+                <select name="category" class="form-control" required>
+                    <option value="Web">Web</option>
+                    <option value="Crypto">Crypto</option>
+                    <option value="Reverse">Reverse</option>
+                    <option value="Pwn">Pwn</option>
+                    <option value="Forensics">Forensics</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Difficulty</label>
+                <select name="level" class="form-control" required>
+                    <option value="Easy">EASY</option>
+                    <option value="Medium">MEDIUM</option>
+                    <option value="Hard">HARD</option>
+                    <option value="Insane">INSANE</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            <textarea name="description" class="form-control" rows="6" placeholder="Explain the challenge..."
+                required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Flag</label>
+            <input type="text" name="flag" class="form-control" placeholder="CTF{secure_flag_here}" required>
+        </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 25px;">
+        <div class="form-box">
+            <div class="form-group">
+                <label>Points</label>
+                <input type="number" name="points" class="form-control" value="100" required>
+            </div>
+
+            <div class="form-group">
+                <label>Event Assignment</label>
+                <select name="event_id" class="form-control">
+                    <option value="">Global (No Event)</option>
+                    {% for event in events %}
+                    <option value="{{ event.id }}">{{ event.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Files / Artifacts</label>
+                <input type="file" name="challenge_file" class="form-control" multiple>
+            </div>
+
+            <div class="form-group">
+                <label>Hint (Optional)</label>
+                <textarea name="hint" class="form-control" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary">CREATE CHALLENGE</button>
+        </div>
+    </div>
+</form>
+{% endblock %}

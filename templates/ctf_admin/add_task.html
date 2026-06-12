@@ -1,0 +1,147 @@
+{% extends "ctf_admin/ctf_admin_base.html" %}
+
+{% block title %}Deploy | CTF-CMD{% endblock %}
+{% block page_title %}CHALLENGE_DEPLOYMENT{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cyber-form {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        display: block;
+        font-family: 'Orbitron';
+        font-size: 0.7rem;
+        color: var(--ctf-accent);
+        margin-bottom: 8px;
+        letter-spacing: 1px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+        width: 100%;
+        background: #020617;
+        border: 1px solid var(--ctf-border);
+        color: #fff;
+        padding: 12px;
+        font-family: 'JetBrains Mono';
+        font-size: 0.9rem;
+        outline: none;
+        border-radius: 4px;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+        border-color: var(--ctf-accent);
+        box-shadow: 0 0 10px var(--ctf-accent-dim);
+    }
+
+    .btn-deploy {
+        background: var(--ctf-accent);
+        color: #000;
+        border: none;
+        padding: 15px 30px;
+        font-family: 'Orbitron';
+        font-weight: bold;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 20px;
+        letter-spacing: 2px;
+        transition: 0.3s;
+        border-radius: 4px;
+    }
+
+    .btn-deploy:hover {
+        background: #fff;
+        box-shadow: 0 0 20px #fff;
+    }
+</style>
+{% endblock %}
+
+{% block ctf_content %}
+<form method="POST" enctype="multipart/form-data" class="cyber-form">
+    <div class="cyber-card">
+        <h3 style="font-family: 'Orbitron'; margin-bottom: 25px; font-size: 1rem; color: var(--ctf-accent);">//
+            CORE_DATA</h3>
+
+        <div class="form-group">
+            <label class="form-label">CHALLENGE_TITLE</label>
+            <input type="text" name="title" class="form-input" placeholder="e.g. Memory Corruption 101" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label class="form-label">CATEGORY</label>
+                <select name="category" class="form-select" required>
+                    <option value="Web">Web</option>
+                    <option value="Crypto">Crypto</option>
+                    <option value="Reverse">Reverse</option>
+                    <option value="Pwn">Pwn</option>
+                    <option value="Forensics">Forensics</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">COMPLEXITY</label>
+                <select name="level" class="form-select" required>
+                    <option value="Easy">EASY</option>
+                    <option value="Medium">MEDIUM</option>
+                    <option value="Hard">HARD</option>
+                    <option value="Insane">INSANE</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">MISSION_BRIEFING</label>
+            <textarea name="description" class="form-textarea" rows="8" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">ENCRYPTION_KEY (FLAG)</label>
+            <input type="text" name="flag" class="form-input" placeholder="CTF{...}" required>
+        </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 25px;">
+        <div class="cyber-card">
+            <h3 style="font-family: 'Orbitron'; margin-bottom: 25px; font-size: 1rem;">// ASSETS</h3>
+
+            <div class="form-group">
+                <label class="form-label">POINT_VALUE</label>
+                <input type="number" name="points" class="form-input" value="100" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">EVENT_SECTOR</label>
+                <select name="event_id" class="form-select">
+                    <option value="">-- GLOBAL_SECTOR --</option>
+                    {% for event in events %}
+                    <option value="{{ event.id }}">{{ event.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">ARTIFACT_UPLOAD</label>
+                <input type="file" name="challenge_file" class="form-input" multiple>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">HINT_TRANSMISSION</label>
+                <textarea name="hint" class="form-textarea" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="btn-deploy">INITIATE_DEPLOYMENT</button>
+        </div>
+    </div>
+</form>
+{% endblock %}

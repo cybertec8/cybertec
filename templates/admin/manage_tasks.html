@@ -1,0 +1,83 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Manage Tasks - Admin{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+    <h1 class="page-title">Manage CTF Tasks</h1>
+    <p class="page-subtitle">View and modify existing security challenges.</p>
+</div>
+
+<div style="display: flex; justify-content: flex-end; margin-bottom: 25px;">
+    <a href="{{ url_for('admin.admin_add_task') }}" class="cyber-card"
+        style="text-decoration: none; color: var(--admin-accent); padding: 10px 20px; font-weight: bold; border-color: var(--admin-accent);">
+        <i class='bx bx-plus-circle'></i> DEPLOY NEW CHALLENGE
+    </a>
+</div>
+
+{% if tasks %}
+<div class="cyber-card" style="padding: 0; overflow: hidden;">
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--admin-border);">
+                <th style="padding: 15px; text-align: left; font-size: 0.75rem; color: var(--admin-accent);">ID</th>
+                <th style="padding: 15px; text-align: left; font-size: 0.75rem; color: var(--admin-accent);">TITLE</th>
+                <th style="padding: 15px; text-align: left; font-size: 0.75rem; color: var(--admin-accent);">CATEGORY
+                </th>
+                <th style="padding: 15px; text-align: left; font-size: 0.75rem; color: var(--admin-accent);">POINTS</th>
+                <th style="padding: 15px; text-align: left; font-size: 0.75rem; color: var(--admin-accent);">DIFFICULTY
+                </th>
+                <th style="padding: 15px; text-align: left; font-size: 0.75rem; color: var(--admin-accent);">SOLVES</th>
+                <th style="padding: 15px; text-align: center; font-size: 0.75rem; color: var(--admin-accent);">ACTIONS
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr style="border-bottom: 1px solid var(--admin-border); transition: background 0.3s;">
+                <td style="padding: 15px; font-family: 'JetBrains Mono'; font-size: 0.8rem; color: #94a3b8;">#{{ task.id
+                    }}</td>
+                <td style="padding: 15px; font-weight: bold;">{{ task.title }}</td>
+                <td style="padding: 15px;">
+                    <span
+                        style="background: rgba(56, 189, 248, 0.1); color: var(--admin-accent); padding: 2px 8px; border-radius: 4px; font-size: 0.7rem;">
+                        {{ task.category }}
+                    </span>
+                </td>
+                <td style="padding: 15px; color: #4ade80; font-weight: bold;">{{ task.points }}</td>
+                <td style="padding: 15px;">
+                    <span
+                        style="font-size: 0.7rem; color: {% if task.level|lower == 'easy' %}#4ade80{% elif task.level|lower == 'medium' %}#fbbf24{% else %}#f87171{% endif %}; font-weight: bold;">
+                        {{ task.level|upper }}
+                    </span>
+                </td>
+                <td style="padding: 15px; font-size: 0.85rem;">{{ task.solved_count }}</td>
+                <td style="padding: 15px; text-align: center;">
+                    <div style="display: flex; gap: 15px; justify-content: center;">
+                        <a href="{{ url_for('admin.admin_add_task') }}?edit={{ task.id }}"
+                            style="color: var(--admin-accent); text-decoration: none;" title="Edit">
+                            <i class='bx bx-edit-alt'></i>
+                        </a>
+                        <form action="{{ url_for('admin.admin_manage_tasks') }}" method="POST"
+                            onsubmit="return confirm('Confirm challenge deletion? All solver records will be wiped.');"
+                            style="display: inline;">
+                            <button type="submit"
+                                style="background: none; border: none; color: #f87171; cursor: pointer; padding: 0;"
+                                title="Delete">
+                                <i class='bx bx-trash'></i>
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="cyber-card" style="text-align: center; padding: 60px;">
+    <i class='bx bx-ghost' style="font-size: 3rem; color: var(--admin-border); margin-bottom: 15px;"></i>
+    <p style="color: #94a3b8;">No challenges found.</p>
+</div>
+{% endif %}
+{% endblock %}

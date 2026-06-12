@@ -1,0 +1,58 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Battle Logs - Admin Panel{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+    <h1 class="page-title">{{ event.name }} - Tactical Activity Logs</h1>
+    <p class="page-subtitle">Real-time surveillance of participant actions, IP tracking, and system interactions.</p>
+</div>
+
+<div class="cyber-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <h3 style="margin: 0; color: #fff;">Surveillance Feed</h3>
+        <span style="font-weight: 700; color: var(--admin-accent);">LOG COUNT: {{ logs|length }}</span>
+    </div>
+
+    {% if not logs %}
+    <div style="text-align: center; padding: 60px;">
+        <i class='bx bx-broadcast' style="font-size: 3rem; color: rgba(255,255,255,0.05); margin-bottom: 20px;"></i>
+        <p style="color: #64748b;">The airwaves are quiet. No activity recorded for this event yet.</p>
+    </div>
+    {% else %}
+    <div class="table-responsive">
+        <table class="table table-dark table-hover table-sm align-middle" style="font-size: 0.85rem;">
+            <thead>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <th>Timestamp</th>
+                    <th>Participant</th>
+                    <th>Action</th>
+                    <th>Network Intel (IP)</th>
+                    <th>User Agent</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.02);">
+                    <td style="color: #94a3b8; font-family: 'JetBrains Mono';">{{ log.created_at.strftime('%Y-%m-%d
+                        %H:%M:%S') }}</td>
+                    <td style="font-weight: 700; color: #fff;">{{ log.user.username }}</td>
+                    <td>
+                        <span
+                            style="color: {% if 'Solved' in log.action %}#4ade80{% elif 'Incorrect' in log.action %}#f87171{% else %}#38bdf8{% endif %};">
+                            {{ log.action }}
+                        </span>
+                    </td>
+                    <td style="font-family: 'JetBrains Mono'; color: var(--admin-accent);">{{ log.ip_address }}</td>
+                    <td title="{{ log.user_agent }}"
+                        style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #64748b;">
+                        {{ log.user_agent }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

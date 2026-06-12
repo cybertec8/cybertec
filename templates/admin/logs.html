@@ -1,0 +1,21 @@
+{% extends "admin/base.html" %}
+
+{% block title %}System Logs - Admin{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+    <h1 class="page-title">System Logs</h1>
+    <p class="page-subtitle">Platform audit trail and security event logging.</p>
+</div>
+
+<div class="cyber-card"
+    style="background: #000; font-family: 'JetBrains Mono'; padding: 20px; border-color: var(--admin-border);">
+    <div style="color: #4ade80; font-size: 0.85rem; line-height: 1.6;">
+        [2026-02-23 02:25:12] INFO: Admin login successful (user: DevAdmin)<br>
+        [2026-02-23 02:26:45] INFO: New challenge deployed (ID: 42, title: "SQL Mastery")<br>
+        [2026-02-23 02:28:30] WARN: Failed login attempt (IP: 192.168.1.45)<br>
+        [2026-02-23 02:30:05] INFO: Team "EliteHackers" solved challenge #12<br>
+        <span style="color: #94a3b8;">_ END_OF_LOG _</span>
+    </div>
+</div>
+{% endblock %}

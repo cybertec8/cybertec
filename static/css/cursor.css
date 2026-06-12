@@ -1,0 +1,122 @@
+/* ========================================
+   CYBERTEC8 - ADVANCED CURSOR SYSTEM
+   Cyberpunk Dot + Square Outline + Trail
+   ======================================== */
+
+:root {
+    --cursor-color: #00ff9c;
+    --cursor-glow: rgba(0, 255, 156, 0.4);
+}
+
+/* Hide default cursor on desktop */
+@media (pointer: fine) {
+
+    body,
+    a,
+    button,
+    input,
+    select,
+    textarea,
+    .btn-cyber,
+    .nav-link {
+        cursor: none !important;
+    }
+}
+
+.cursor-system {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10000;
+    display: block;
+}
+
+/* The exact pointer - small neon dot */
+.cursor-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--cursor-color);
+    border-radius: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 10002;
+    box-shadow: 0 0 10px var(--cursor-color), 0 0 20px var(--cursor-glow);
+    transition: width 0.2s, height 0.2s, opacity 0.3s;
+}
+
+/* The follower - square outline */
+.cursor-outline {
+    width: 34px;
+    height: 34px;
+    border: 1.5px solid var(--cursor-color);
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 10001;
+    transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        height 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        border-radius 0.3s,
+        background 0.3s,
+        opacity 0.3s;
+    box-shadow: 0 0 12px var(--cursor-glow);
+}
+
+/* Trail elements */
+.cursor-trail {
+    width: 4px;
+    height: 4px;
+    background: var(--cursor-color);
+    border-radius: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    opacity: 0.4;
+    z-index: 10000;
+    pointer-events: none;
+}
+
+/* Hover State */
+.cursor-system.hovering .cursor-outline {
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 255, 156, 0.1);
+    border-width: 2px;
+    animation: cursorRotate 4s linear infinite;
+    box-shadow: 0 0 20px var(--cursor-glow);
+}
+
+.cursor-system.hovering .cursor-dot {
+    width: 8px;
+    height: 8px;
+    box-shadow: 0 0 15px var(--cursor-color), 0 0 30px var(--cursor-glow);
+}
+
+/* Click Animation */
+.cursor-system.clicking .cursor-outline {
+    width: 24px;
+    height: 24px;
+    background: var(--cursor-color);
+    transition: all 0.1s;
+}
+
+.cursor-system.clicking .cursor-dot {
+    opacity: 0;
+}
+
+@keyframes cursorRotate {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* Disable on mobile */
+@media (pointer: coarse) {
+    .cursor-system {
+        display: none !important;
+    }
+}

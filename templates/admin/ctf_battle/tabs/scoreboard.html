@@ -1,0 +1,44 @@
+<div class="cyber-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3 style="margin: 0; color: #fff;"><i class='bx bx-trophy'></i> Live Ranking Engine</h3>
+        <div style="display: flex; gap: 10px;">
+            <a href="{{ url_for('ctf_battle.admin_export_scoreboard_csv', event_id=event.id) }}" class="cyber-btn"
+                style="background: #3b82f6; color: #fff; text-decoration: none; padding: 5px 15px; border-radius: 4px; font-size: 0.8rem; font-weight: 700;">EXPORT
+                CSV</a>
+            <form action="{{ url_for('ctf_battle.admin_freeze_scoreboard', event_id=event.id) }}" method="POST">
+                <button type="submit" class="cyber-btn"
+                    style="background: {% if event.is_frozen %}#facc15{% else %}#1e293b{% endif %}; color: {% if event.is_frozen %}#000{% else %}#fff{% endif %}; border: none; padding: 5px 15px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
+                    {% if event.is_frozen %}UNFREEZE SCOREBOARD{% else %}FREEZE SCOREBOARD{% endif %}
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr style="color: #64748b; font-size: 0.75rem; text-transform: uppercase;">
+                    <th style="width: 80px;">Rank</th>
+                    <th>Operator</th>
+                    <th style="text-align: right;">Total Captured Points</th>
+                    <th style="text-align: right;">Last Successful Solve</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in scores %}
+                <tr>
+                    <td style="font-family: 'JetBrains Mono', monospace; font-weight: 700;">#{{ loop.index }}</td>
+                    <td>
+                        <div style="font-weight: 700; color: #fff;">{{ s.username }}</div>
+                    </td>
+                    <td
+                        style="text-align: right; color: #4ade80; font-weight: 700; font-family: 'JetBrains Mono', monospace;">
+                        {{ s.total_points }}</td>
+                    <td style="text-align: right; font-size: 0.85rem; color: #94a3b8;">{{
+                        s.last_solve.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

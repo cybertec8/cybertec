@@ -1,0 +1,74 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Manage Teams - Admin Panel{% endblock %}
+{% block breadcrumb %}Teams{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+    <h1 class="page-title">Operational Teams</h1>
+    <p class="page-subtitle">Monitor registered CTFs teams, their captains, and membership status.</p>
+</div>
+
+<div class="cyber-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <h3 style="margin: 0; font-size: 1.1rem; color: #fff;">Team Registry</h3>
+        <span style="font-size: 0.8rem; color: var(--admin-accent); font-weight: 600;">{{ team_data|length }} UNITS
+            ACTIVE</span>
+    </div>
+
+    {% if team_data %}
+    <div class="table-responsive">
+        <table class="table table-dark table-hover align-middle">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--admin-border);">
+                    <th style="color: var(--admin-accent); font-size: 0.75rem;">ID</th>
+                    <th style="color: var(--admin-accent); font-size: 0.75rem;">NAME</th>
+                    <th style="color: var(--admin-accent); font-size: 0.75rem;">CAPTAIN</th>
+                    <th style="color: var(--admin-accent); font-size: 0.75rem;">INVITE CODE</th>
+                    <th style="color: var(--admin-accent); font-size: 0.75rem;">STRENGTH</th>
+                    <th style="color: var(--admin-accent); font-size: 0.75rem; text-align: center;">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for team in team_data %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="font-family: 'JetBrains Mono'; font-size: 0.8rem; color: #94a3b8;">#{{ team.id }}</td>
+                    <td style="font-weight: 700; color: #fff;">{{ team.name }}</td>
+                    <td>
+                        <span
+                            style="border: 1px solid var(--admin-accent); color: var(--admin-accent); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">
+                            {{ team.captain_username }}
+                        </span>
+                    </td>
+                    <td>
+                        <code
+                            style="background: #000; color: #fbbf24; padding: 4px 10px; border-radius: 4px; font-size: 0.85rem; border: 1px solid #332b00;">{{ team.invite_code }}</code>
+                    </td>
+                    <td>
+                        <div style="font-size: 0.85rem; color: #d1d5db;">
+                            {{ team.used_count }} / 4 Members
+                        </div>
+                    </td>
+                    <td style="text-align: center;">
+                        <a href="{{ url_for('admin.admin_delete_team', team_id=team.id) }}"
+                            onclick="return confirm('Confirm unit decommissioning? All associated member data will be wiped.')"
+                            style="color: #f87171; transition: color 0.2s;" title="Decommission Team">
+                            <i class='bx bx-trash' style="font-size: 1.2rem;"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 80px 20px;">
+        <i class='bx bx-group'
+            style="font-size: 4rem; color: var(--admin-border); margin-bottom: 20px; opacity: 0.5;"></i>
+        <h3 style="color: #fff; margin-bottom: 10px;">No Teams Detected</h3>
+        <p style="color: #94a3b8; max-width: 400px; margin: 0 auto;">The tactical grid is currently empty. Direct
+            participants to form teams through the platform.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

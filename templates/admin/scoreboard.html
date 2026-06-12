@@ -1,0 +1,37 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Scoreboard - Admin{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+    <h1 class="page-title">CTF Scoreboard</h1>
+    <p class="page-subtitle">Real-time ranking of all participating teams.</p>
+</div>
+
+<div class="cyber-card">
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--admin-border);">
+                <th style="padding: 15px; text-align: left; font-size: 0.75rem; color: var(--admin-accent);">RANK</th>
+                <th style="padding: 15px; text-align: left; font-size: 0.75rem; color: var(--admin-accent);">TEAM</th>
+                <th style="padding: 15px; text-align: left; font-size: 0.75rem; color: var(--admin-accent);">SOLVES</th>
+                <th style="padding: 15px; text-align: left; font-size: 0.75rem; color: var(--admin-accent);">POINTS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="border-bottom: 1px solid var(--admin-border);">
+                <td style="padding: 15px; font-weight: bold; color: #fbbf24;">#1</td>
+                <td style="padding: 15px;">EliteHackers</td>
+                <td style="padding: 15px;">12</td>
+                <td style="padding: 15px; color: #4ade80; font-weight: bold;">1200</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--admin-border);">
+                <td style="padding: 15px; font-weight: bold; color: #94a3b8;">#2</td>
+                <td style="padding: 15px;">ShadowRunners</td>
+                <td style="padding: 15px;">10</td>
+                <td style="padding: 15px; color: #4ade80; font-weight: bold;">950</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

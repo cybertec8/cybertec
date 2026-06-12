@@ -1,0 +1,10 @@
+flask
+flask-sqlalchemy
+flask-login
+python-dotenv
+authlib
+requests
+werkzeug
+gunicorn
+jinja2
+psycopg2-binary

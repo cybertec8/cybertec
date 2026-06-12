@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Panel - CYBERTEC8{% endblock %}</title>
+
+    <!-- Fonts & Icons -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+    <!-- Admin CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body class="admin-body">
+
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- ======== SIDEBAR ======== -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon"><i class='bx bxs-shield-quarter'></i></div>
+            <span class="brand-text">CYBERTEC8</span>
+            <span class="brand-badge">ADMIN</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <!-- Main -->
+            <div class="nav-section">
+                <a href="{{ url_for('admin.dashboard') }}"
+                    class="nav-item {% if request.endpoint == 'admin.dashboard' %}active{% endif %}">
+                    <i class='bx bxs-dashboard'></i> Dashboard
+                </a>
+                <a href="{{ url_for('ctf_battle.admin_dashboard') }}"
+                    class="nav-item {% if request.endpoint and request.endpoint.startswith('ctf_battle.') %}active{% endif %}">
+                    <i class='bx bx-bolt-circle'></i> CTF Battle
+                </a>
+            </div>
+
+            <!-- Operations -->
+            <div class="nav-section">
+                <div class="nav-section-title">OPERATIONS</div>
+                <a href="{{ url_for('admin.admin_create_event') }}"
+                    class="nav-item {% if request.endpoint == 'admin.admin_create_event' %}active{% endif %}">
+                    <i class='bx bx-plus-circle'></i> Create Event
+                </a>
+                <a href="{{ url_for('admin.admin_add_task') }}"
+                    class="nav-item {% if request.endpoint == 'admin.admin_add_task' %}active{% endif %}">
+                    <i class='bx bx-shield-plus'></i> Add Task
+                </a>
+                <a href="{{ url_for('admin.admin_manage_tasks') }}"
+                    class="nav-item {% if request.endpoint == 'admin.admin_manage_tasks' %}active{% endif %}">
+                    <i class='bx bx-list-ul'></i> Manage Tasks
+                </a>
+            </div>
+
+            <!-- Management -->
+            <div class="nav-section">
+                <div class="nav-section-title">MANAGEMENT</div>
+                <a href="{{ url_for('admin.admin_manage_teams') }}"
+                    class="nav-item {% if request.endpoint == 'admin.admin_manage_teams' %}active{% endif %}">
+                    <i class='bx bx-group'></i> Manage Teams
+                </a>
+                <a href="{{ url_for('admin.admin_blogs') }}"
+                    class="nav-item {% if request.endpoint == 'admin.admin_blogs' %}active{% endif %}">
+                    <i class='bx bx-news'></i> Manage Blogs
+                </a>
+                <a href="{{ url_for('admin.manage_users') }}"
+                    class="nav-item {% if request.endpoint == 'admin.manage_users' %}active{% endif %}">
+                    <i class='bx bx-user-circle'></i> Manage Users
+                </a>
+            </div>
+
+            <!-- System -->
+            <div class="nav-section">
+                <div class="nav-section-title">SYSTEM</div>
+                <a href="{{ url_for('admin.dashboard') }}" class="nav-item">
+                    <i class='bx bx-cog'></i> Settings
+                </a>
+                <a href="{{ url_for('participant.dashboard') }}" class="nav-item">
+                    <i class='bx bx-arrow-back'></i> Back to Platform
+                </a>
+                <a href="{{ url_for('logout') }}" class="nav-item">
+                    <i class='bx bx-log-out'></i> Logout
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- ======== MAIN WRAPPER ======== -->
+    <div class="main-wrapper">
+
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle menu">
+                    <i class='bx bx-menu'></i>
+                </button>
+                <div class="topbar-search">
+                    <i class='bx bx-search'></i>
+                    <input type="text" placeholder="Search Command Center...">
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="topbar-actions">
+                    <button class="topbar-btn" title="Notifications">
+                        <i class='bx bx-bell'></i>
+                        <span class="btn-badge"></span>
+                    </button>
+                    <button class="topbar-btn" title="Apps">
+                        <i class='bx bx-grid-alt'></i>
+                    </button>
+                    <a href="{{ url_for('home') }}" class="topbar-btn" title="View Site">
+                        <i class='bx bx-globe'></i>
+                    </a>
+                </div>
+                <a href="{{ url_for('admin.dashboard') }}" class="topbar-user">
+                    <div class="topbar-avatar">
+                        {% if current_user.is_authenticated %}
+                        {{ current_user.username[0]|upper }}
+                        {% else %}A{% endif %}
+                    </div>
+                    <div class="topbar-user-info">
+                        <div class="topbar-username">
+                            {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Admin{% endif %}
+                        </div>
+                        <div class="topbar-role">Super Admin</div>
+                    </div>
+                </a>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="flash-msg {{ category }}">
+                <i
+                    class='bx {% if category == "success" %}bx-check-circle{% elif category == "danger" %}bx-x-circle{% else %}bx-info-circle{% endif %}'></i>
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            {% block admin_content %}{% endblock %}
+        </main>
+    </div>
+
+    <!-- Sidebar Toggle Script -->
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

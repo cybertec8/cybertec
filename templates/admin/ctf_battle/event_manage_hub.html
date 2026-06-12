@@ -1,0 +1,76 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Battle Console - {{ event.name }}{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 class="page-title">{{ event.name }}</h1>
+            <p class="page-subtitle">Standard Operating Environment for Battle Management.</p>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <span
+                class="badge {% if event.status == 'Live' %}bg-success{% elif event.status == 'Paused' %}bg-info{% elif event.status == 'Ended' %}bg-danger{% else %}bg-warning text-dark{% endif %}"
+                style="padding: 8px 15px; font-weight: 700; display: flex; align-items: center;">
+                {{ event.status|upper }}
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- Battle Terminal Navigation -->
+<div style="margin-bottom: 30px; border-bottom: 2px solid rgba(255,255,255,0.05); display: flex; gap: 10px;">
+    {% set tabs = [
+    ('overview', 'bx-tachometer', 'Overview'),
+    ('challenges', 'bx-extension', 'Challenges'),
+    ('participants', 'bx-group', 'Participants'),
+    ('submissions', 'bx-send', 'Submissions'),
+    ('scoreboard', 'bx-trophy', 'Scoreboard'),
+    ('security', 'bx-shield-quarter', 'Security'),
+    ('settings', 'bx-cog', 'Settings')
+    ] %}
+    {% for t_id, t_icon, t_label in tabs %}
+    <a href="{{ url_for('ctf_battle.event_hub', event_id=event.id, tab=t_id) }}"
+        style="padding: 12px 20px; text-decoration: none; color: {% if tab == t_id %}var(--admin-accent){% else %}#64748b{% endif %}; font-weight: 700; font-size: 0.9rem; border-bottom: 3px solid {% if tab == t_id %}var(--admin-accent){% else %}transparent{% endif %}; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
+        <i class='bx {{ t_icon }}'></i> {{ t_label|upper }}
+    </a>
+    {% endfor %}
+</div>
+
+<div class="tab-content" style="animation: fadeIn 0.3s ease-in-out;">
+    {% if tab == 'overview' %}
+    {% include "admin/ctf_battle/tabs/overview.html" %}
+    {% elif tab == 'challenges' %}
+    {% include "admin/ctf_battle/tabs/challenges.html" %}
+    {% elif tab == 'participants' %}
+    {% include "admin/ctf_battle/tabs/participants.html" %}
+    {% elif tab == 'submissions' %}
+    {% include "admin/ctf_battle/tabs/submissions.html" %}
+    {% elif tab == 'scoreboard' %}
+    {% include "admin/ctf_battle/tabs/scoreboard.html" %}
+    {% elif tab == 'security' %}
+    {% include "admin/ctf_battle/tabs/security.html" %}
+    {% elif tab == 'settings' %}
+    {% include "admin/ctf_battle/tabs/settings.html" %}
+    {% endif %}
+</div>
+
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .tab-content {
+        min-height: 400px;
+    }
+</style>
+{% endblock %}

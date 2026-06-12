@@ -1,0 +1,228 @@
+/* ========================================
+   GLOBAL THEME SYSTEM
+   CyberTec8 CTF Platform
+   ======================================== */
+
+/* Default Dark Theme Variables */
+:root {
+  --bg-primary: #0a0e14;
+  --bg-secondary: #0d1421;
+  --bg-tertiary: #111827;
+  --bg-card: #111c2f;
+  --bg-input: #1a2332;
+  
+  --text-primary: #e5e7eb;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  
+  --border-primary: rgba(255, 255, 255, 0.08);
+  --border-secondary: rgba(255, 255, 255, 0.05);
+  --border-focus: rgba(34, 197, 94, 0.3);
+  
+  --accent-green: #22c55e;
+  --accent-green-hover: #10b981;
+  --accent-green-light: rgba(34, 197, 94, 0.1);
+  
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+  
+  --overlay: rgba(10, 14, 20, 0.85);
+  --backdrop-blur: blur(20px);
+}
+
+/* Light Theme Variables - Premium Cyber/SaaS Style */
+[data-theme="light"],
+.light-theme {
+  /* Backgrounds - Clean, layered whites/grays */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-input: #f8fafc;
+  
+  /* Text - High contrast, professional */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  
+  /* Borders - Subtle but defined */
+  --border-primary: rgba(15, 23, 42, 0.08);
+  --border-secondary: rgba(15, 23, 42, 0.04);
+  --border-focus: rgba(34, 197, 94, 0.5);
+  
+  /* Accent - Sharp Green */
+  --accent-green: #16a34a;
+  --accent-green-hover: #15803d;
+  --accent-green-light: rgba(22, 163, 74, 0.08); /* Softer for light mode */
+  
+  /* Shadows - Soft, diffused depth */
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -1px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.05), 0 4px 6px -2px rgba(15, 23, 42, 0.025);
+  
+  /* Overlays */
+  --overlay: rgba(255, 255, 255, 0.9);
+  --backdrop-blur: blur(12px);
+  
+  /* Gradients & Textures */
+  --hero-gradient: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  --grid-color: rgba(15, 23, 42, 0.03);
+}
+
+/* Global Light Theme Enhancements */
+[data-theme="light"] body {
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(22, 163, 74, 0.03) 0%, transparent 50%),
+    linear-gradient(to bottom, #ffffff, #f8fafc);
+  position: relative;
+}
+
+/* Subtle Grid Pattern for Light Mode */
+[data-theme="light"] body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+  mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Smooth theme transition */
+* {
+  transition: background-color 0.3s ease, 
+              color 0.3s ease, 
+              border-color 0.3s ease,
+              box-shadow 0.3s ease,
+              fill 0.3s ease;
+}
+
+/* Prevent transition on page load */
+.no-transition * {
+  transition: none !important;
+}
+
+/* Theme Toggle Button Styles */
+.theme-toggle-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-primary);
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+  position: relative;
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent-green);
+  transform: translateY(-1px);
+}
+
+.theme-toggle-btn svg {
+  width: 18px;
+  height: 18px;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  position: absolute;
+}
+
+.theme-toggle-btn:hover svg {
+  color: var(--accent-green);
+}
+
+/* Icon animations */
+.theme-icon-moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+.theme-icon-sun {
+  opacity: 0;
+  transform: rotate(180deg) scale(0);
+}
+
+[data-theme="light"] .theme-icon-moon,
+.light-theme .theme-icon-moon {
+  opacity: 0;
+  transform: rotate(-180deg) scale(0);
+}
+
+[data-theme="light"] .theme-icon-sun,
+.light-theme .theme-icon-sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+/* Global body styles */
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Common element theme support */
+.card,
+.panel,
+.container-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+input,
+textarea,
+select {
+  background: var(--bg-input);
+  border: 1px solid var(--border-primary);
+  color: var(--text-primary);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--border-focus);
+  outline: none;
+}
+
+a {
+  color: var(--text-primary);
+}
+
+a:hover {
+  color: var(--accent-green);
+}
+
+/* Button theming */
+.btn-primary {
+  background: var(--accent-green);
+  color: #020617;
+}
+
+.btn-primary:hover {
+  background: var(--accent-green-hover);
+  color: #020617;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-primary);
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent-green);
+}

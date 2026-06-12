@@ -1,0 +1,89 @@
+{% extends "ctf_admin/ctf_admin_base.html" %}
+
+{% block title %}Dashboard | CTF-CMD{% endblock %}
+{% block page_title %}COMMAND_CENTER{% endblock %}
+
+{% block ctf_content %}
+<div
+    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; margin-bottom: 40px;">
+
+    <div class="cyber-card" style="border-left: 4px solid var(--ctf-accent);">
+        <div style="font-size: 0.7rem; color: var(--ctf-text-dim); margin-bottom: 10px; font-family: 'JetBrains Mono';">
+            TOTAL_OPERATIVES</div>
+        <div style="font-size: 2rem; font-family: 'Orbitron'; font-weight: 700;">128</div>
+        <div style="font-size: 0.75rem; color: var(--ctf-success); margin-top: 10px;">+12 THIS_UNIT_CYCLE</div>
+    </div>
+
+    <div class="cyber-card" style="border-left: 4px solid var(--ctf-success);">
+        <div style="font-size: 0.7rem; color: var(--ctf-text-dim); margin-bottom: 10px; font-family: 'JetBrains Mono';">
+            ACTIVE_TEAMS</div>
+        <div style="font-size: 2rem; font-family: 'Orbitron'; font-weight: 700;">32</div>
+        <div style="font-size: 0.75rem; color: var(--ctf-text-dim); margin-top: 10px;">Sectors 1-4 Online</div>
+    </div>
+
+    <div class="cyber-card" style="border-left: 4px solid #fbbf24;">
+        <div style="font-size: 0.7rem; color: var(--ctf-text-dim); margin-bottom: 10px; font-family: 'JetBrains Mono';">
+            CHALLENGES_ACTIVE</div>
+        <div style="font-size: 2rem; font-family: 'Orbitron'; font-weight: 700;">24</div>
+        <div style="font-size: 0.75rem; color: #fbbf24; margin-top: 10px;">4 Pending Deployment</div>
+    </div>
+
+    <div class="cyber-card" style="border-left: 4px solid var(--ctf-danger);">
+        <div style="font-size: 0.7rem; color: var(--ctf-text-dim); margin-bottom: 10px; font-family: 'JetBrains Mono';">
+            FLAGS_CAPTURED</div>
+        <div style="font-size: 2rem; font-family: 'Orbitron'; font-weight: 700;">412</div>
+        <div style="font-size: 0.75rem; color: var(--ctf-danger); margin-top: 10px;">High Velocity Activity</div>
+    </div>
+
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 25px;">
+
+    <div class="cyber-card">
+        <h3
+            style="font-family: 'Orbitron'; font-size: 1rem; margin-bottom: 25px; border-bottom: 1px solid var(--ctf-border); padding-bottom: 15px;">
+            LIVE_ACTIVITY_FEED</h3>
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            {% for i in range(5) %}
+            <div
+                style="display: flex; gap: 15px; align-items: center; padding-bottom: 15px; border-bottom: 1px dotted var(--ctf-border);">
+                <div
+                    style="width: 40px; height: 40px; background: var(--ctf-accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--ctf-accent);">
+                    <i class='bx bx-user'></i>
+                </div>
+                <div style="flex: 1;">
+                    <div style="font-size: 0.85rem; font-weight: bold;">User_{{ range(1000, 9999)|random }} <span
+                            style="font-weight: normal; color: var(--ctf-text-dim);">solved</span> Shell_Escape</div>
+                    <div style="font-size: 0.7rem; color: var(--ctf-text-dim); font-family: 'JetBrains Mono';">
+                        TIMESTAMP: 2026.02.23 02:46:12</div>
+                </div>
+                <div style="color: var(--ctf-success); font-family: 'Orbitron'; font-size: 0.8rem;">+200 XP</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="cyber-card">
+        <h3
+            style="font-family: 'Orbitron'; font-size: 1rem; margin-bottom: 25px; border-bottom: 1px solid var(--ctf-border); padding-bottom: 15px;">
+            TOP_SQUADS</h3>
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-family: 'JetBrains Mono'; font-size: 0.85rem;">1. Team_Alpha</span>
+                <span style="font-family: 'Orbitron'; font-size: 0.8rem; color: var(--ctf-accent);">2400 pts</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-family: 'JetBrains Mono'; font-size: 0.85rem;">2. Shadow_Net</span>
+                <span style="font-family: 'Orbitron'; font-size: 0.8rem; color: var(--ctf-accent);">2150 pts</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-family: 'JetBrains Mono'; font-size: 0.85rem;">3. Byte_Hunters</span>
+                <span style="font-family: 'Orbitron'; font-size: 0.8rem; color: var(--ctf-accent);">1900 pts</span>
+            </div>
+        </div>
+        <button
+            style="width: 100%; margin-top: 25px; padding: 12px; background: var(--ctf-accent-dim); border: 1px solid var(--ctf-accent); color: var(--ctf-accent); font-family: 'Orbitron'; font-size: 0.75rem; cursor: pointer; transition: 0.3s;">FULL_REPORT_ACCESS</button>
+    </div>
+
+</div>
+{% endblock %}

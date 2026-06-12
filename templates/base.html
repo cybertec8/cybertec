@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}CYBERTEC8 | Capture The Flag Platform{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CyberTec8 - The ultimate CTF platform for cybersecurity enthusiasts.">
+
+    <!-- Global Theme System -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-system.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cyber-theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/features-ladder.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cursor.css') }}">
+
+    <!-- Bootstrap & Fonts -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+    <!-- Theme Manager (must be in head to prevent FOUC) -->
+    <script src="{{ url_for('static', filename='js/theme-manager.js') }}"></script>
+
+    <style>
+        /* Global Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            overflow-x: hidden;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding-top: 68px;
+            /* Space for fixed navbar */
+        }
+
+        /* Navbar Styles - Now handled by cyber-theme.css */
+        .navbar-brand img {
+            height: 55px;
+            width: auto;
+        }
+
+        /* Maintenance Banner */
+        .maintenance-banner {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            color: #fff;
+            text-align: center;
+            padding: 8px 12px;
+            font-weight: 600;
+            font-size: 13px;
+            position: fixed;
+            top: 68px;
+            /* Below navbar */
+            left: 0;
+            right: 0;
+            z-index: 999;
+        }
+
+        /* Page Layout */
+        .page-content {
+            min-height: 80vh;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .navbar {
+                padding: 10px 20px;
+            }
+        }
+
+        /* Ensure navbar interaction */
+        .navbar,
+        .navbar-nav,
+        .nav-item,
+        .nav-link {
+            pointer-events: auto;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- Fixed Navbar -->
+    {% include "includes/navbar.html" %}
+
+    <!-- Main Content -->
+    <main class="page-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Advanced Cursor System -->
+    {% include "includes/cursor.html" %}
+
+    <!-- Footer Script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/cursor-system.js') }}"></script>
+    <script>
+        // Ensure navbar active state on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const path = window.location.pathname;
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('href') === path) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

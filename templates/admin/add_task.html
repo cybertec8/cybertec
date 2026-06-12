@@ -1,0 +1,167 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Add Task - Admin Panel{% endblock %}
+{% block breadcrumb %}Add Task{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-form-container {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 25px;
+    }
+
+    .form-box {
+        background: var(--admin-card-bg);
+        border: 1px solid var(--admin-border);
+        padding: 25px;
+        border-radius: 12px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #94a3b8;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+    }
+
+    .form-control {
+        width: 100%;
+        background: #020617;
+        border: 1px solid var(--admin-border);
+        color: #fff;
+        padding: 12px;
+        border-radius: 8px;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .form-control:focus {
+        border-color: var(--admin-accent);
+    }
+
+    .btn-create {
+        background: var(--admin-accent);
+        color: #020617;
+        border: none;
+        padding: 15px;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        width: 100%;
+        transition: transform 0.2s, background 0.2s;
+        text-transform: uppercase;
+    }
+
+    .btn-create:hover {
+        background: #7dd3fc;
+        transform: translateY(-2px);
+    }
+
+    @media (max-width: 992px) {
+        .admin-form-container {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+    <h1 class="page-title">Deploy New Challenge</h1>
+    <p class="page-subtitle">Configure the parameters and upload artifacts for the new CTF task.</p>
+</div>
+
+<form method="POST" enctype="multipart/form-data" class="admin-form-container">
+    <!-- Main Configuration -->
+    <div class="form-box">
+        <div class="form-group">
+            <label>Challenge Title</label>
+            <input type="text" name="title" class="form-control" placeholder="e.g. Broken Authentication" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label>Category</label>
+                <select name="category" class="form-control" required>
+                    <option value="Web">Web Security</option>
+                    <option value="Crypto">Cryptography</option>
+                    <option value="Reverse">Reverse Engineering</option>
+                    <option value="Forensics">Digital Forensics</option>
+                    <option value="Pwn">Binary Exploitation</option>
+                    <option value="Misc">Miscellaneous</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Difficulty Level</label>
+                <select name="level" class="form-control" required>
+                    <option value="Easy">EASY</option>
+                    <option value="Medium">MEDIUM</option>
+                    <option value="Hard">HARD</option>
+                    <option value="Insane">INSANE</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Description / Briefing</label>
+            <textarea name="description" class="form-control" rows="8"
+                placeholder="Detailed instructions for the participant..." required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Target Flag</label>
+            <input type="text" name="flag" class="form-control" placeholder="CTF{flag_result_here}" required>
+        </div>
+    </div>
+
+    <!-- Sidebar Configuration -->
+    <div style="display: flex; flex-direction: column; gap: 25px;">
+        <div class="form-box">
+            <div class="form-group">
+                <label>Points Reward</label>
+                <input type="number" name="points" class="form-control" value="100" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label>Event Attachment</label>
+                <select name="event_id" class="form-control">
+                    <option value="">Global (No Specific Event)</option>
+                    {% for event in events %}
+                    <option value="{{ event.id }}">{{ event.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Challenge Artifacts</label>
+                <input type="file" name="challenge_file" class="form-control" multiple>
+                <small style="color: #64748b; margin-top: 5px; display: block;">Upload ZIP, PDF, or binary
+                    files.</small>
+            </div>
+
+            <div class="form-group">
+                <label>Preview Image</label>
+                <input type="file" name="preview_image" class="form-control" accept="image/*">
+            </div>
+
+            <div class="form-group">
+                <label>Intelligence Hint</label>
+                <textarea name="hint" class="form-control" rows="2"
+                    placeholder="Subtle clue for the agent..."></textarea>
+            </div>
+
+            <button type="submit" class="btn-create">
+                <i class='bx bx-cloud-upload'></i> Deploy Task
+            </button>
+        </div>
+    </div>
+</form>
+{% endblock %}

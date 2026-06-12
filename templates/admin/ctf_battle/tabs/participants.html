@@ -1,0 +1,43 @@
+<div class="cyber-card">
+    <h3 style="margin-top: 0; color: #fff;"><i class='bx bx-group'></i> Intercepted Participants</h3>
+    <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.05); margin: 15px 0;">
+
+    <div style="overflow-x: auto;">
+        <table class="table table-dark table-hover">
+            <thead>
+                <tr style="color: #64748b; font-size: 0.75rem; text-transform: uppercase;">
+                    <th>Operator</th>
+                    <th>Email</th>
+                    <th>Intercepted IP</th>
+                    <th>User Agent</th>
+                    <th>Last Active</th>
+                    <th style="text-align: right;">Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sess in participants %}
+                <tr>
+                    <td>
+                        <div style="font-weight: 700; color: #fff;">{{ sess.user.username }}</div>
+                    </td>
+                    <td><small style="color: #94a3b8;">{{ sess.user.email }}</small></td>
+                    <td style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">{{ sess.ip_address }}</td>
+                    <td>
+                        <div style="font-size: 0.7rem; color: #64748b; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                            title="{{ sess.user_agent }}">
+                            {{ sess.user_agent }}
+                        </div>
+                    </td>
+                    <td style="font-size: 0.85rem;">{{ sess.last_active.strftime('%H:%M:%S') }}</td>
+                    <td style="text-align: right; color: var(--admin-accent); font-weight: 700;">
+                        <!-- Calculate points for this user in this event -->
+                        {% set user_points = event.solves|selectattr('user_id', 'equalto',
+                        sess.user_id)|sum(attribute='points') %}
+                        {{ user_points }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

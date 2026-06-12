@@ -1,0 +1,467 @@
+{% extends "base.html" %}
+
+{% block title %}Agent Profile | CYBERTEC8{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Hide Navbar and Footer for Onboarding */
+  .navbar,
+  header,
+  footer {
+    display: none !important;
+  }
+
+ body {
+    padding-top: 0 !important;
+    margin: 0;
+    background-color: #050a10;
+
+    background-image:
+      linear-gradient(rgba(132, 204, 22, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(132, 204, 22, 0.08) 1px, transparent 1px);
+
+    background-size: 40px 40px;
+}
+   body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 2px;
+  height: 100vh;
+
+  background: #84cc16;
+
+  box-shadow:
+    0 0 10px #84cc16,
+    0 0 20px #84cc16,
+    0 0 40px #84cc16;
+
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 2px;
+
+  background: #84cc16;
+
+  box-shadow:
+    0 0 10px #84cc16,
+    0 0 20px #84cc16,
+    0 0 40px #84cc16;
+
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
+  .agent-profile-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .agent-modal {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 440px;
+    background: #0b1220;
+    border: 1px solid #84cc16;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(132, 204, 22, 0.15);
+    color: #fff;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    overflow: hidden;
+  }
+
+  .modal-header-cyber {
+    text-align: center;
+    padding: 28px 24px 12px;
+    border-bottom: 1px solid rgba(132, 204, 22, 0.15);
+  }
+
+  .modal-header-cyber .agent-tag {
+    font-size: 10px;
+    color: rgba(132, 204, 22, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 6px;
+  }
+
+  .modal-header-cyber h2 {
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #84cc16;
+    margin: 0;
+  }
+
+  .modal-body-cyber {
+    padding: 20px 24px;
+    max-height: 65vh;
+    overflow-y: auto;
+  }
+
+  .modal-body-cyber::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .modal-body-cyber::-webkit-scrollbar-thumb {
+    background: #84cc16;
+    border-radius: 10px;
+  }
+
+  /* Avatar Section */
+  .avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .circular-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid #84cc16;
+    object-fit: cover;
+    margin-bottom: 10px;
+    background: #050a10;
+    box-shadow: 0 0 12px rgba(132, 204, 22, 0.4);
+  }
+
+  .avatar-btn-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .btn-avatar-action {
+    background: transparent;
+    color: #84cc16;
+    border: 1px solid #84cc16;
+    padding: 5px 14px;
+    font-size: 10px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+
+  .btn-avatar-action:hover {
+    background: #84cc16;
+    color: #0b1220;
+  }
+
+  .avatar-grid-container {
+    display: none;
+    margin-top: 12px;
+    width: 100%;
+  }
+
+  .avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+    background: rgba(5, 10, 16, 0.6);
+    border: 1px solid rgba(132, 204, 22, 0.2);
+    border-radius: 4px;
+    padding: 10px;
+  }
+
+  .avatar-option {
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    padding: 2px;
+    transition: all 0.15s;
+  }
+
+  .avatar-option img {
+    width: 100%;
+    border-radius: 3px;
+    display: block;
+  }
+
+  .avatar-option:hover {
+    border-color: rgba(132, 204, 22, 0.6);
+    background: rgba(132, 204, 22, 0.08);
+  }
+
+  .avatar-option.selected {
+    border-color: #84cc16;
+    background: rgba(132, 204, 22, 0.15);
+    box-shadow: 0 0 8px rgba(132, 204, 22, 0.4);
+  }
+
+  /* Form Fields */
+  .form-group-cyber {
+    margin-bottom: 14px;
+  }
+
+  .form-group-cyber label {
+    display: block;
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.55);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+  }
+
+  .form-input-cyber {
+    width: 100%;
+    background: rgba(5, 10, 16, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding: 10px 12px;
+    font-size: 12px;
+    border-radius: 4px;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+  }
+
+  .form-input-cyber:focus {
+    border-color: #84cc16;
+    outline: none;
+    box-shadow: 0 0 8px rgba(132, 204, 22, 0.25);
+  }
+
+  .form-input-cyber[readonly] {
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.35);
+    cursor: not-allowed;
+  }
+
+  .form-input-cyber::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+  }
+
+  textarea.form-input-cyber {
+    resize: vertical;
+    min-height: 70px;
+  }
+
+  .row-flex {
+    display: flex;
+    gap: 12px;
+  }
+
+  .col-flex {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Footer Buttons */
+  .modal-footer-cyber {
+    display: flex;
+    gap: 12px;
+    padding: 16px 24px 20px;
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .btn-cancel {
+    flex: 1;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 11px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-family: inherit;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-cancel:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #fff;
+  }
+
+  .btn-save {
+    flex: 1;
+    background: #84cc16;
+    border: none;
+    color: #0b1220;
+    padding: 11px;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-family: inherit;
+  }
+
+  .btn-save:hover {
+    background: #65a30d;
+    box-shadow: 0 0 12px rgba(132, 204, 22, 0.3);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="agent-profile-wrapper">
+  <div class="agent-modal">
+
+    <!-- Header -->
+    <div class="modal-header-cyber">
+      <h2>Agent Profile</h2>
+    </div>
+
+    <form method="POST">
+
+      <div class="modal-body-cyber">
+
+        <!-- Avatar -->
+        <div class="avatar-section">
+          {% if current_user.profile_image and current_user.avatar_type == 'custom' %}
+          <img src="{{ url_for('static', filename=current_user.profile_image) }}" id="avatarPreview"
+            class="circular-avatar" alt="Avatar">
+          {% elif current_user.avatar_filename %}
+          <img src="{{ url_for('static', filename='avatars/' ~ current_user.avatar_filename) }}" id="avatarPreview"
+            class="circular-avatar" alt="Avatar">
+          {% else %}
+          <img src="{{ url_for('static', filename='avatars/avatar1.png') }}" id="avatarPreview" class="circular-avatar"
+            alt="Avatar">
+          {% endif %}
+
+          <!-- Stores the selected preset avatar filename -->
+          <input type="hidden" name="avatar" id="avatarInput"
+            value="{{ current_user.avatar_filename or 'avatar1.png' }}">
+
+          <div class="avatar-btn-row">
+            <button type="button" class="btn-avatar-action" id="btnReplaceAvatar">Replace Avatar</button>
+          </div>
+
+          <!-- Collapsible 12-avatar grid -->
+          <div class="avatar-grid-container" id="avatarGridContainer">
+            <div class="avatar-grid">
+              {% for i in range(1, 13) %}
+              <div
+                class="avatar-option {% if current_user.avatar_filename == 'avatar' ~ i ~ '.png' %}selected{% endif %}"
+                data-avatar="avatar{{ i }}.png">
+                <img src="{{ url_for('static', filename='avatars/avatar' ~ i ~ '.png') }}" alt="Avatar {{ i }}">
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Username -->
+        <div class="form-group-cyber">
+          <label>Username</label>
+          <input type="text" name="username" class="form-input-cyber" value="{{ current_user.username or '' }}"
+            placeholder="agent_codename" required>
+        </div>
+
+        <!-- Email (Readonly) -->
+        <div class="form-group-cyber">
+          <label>Email — via Google OAuth</label>
+          <input type="email" class="form-input-cyber" value="{{ current_user.email or '' }}" readonly>
+        </div>
+
+        <!-- Mobile -->
+        <div class="form-group-cyber">
+          <label>Mobile Number</label>
+          <input type="text" name="mobile" class="form-input-cyber" value="{{ current_user.mobile or '' }}"
+            placeholder="+91XXXXXXXXXX">
+        </div>
+
+        <!-- Bio -->
+        <div class="form-group-cyber">
+          <label>Biography</label>
+          <textarea name="bio" class="form-input-cyber"
+            placeholder="Describe your expertise...">{{ current_user.bio or '' }}</textarea>
+        </div>
+
+        <!-- Social Links Row -->
+        <div class="row-flex">
+          <div class="col-flex">
+            <div class="form-group-cyber">
+              <label>LinkedIn</label>
+              <input type="url" name="linkedin_url" class="form-input-cyber"
+                value="{{ current_user.linkedin_url or '' }}" placeholder="https://...">
+            </div>
+          </div>
+          <div class="col-flex">
+            <div class="form-group-cyber">
+              <label>GitHub</label>
+              <input type="url" name="github_url" class="form-input-cyber" value="{{ current_user.github_url or '' }}"
+                placeholder="https://...">
+            </div>
+          </div>
+        </div>
+
+        <!-- Discord -->
+        <div class="form-group-cyber" style="margin-bottom: 0;">
+          <label>Discord Handle</label>
+          <input type="text" name="discord_handle" class="form-input-cyber"
+            value="{{ current_user.discord_handle or '' }}" placeholder="username#0000">
+        </div>
+
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="modal-footer-cyber">
+        <a href="{{ url_for('home') }}" class="btn-cancel">Cancel</a>
+        <button type="submit" class="btn-save">Save Profile</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var preview = document.getElementById('avatarPreview');
+    var hiddenInput = document.getElementById('avatarInput');
+    var gridContainer = document.getElementById('avatarGridContainer');
+    var btnReplace = document.getElementById('btnReplaceAvatar');
+    var options = document.querySelectorAll('.avatar-option');
+
+    // Toggle avatar grid visibility
+    btnReplace.addEventListener('click', function () {
+      gridContainer.style.display = gridContainer.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Click a preset avatar
+    options.forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        options.forEach(function (o) { o.classList.remove('selected'); });
+        this.classList.add('selected');
+        hiddenInput.value = this.getAttribute('data-avatar');
+        preview.src = this.querySelector('img').src;
+        gridContainer.style.display = 'none';
+      });
+    });
+  })();
+</script>
+{% endblock %}

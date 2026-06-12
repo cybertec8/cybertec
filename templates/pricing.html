@@ -1,0 +1,99 @@
+{% extends "console/base.html" %}
+
+{% block page_title %}Educational & Study Resources{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Educational & Study Resources</h1>
+    <p class="page-subtitle">Premium learning paths, study materials, and certification prep kits.</p>
+</div>
+
+<div class="grid grid-3 gap-lg">
+    <!-- Basic Tier -->
+    <div class="card" style="display: flex; flex-direction: column;">
+        <div
+            style="padding: 10px; background: rgba(34, 197, 94, 0.1); border-radius: 4px; text-align: center; margin-bottom: 20px;">
+            <span
+                style="color: var(--accent-green); font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">Basic
+                Learner</span>
+        </div>
+        <h2 style="font-size: 2.5rem; margin-bottom: 10px;">Free</h2>
+        <p class="text-secondary" style="margin-bottom: 20px;">Access to communal tools and public study guides.</p>
+
+        <ul style="list-style: none; padding: 0; margin-bottom: 30px; flex-grow: 1;">
+            <li style="margin-bottom: 12px; font-size: 0.9rem;"><i class='bx bx-check-circle'
+                    style="color: var(--accent-green);"></i> Public CTF Events</li>
+            <li style="margin-bottom: 12px; font-size: 0.9rem;"><i class='bx bx-check-circle'
+                    style="color: var(--accent-green);"></i> Base Study PDFs</li>
+            <li style="margin-bottom: 12px; font-size: 0.9rem;"><i class='bx bx-check-circle'
+                    style="color: var(--accent-green);"></i> Community Support</li>
+        </ul>
+
+        <a href="{{ url_for('register') }}" class="btn btn-secondary" style="width: 100%;">Current Plan</a>
+    </div>
+
+    <!-- Pro Tier -->
+    <div class="card"
+        style="display: flex; flex-direction: column; border-color: var(--accent-green); position: relative; overflow: hidden;">
+        <div
+            style="position: absolute; top: 12px; right: -30px; background: var(--accent-green); color: #000; padding: 4px 40px; transform: rotate(45deg); font-size: 0.7rem; font-weight: 800;">
+            POPULAR</div>
+        <div
+            style="padding: 10px; background: rgba(34, 197, 94, 0.1); border-radius: 4px; text-align: center; margin-bottom: 20px;">
+            <span
+                style="color: var(--accent-green); font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">Pro
+                Researcher</span>
+        </div>
+        <h2 style="font-size: 2.5rem; margin-bottom: 10px;">$19<span
+                style="font-size: 1rem; color: var(--text-muted);">/mo</span></h2>
+        <p class="text-secondary" style="margin-bottom: 20px;">Advanced labs and certified practice materials.</p>
+
+        <ul style="list-style: none; padding: 0; margin-bottom: 30px; flex-grow: 1;">
+            <li style="margin-bottom: 12px; font-size: 0.9rem;"><i class='bx bx-check-circle'
+                    style="color: var(--accent-green);"></i> All Basic Features</li>
+            <li style="margin-bottom: 12px; font-size: 0.9rem;"><i class='bx bx-check-circle'
+                    style="color: var(--accent-green);"></i> Private Practice Labs</li>
+            <li style="margin-bottom: 12px; font-size: 0.9rem;"><i class='bx bx-check-circle'
+                    style="color: var(--accent-green);"></i> Certification Prep Kits</li>
+            <li style="margin-bottom: 12px; font-size: 0.9rem;"><i class='bx bx-check-circle'
+                    style="color: var(--accent-green);"></i> Priority Event Access</li>
+        </ul>
+
+        <a href="#" class="btn btn-primary" style="width: 100%;">Upgrade to Pro</a>
+    </div>
+
+    <!-- Enterprise Tier -->
+    <div class="card" style="display: flex; flex-direction: column;">
+        <div
+            style="padding: 10px; background: rgba(34, 197, 94, 0.1); border-radius: 4px; text-align: center; margin-bottom: 20px;">
+            <span
+                style="color: var(--accent-green); font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">Institute
+                / Org</span>
+        </div>
+        <h2 style="font-size: 2.5rem; margin-bottom: 10px;">Custom</h2>
+        <p class="text-secondary" style="margin-bottom: 20px;">Dedicated infrastructure for organizations and
+            universities.</p>
+
+        <ul style="list-style: none; padding: 0; margin-bottom: 30px; flex-grow: 1;">
+            <li style="margin-bottom: 12px; font-size: 0.9rem;"><i class='bx bx-check-circle'
+                    style="color: var(--accent-green);"></i> Custom CTF Hosting</li>
+            <li style="margin-bottom: 12px; font-size: 0.9rem;"><i class='bx bx-check-circle'
+                    style="color: var(--accent-green);"></i> User Management API</li>
+            <li style="margin-bottom: 12px; font-size: 0.9rem;"><i class='bx bx-check-circle'
+                    style="color: var(--accent-green);"></i> Dedicated Support</li>
+            <li style="margin-bottom: 12px; font-size: 0.9rem;"><i class='bx bx-check-circle'
+                    style="color: var(--accent-green);"></i> White-label Option</li>
+        </ul>
+
+        <a href="mailto:cybertecc4@gmail.com" class="btn btn-secondary" style="width: 100%;">Contact Sales</a>
+    </div>
+</div>
+
+<div class="mt-lg p-md"
+    style="background: rgba(34, 197, 94, 0.05); border-radius: 8px; border: 1px solid var(--border-color); text-align: center;">
+    <p style="margin: 0; font-size: 0.9rem; color: var(--text-secondary);">
+        Need custom study materials or group discounts? <a href="mailto:cybertecc4@gmail.com"
+            style="color: var(--accent-green); text-decoration: none; font-weight: 700;">Email us.</a>
+    </p>
+</div>
+{% endblock %}

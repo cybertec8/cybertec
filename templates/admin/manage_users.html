@@ -1,0 +1,52 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Manage Users - Admin Panel{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+    <h1 class="page-title">Manage Platform Users</h1>
+    <p class="page-subtitle">View and manage all registered users on the platform.</p>
+</div>
+
+<div class="cyber-card">
+    <div class="table-responsive">
+        <table class="table table-dark table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <span
+                            class="badge {% if user.role == 'admin' %}bg-danger{% elif user.role == 'ctf_admin' %}bg-warning text-dark{% else %}bg-info text-dark{% endif %}">
+                            {{ user.role | upper }}
+                        </span>
+                    </td>
+                    <td>{{ user.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>
+                        <form action="{{ url_for('admin.delete_user', user_id=user.id) }}" method="POST"
+                            style="display:inline;"
+                            onsubmit="return confirm('Are you sure you want to delete this user?');">
+                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                <i class='bx bx-trash'></i> Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

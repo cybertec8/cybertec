@@ -1,0 +1,76 @@
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 25px;">
+    <!-- Security Alerts Feed -->
+    <div class="cyber-card" style="padding: 0; overflow: hidden; border-left: 4px solid #ef4444;">
+        <div
+            style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; font-size: 1rem; color: #ef4444;"><i class='bx bx-shield-quarter'></i> Operational
+                Security Alerts</h3>
+        </div>
+        <div style="padding: 20px; max-height: 500px; overflow-y: auto;">
+            {% if not alerts %}
+            <div style="text-align: center; padding: 40px; color: #64748b;">
+                <i class='bx bx-check-shield'
+                    style="font-size: 3rem; opacity: 0.2; display: block; margin-bottom: 10px;"></i>
+                No high-risk security threats detected in current cycle.
+            </div>
+            {% endif %}
+            {% for alert in alerts %}
+            <div
+                style="background: rgba(239, 68, 68, 0.05); padding: 15px; border-radius: 4px; border: 1px solid rgba(239, 68, 68, 0.1); margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <div style="color: #fff; font-weight: 700; margin-bottom: 5px;">{{
+                            alert.action.replace('SECURITY ALERT: ', '') }}</div>
+                        <div style="font-size: 0.8rem; color: #94a3b8;">Operator: <span style="color: #fff;">{{
+                                alert.user.username }}</span></div>
+                    </div>
+                    <div style="text-align: right;">
+                        <span class="badge bg-danger" style="font-size: 0.65rem;">THREAT DETECTED</span>
+                        <div style="font-size: 0.7rem; color: #64748b; margin-top: 5px;">{{
+                            alert.created_at.strftime('%H:%M:%S') }}</div>
+                    </div>
+                </div>
+                <div
+                    style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b;">
+                    <span>IP: {{ alert.ip_address }}</span>
+                    <span>LOC: {{ alert.city or 'Unmapped' }}, {{ alert.country or 'LOC' }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Surveillance Stats -->
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+        <div class="cyber-card">
+            <h4 style="margin-top: 0; font-size: 0.8rem; color: #fff; text-transform: uppercase;">IP Reuse Matrix</h4>
+            <div style="margin-top: 15px;">
+                {% if not ip_reuse %}
+                <p style="color: #64748b; font-size: 0.8rem; text-align: center;">No IP sharing detected.</p>
+                {% endif %}
+                {% for ip in ip_reuse %}
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 10px;">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #facc15;">{{
+                        ip.ip_address }}</div>
+                    <div class="badge bg-warning text-dark" style="font-size: 0.7rem;">{{ ip.user_count }} USERS</div>
+                </div>
+                {% endfor %}
+            </div>
+            <p style="font-size: 0.7rem; color: #64748b; margin-top: 15px;">Multiple operators using same uplink might
+                indicate collusion or hardware sharing.</p>
+        </div>
+
+        <div class="cyber-card">
+            <h4 style="margin-top: 0; font-size: 0.8rem; color: #fff; text-transform: uppercase;">Security Protocol</h4>
+            <ul style="padding-left: 15px; font-size: 0.8rem; color: #94a3b8; margin-top: 15px;">
+                <li style="margin-bottom: 8px;">Automated IP Reuse Detection: <span
+                        style="color: #4ade80;">ACTIVE</span></li>
+                <li style="margin-bottom: 8px;">Rapid Solve Heuristics: <span style="color: #4ade80;">ACTIVE</span></li>
+                <li style="margin-bottom: 8px;">Geo-location Tracking: <span style="color: #4ade80;">ACTIVE</span></li>
+                <li style="margin-bottom: 8px;">Public Interface Lock: <span style="color: #64748b;">INACTIVE</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+{% extends "ctf_admin/ctf_admin_base.html" %}
+
+{% block title %}Audit Logs | CTF-CMD{% endblock %}
+{% block page_title %}SYSTEM_AUDIT_TRAIL{% endblock %}
+
+{% block ctf_content %}
+<div class="cyber-card"
+    style="background: #000; font-family: 'JetBrains Mono'; padding: 25px; border-color: var(--ctf-border); position: relative; overflow: hidden;">
+    <div style="position: absolute; top: 0; right: 0; padding: 10px; font-size: 0.6rem; color: var(--ctf-accent-dim);">
+        SECURE_LOG_CHANNEL_01</div>
+    <div style="color: var(--ctf-success); font-size: 0.85rem; line-height: 1.8;">
+        <span style="color: var(--ctf-text-dim);">[2026.02.23 02:40:12]</span> <span
+            style="color: var(--ctf-accent);">INFO:</span> ADMIN_SESSION_INITIALIZED (USER: DevAdmin)<br>
+        <span style="color: var(--ctf-text-dim);">[2026.02.23 02:41:45]</span> <span
+            style="color: var(--ctf-accent);">INFO:</span> CHALLENGE_DEPLOY_SUCCESS (ID: 42, SRC: system_hub)<br>
+        <span style="color: var(--ctf-text-dim);">[2026.02.23 02:42:30]</span> <span
+            style="color: var(--ctf-danger);">WARN:</span> BRUTE_FORCE_DETECTED (IP: 192.168.1.104, TARGET:
+        /api/v1/auth)<br>
+        <span style="color: var(--ctf-text-dim);">[2026.02.23 02:44:05]</span> <span
+            style="color: var(--ctf-accent);">INFO:</span> FLAG_SUBMISSION_VALD (USER_ID: 102, STATUS: SUCCESS)<br>
+        <span style="color: var(--ctf-text-dim);">[2026.02.23 02:46:00]</span> <span
+            style="color: var(--ctf-accent);">INFO:</span> RE-ISOLATION_SEQUENCE_COMPLETE<br>
+        <span style="color: var(--ctf-text-dim); background: var(--ctf-accent-dim); padding: 2px 5px;">_
+            CURSOR_AWAITING_INPUT _</span>
+    </div>
+</div>
+{% endblock %}

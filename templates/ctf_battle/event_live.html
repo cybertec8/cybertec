@@ -1,0 +1,158 @@
+{% extends "console/base.html" %}
+
+{% block title %}{{ event.name }} - Live Battle{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-3">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-3"
+        style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+        <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="badge bg-success" style="font-size: 0.6rem; animation: pulse 2s infinite;">LIVE
+                    BATTLE</span>
+                <h1 class="text-xl font-bold text-white mb-0">{{ event.name }}</h1>
+            </div>
+            <p class="text-muted small mb-0">Combat phase is active. Submit flags to capture points.</p>
+        </div>
+        <div class="text-end">
+            <div class="text-muted small mb-1">Extraction In:</div>
+            <div id="countdown-live" class="text-white font-bold h5 mb-0">00:00:00</div>
+        </div>
+    </div>
+
+    <!-- Battle Grid -->
+    <div class="row">
+        <!-- Categories Loop -->
+        {% for cat in event.categories %}
+        <div class="col-12 mb-5">
+            <h2 class="h5 text-primary font-bold mb-4" style="letter-spacing: 1px; text-transform: uppercase;">
+                <i class='bx bx-chevron-right'></i> {{ cat.name }}
+            </h2>
+            <div class="row g-4">
+                {% for chal in cat.challenges %}
+                <div class="col-md-6 col-lg-3">
+                    <div class="cyber-card p-4 h-100 d-flex flex-column {% if chal.id in user_solves %}solved-mask{% endif %}"
+                        style="background: rgba(15, 23, 42, 0.4); border: 1px solid {% if chal.id in user_solves %}#4ade80{% else %}rgba(255,255,255,0.05){% endif %}; position: relative; cursor: pointer;"
+                        data-bs-toggle="modal" data-bs-target="#chalModal{{ chal.id }}">
+
+                        {% if chal.id in user_solves %}
+                        <div class="position-absolute top-0 end-0 p-2">
+                            <i class='bx bxs-check-shield text-success' style="font-size: 1.5rem;"></i>
+                        </div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            <h3 class="h6 text-white font-bold mb-1">{{ chal.title }}</h3>
+                            <div
+                                style="color: #4ade80; font-family: 'JetBrains Mono'; font-weight: 800; font-size: 0.9rem;">
+                                {{ chal.points }} PTS
+                            </div>
+                        </div>
+
+                        <div class="mt-auto d-flex justify-content-between align-items-center">
+                            <span class="text-muted" style="font-size: 0.7rem;">{{ chal.solves|length }} SOLVES</span>
+                            <span class="badge bg-dark text-muted"
+                                style="font-size: 0.6rem; border: 1px solid rgba(255,255,255,0.1);">VULN DETECTED</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Challenge Modal -->
+                <div class="modal fade" id="chalModal{{ chal.id }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content"
+                            style="background: #020617; border: 1px solid var(--admin-border); color: #fff; border-radius: 12px;">
+                            <div class="modal-header border-0 pb-0">
+                                <h5 class="modal-title font-bold">{{ chal.title }}</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-4 text-muted" style="font-size: 0.9rem; line-height: 1.6;">
+                                    {{ chal.description }}
+                                </div>
+
+                                {% if chal.hint %}
+                                <div class="mb-4">
+                                    <button class="btn btn-sm btn-outline-warning w-100" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#hint{{ chal.id }}">
+                                        <i class='bx bx-help-circle'></i> REVEAL DATA LEAK (HINT)
+                                    </button>
+                                    <div class="collapse mt-2" id="hint{{ chal.id }}">
+                                        <div class="p-3 rounded"
+                                            style="background: rgba(251, 191, 36, 0.05); border: 1px dashed #fbbf24; color: #fbbf24; font-size: 0.85rem;">
+                                            {{ chal.hint }}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                <form action="{{ url_for('battle.submit_flag') }}" method="POST">
+                                    <input type="hidden" name="challenge_id" value="{{ chal.id }}">
+                                    <div class="input-group mb-3">
+                                        <input type="text" name="flag" class="form-control" placeholder="CTF{flag_here}"
+                                            style="background: #0f172a; border: 1px solid #1e293b; color: #fff;"
+                                            required {% if chal.id in user_solves %}disabled value="ALREADY SOLVED" {%
+                                            endif %}>
+                                        <button class="btn btn-primary px-4" type="submit" {% if chal.id in user_solves
+                                            %}disabled{% endif %}>
+                                            <i class='bx bx-send'></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    @keyframes pulse {
+        0% {
+            opacity: 0.6;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0.6;
+        }
+    }
+
+    .solved-mask {
+        opacity: 0.8;
+    }
+</style>
+
+<script>
+    const endTime = new Date("{{ event.end_time.isoformat() }}").getTime();
+
+    const liveTimer = setInterval(function () {
+        const now = new Date().getTime();
+        const distance = endTime - now;
+
+        if (distance < 0) {
+            clearInterval(liveTimer);
+            window.location.reload();
+            return;
+        }
+
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("countdown-live").innerText =
+            hours.toString().padStart(2, '0') + ":" +
+            minutes.toString().padStart(2, '0') + ":" +
+            seconds.toString().padStart(2, '0');
+    }, 1000);
+</script>
+{% endblock %}

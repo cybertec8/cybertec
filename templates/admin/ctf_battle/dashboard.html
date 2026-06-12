@@ -1,0 +1,75 @@
+{% extends "admin/base.html" %}
+
+{% block title %}CTF Battle - Admin Panel{% endblock %}
+{% block breadcrumb %}CTF Battle{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+    <h1 class="page-title">CTF Battle Command</h1>
+    <p class="page-subtitle">Manage high-intensity CTF events, monitor participants, and control live battle sessions.
+    </p>
+</div>
+
+<div style="display: flex; justify-content: flex-end; margin-bottom: 25px;">
+    <a href="{{ url_for('ctf_battle.admin_create_event') }}" class="cyber-btn"
+        style="background: var(--admin-accent); color: #000; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 700;">
+        <i class='bx bx-plus-circle'></i> INITIALIZE NEW BATTLE
+    </a>
+</div>
+
+<div class="cyber-card">
+    <div class="table-responsive">
+        <table class="table table-dark table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Timing</th>
+                    <th>Status</th>
+                    <th>Visibility</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                <tr>
+                    <td>
+                        <div style="font-weight: 700; color: #fff;">{{ event.name }}</div>
+                        <small style="color: #94a3b8;">{{ event.categories|length }} Categories</small>
+                    </td>
+                    <td>
+                        <div style="font-size: 0.85rem;">
+                            <i class='bx bx-time'></i> {{ event.start_time.strftime('%Y-%m-%d %H:%M') }}
+                        </div>
+                        <small style="color: #64748b;">to {{ event.end_time.strftime('%Y-%m-%d %H:%M') }}</small>
+                    </td>
+                    <td>
+                        <span
+                            class="badge {% if event.status == 'Live' %}bg-success{% elif event.status == 'Paused' %}bg-info{% elif event.status == 'Ended' %}bg-danger{% else %}bg-warning text-dark{% endif %}">
+                            {{ event.status|upper }}
+                        </span>
+                    </td>
+                    <td>{{ event.visibility }}</td>
+                    <td>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <a href="{{ url_for('ctf_battle.event_hub', event_id=event.id) }}" class="cyber-btn"
+                                style="background: rgba(45, 212, 191, 0.1); color: #2dd4bf; border: 1px solid rgba(45, 212, 191, 0.3); padding: 5px 12px; border-radius: 4px; text-decoration: none; font-size: 0.75rem; font-weight: 700; white-space: nowrap;">
+                                MANAGE
+                            </a>
+                            <form action="{{ url_for('ctf_battle.admin_delete_event', event_id=event.id) }}"
+                                method="POST"
+                                onsubmit="return confirm('PERMANENTLY DELETE this event and all associated data?');"
+                                style="display: inline;">
+                                <button type="submit" class="cyber-btn" title="Delete Event"
+                                    style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; font-weight: 700;">
+                                    DELETE
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

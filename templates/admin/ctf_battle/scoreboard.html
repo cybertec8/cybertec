@@ -1,0 +1,58 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Battle Scoreboard - Admin Panel{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+    <h1 class="page-title">{{ event.name }} - Real-time Standings</h1>
+    <p class="page-subtitle">Live monitor of participant performance and points distribution.</p>
+</div>
+
+<div class="cyber-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <h3 style="margin: 0; color: #fff;">Combat Standings</h3>
+        <span style="font-weight: 700; color: var(--admin-accent);">STATUS: {{ event.status|upper }}</span>
+    </div>
+
+    {% if not scores %}
+    <div style="text-align: center; padding: 60px;">
+        <i class='bx bx-ghost' style="font-size: 3rem; color: rgba(255,255,255,0.05); margin-bottom: 20px;"></i>
+        <p style="color: #64748b;">No tactical gains recorded yet. The board is clear.</p>
+    </div>
+    {% else %}
+    <div class="table-responsive">
+        <table class="table table-dark table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Participant</th>
+                    <th>Tactical Points</th>
+                    <th>Last Solve Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for score in scores %}
+                <tr>
+                    <td>
+                        <span
+                            style="font-family: 'JetBrains Mono'; font-weight: 700; color: {% if loop.index == 1 %}#fbbf24{% elif loop.index == 2 %}#94a3b8{% elif loop.index == 3 %}#b45309{% else %}#64748b{% endif %};">
+                            #{{ loop.index }}
+                        </span>
+                    </td>
+                    <td>
+                        <div style="font-weight: 700; color: #fff;">{{ score.username }}</div>
+                    </td>
+                    <td>
+                        <div style="color: #4ade80; font-weight: 800; font-size: 1.1rem;">{{ score.total_points }}</div>
+                    </td>
+                    <td style="font-size: 0.85rem; color: #94a3b8;">
+                        {{ score.last_solve.strftime('%H:%M:%S • %Y-%m-%d') }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

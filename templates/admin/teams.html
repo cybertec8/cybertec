@@ -1,0 +1,71 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Manage Teams - Admin{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+    <h1 class="page-title">Manage Teams</h1>
+    <p class="page-subtitle">Monitor and manage registered teams and their captains.</p>
+</div>
+
+<div class="cyber-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <h3 style="margin: 0;">Team Registry</h3>
+        <span style="font-size: 0.85rem; color: var(--admin-accent);">TOTAL: {{ team_data|length }} TEAMS</span>
+    </div>
+
+    {% if team_data %}
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--admin-border);">
+                    <th style="padding: 15px; text-align: left; font-size: 0.75rem; color: var(--admin-accent);">ID</th>
+                    <th style="padding: 15px; text-align: left; font-size: 0.75rem; color: var(--admin-accent);">TEAM
+                        NAME</th>
+                    <th style="padding: 15px; text-align: left; font-size: 0.75rem; color: var(--admin-accent);">CAPTAIN
+                    </th>
+                    <th style="padding: 15px; text-align: left; font-size: 0.75rem; color: var(--admin-accent);">INVITE
+                        CODE</th>
+                    <th style="padding: 15px; text-align: left; font-size: 0.75rem; color: var(--admin-accent);">MEMBERS
+                    </th>
+                    <th style="padding: 15px; text-align: center; font-size: 0.75rem; color: var(--admin-accent);">
+                        ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for team in team_data %}
+                <tr style="border-bottom: 1px solid var(--admin-border); transition: background 0.3s;">
+                    <td style="padding: 15px; font-family: 'JetBrains Mono'; font-size: 0.8rem; color: #94a3b8;">#{{
+                        team.id }}</td>
+                    <td style="padding: 15px; font-weight: bold; color: #fff;">{{ team.name }}</td>
+                    <td style="padding: 15px;">
+                        <span
+                            style="border: 1px solid var(--admin-accent); color: var(--admin-accent); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem;">
+                            {{ team.captain_username }}
+                        </span>
+                    </td>
+                    <td style="padding: 15px;">
+                        <code
+                            style="background: #000; color: #fbbf24; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">{{ team.invite_code }}</code>
+                    </td>
+                    <td style="padding: 15px; font-size: 0.85rem;">{{ team.used_count }} / 4</td>
+                    <td style="padding: 15px; text-align: center;">
+                        <a href="{{ url_for('ctf_admin.delete_team', team_id=team.id) }}"
+                            onclick="return confirm('Confirm deletion? This will delete all team members and requests.')"
+                            style="color: #f87171; text-decoration: none;" title="Delete">
+                            <i class='bx bx-trash'></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 60px;">
+        <i class='bx bx-group' style="font-size: 3rem; color: var(--admin-border); margin-bottom: 15px;"></i>
+        <p style="color: #94a3b8;">No teams registered yet.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

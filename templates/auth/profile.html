@@ -1,0 +1,304 @@
+{% extends "base.html" %}
+
+{% block title %}{{ current_user.username }} | CYBERTEC8{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background: #050a10;
+        padding-top: 80px;
+    }
+
+    .profile-wrapper {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 30px 20px 60px;
+    }
+
+    /* ── Top Card ── */
+    .profile-top-card {
+        background: #0b1220;
+        border: 1px solid rgba(132, 204, 22, 0.4);
+        border-radius: 8px;
+        padding: 32px;
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        margin-bottom: 20px;
+        box-shadow: 0 0 30px rgba(132, 204, 22, 0.08);
+    }
+
+    .profile-avatar {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        border: 2px solid #84cc16;
+        object-fit: cover;
+        flex-shrink: 0;
+        box-shadow: 0 0 16px rgba(132, 204, 22, 0.4);
+    }
+
+    .profile-top-info h2 {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #84cc16;
+        margin: 0 0 4px;
+        letter-spacing: 1px;
+    }
+
+    .profile-top-info .email-tag {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.45);
+        margin-bottom: 12px;
+    }
+
+    .social-links {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .social-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 12px;
+        border: 1px solid rgba(132, 204, 22, 0.3);
+        border-radius: 4px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+        color: #84cc16;
+        text-decoration: none;
+        transition: 0.2s;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .social-badge:hover {
+        background: rgba(132, 204, 22, 0.1);
+        border-color: #84cc16;
+        color: #84cc16;
+    }
+
+    .social-badge.disabled {
+        color: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.08);
+        cursor: default;
+        pointer-events: none;
+    }
+
+    /* ── Info Card ── */
+    .profile-info-card {
+        background: #0b1220;
+        border: 1px solid rgba(132, 204, 22, 0.15);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+
+    .card-section-header {
+        padding: 12px 24px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: rgba(132, 204, 22, 0.7);
+        background: rgba(132, 204, 22, 0.04);
+        border-bottom: 1px solid rgba(132, 204, 22, 0.1);
+    }
+
+    .profile-row {
+        display: flex;
+        align-items: flex-start;
+        padding: 14px 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    .profile-row:last-child {
+        border-bottom: none;
+    }
+
+    .profile-label {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+        width: 130px;
+        flex-shrink: 0;
+        padding-top: 2px;
+    }
+
+    .profile-value {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.85);
+        flex: 1;
+        word-break: break-word;
+    }
+
+    .profile-value a {
+        color: #84cc16;
+        text-decoration: none;
+    }
+
+    .profile-value a:hover {
+        text-decoration: underline;
+    }
+
+    .not-added {
+        color: rgba(255, 255, 255, 0.2);
+        font-style: italic;
+    }
+
+    /* ── Edit Button ── */
+    .btn-edit-profile {
+        display: inline-block;
+        background: transparent;
+        border: 1px solid #84cc16;
+        color: #84cc16;
+        padding: 10px 28px;
+        border-radius: 4px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+    .btn-edit-profile:hover {
+        background: #84cc16;
+        color: #0b1220;
+        box-shadow: 0 0 12px rgba(132, 204, 22, 0.3);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-wrapper">
+
+    <!-- Top: Avatar + Username + Social Links -->
+    <div class="profile-top-card">
+
+        <!-- Avatar -->
+        {% if current_user.avatar_type == 'custom' and current_user.profile_image %}
+        <img src="{{ url_for('static', filename=current_user.profile_image) }}" class="profile-avatar" alt="Avatar">
+        {% elif current_user.avatar_filename %}
+        <img src="{{ url_for('static', filename='avatars/' ~ current_user.avatar_filename) }}" class="profile-avatar"
+            alt="Avatar">
+        {% else %}
+        <img src="{{ url_for('static', filename='avatars/avatar1.png') }}" class="profile-avatar" alt="Avatar">
+        {% endif %}
+
+        <div class="profile-top-info">
+            <h2>{{ current_user.username }}</h2>
+            <div class="email-tag">{{ current_user.email }}</div>
+
+            <!-- Social Badges -->
+            <div class="social-links">
+                {% if current_user.linkedin_url %}
+                <a href="{{ current_user.linkedin_url }}" target="_blank" rel="noopener" class="social-badge">🔗
+                    LinkedIn</a>
+                {% else %}
+                <span class="social-badge disabled">🔗 LinkedIn</span>
+                {% endif %}
+
+                {% if current_user.github_url %}
+                <a href="{{ current_user.github_url }}" target="_blank" rel="noopener" class="social-badge">🐙
+                    GitHub</a>
+                {% else %}
+                <span class="social-badge disabled">🐙 GitHub</span>
+                {% endif %}
+
+                {% if current_user.discord_handle %}
+                <span class="social-badge">💬 {{ current_user.discord_handle }}</span>
+                {% else %}
+                <span class="social-badge disabled">💬 Discord</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Details Card -->
+    <div class="profile-info-card">
+        <div class="card-section-header">// Agent Details</div>
+
+        <div class="profile-row">
+            <span class="profile-label">Username</span>
+            <span class="profile-value">{{ current_user.username }}</span>
+        </div>
+
+        <div class="profile-row">
+            <span class="profile-label">Email</span>
+            <span class="profile-value">{{ current_user.email }}</span>
+        </div>
+
+        <div class="profile-row">
+            <span class="profile-label">Mobile</span>
+            <span class="profile-value">
+                {% if current_user.mobile %}
+                {{ current_user.mobile }}
+                {% else %}
+                <span class="not-added">Not added</span>
+                {% endif %}
+            </span>
+        </div>
+
+        <div class="profile-row">
+            <span class="profile-label">Bio</span>
+            <span class="profile-value">
+                {% if current_user.bio %}
+                {{ current_user.bio }}
+                {% else %}
+                <span class="not-added">Not added</span>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+
+    <!-- Social Links Card -->
+    <div class="profile-info-card">
+        <div class="card-section-header">// Social Links</div>
+
+        <div class="profile-row">
+            <span class="profile-label">LinkedIn</span>
+            <span class="profile-value">
+                {% if current_user.linkedin_url %}
+                <a href="{{ current_user.linkedin_url }}" target="_blank">{{ current_user.linkedin_url }}</a>
+                {% else %}
+                <span class="not-added">Not added</span>
+                {% endif %}
+            </span>
+        </div>
+
+        <div class="profile-row">
+            <span class="profile-label">GitHub</span>
+            <span class="profile-value">
+                {% if current_user.github_url %}
+                <a href="{{ current_user.github_url }}" target="_blank">{{ current_user.github_url }}</a>
+                {% else %}
+                <span class="not-added">Not added</span>
+                {% endif %}
+            </span>
+        </div>
+
+        <div class="profile-row">
+            <span class="profile-label">Discord</span>
+            <span class="profile-value">
+                {% if current_user.discord_handle %}
+                {{ current_user.discord_handle }}
+                {% else %}
+                <span class="not-added">Not added</span>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+
+    <!-- Edit Button -->
+    <a href="{{ url_for('participant.profile') }}" class="btn-edit-profile">Edit Profile</a>
+
+</div>
+{% endblock %}
