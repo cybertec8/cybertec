@@ -297,10 +297,6 @@ def make_admin_now():
     return f"Success: {current_user.email} is now an admin. Logout and login again."
 
 
-# ---------------- DATABASE INIT ----------------
-with app.app_context():
-    db.create_all()
-
 
 # ---------------- RUN LOCAL ----------------
 if __name__ == "__main__":
