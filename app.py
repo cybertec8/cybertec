@@ -268,8 +268,8 @@ def google_callback():
 
     login_user(user)
 
-    if not user.profile_completed:
-        return redirect(url_for('participant.profile'))
+    #if not user.profile_completed:
+       #return redirect(url_for('participant.profile'))
 
     return redirect(url_for('home'))
 
