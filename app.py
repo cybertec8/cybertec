@@ -263,12 +263,12 @@ def google_callback():
             db.session.add(user)
         db.session.commit()
 
-    login_user(user)
+  login_user(user)
 
-    #if not user.profile_completed:
-       #return redirect(url_for('participant.profile'))
+if not user.profile_completed:
+    return redirect(url_for('participant.profile'))
 
-    return redirect(url_for('home'))
+return redirect(url_for('home'))
 
 @app.route("/logout")
 @login_required
