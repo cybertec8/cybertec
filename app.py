@@ -140,23 +140,23 @@ def require_login():
     admin_prefixes = ['admin.', 'ctf_admin.']
     is_admin_route = any(request.endpoint.startswith(p) for p in admin_prefixes if request.endpoint)
 
-    if app.config['DEV_MODE'] and not is_auth_route:
-        # Auto-login the dev user if not already authenticated
-        if not current_user.is_authenticated:
-            dev_user = User.query.filter_by(email=app.config['DEV_USER_EMAIL']).first()
-            if not dev_user:
-                dev_user = User(
-                    username="Dev User",
-                    email=app.config['DEV_USER_EMAIL'],
-                    is_admin=app.config['DEV_USER_IS_ADMIN']
-                )
-                db.session.add(dev_user)
-                db.session.commit()
-            elif dev_user.is_admin != app.config['DEV_USER_IS_ADMIN']:
-                dev_user.is_admin = app.config['DEV_USER_IS_ADMIN']
-                db.session.commit()
-            login_user(dev_user)
-        return  # skip all login enforcement in DEV_MODE
+# if app.config['DEV_MODE'] and not is_auth_route:
+#     # Auto-login the dev user if not already authenticated
+#     if not current_user.is_authenticated:
+#         dev_user = User.query.filter_by(email=app.config['DEV_USER_EMAIL']).first()
+#         if not dev_user:
+#             dev_user = User(
+#                 username="Dev User",
+#                 email=app.config['DEV_USER_EMAIL'],
+#                 is_admin=app.config['DEV_USER_IS_ADMIN']
+#             )
+#             db.session.add(dev_user)
+#             db.session.commit()
+#         elif dev_user.is_admin != app.config['DEV_USER_IS_ADMIN']:
+#             dev_user.is_admin = app.config['DEV_USER_IS_ADMIN']
+#             db.session.commit()
+#         login_user(dev_user)
+#     return
     # ── END DEV MODE ────────────────────────────────────────────────────────────
 
     if not GOOGLE_AUTH_ONLY:
