@@ -90,16 +90,13 @@ GOOGLE_AUTH_ONLY = True
 # Set to False to disable authentication (maintenance mode)
 AUTH_ENABLED = True
 app.config['AUTH_ENABLED'] = AUTH_ENABLED
+
+# Production Mode (IMPORTANT)
 app.config['DEV_MODE'] = False
 
-# DEV_MODE = True : auto-logs in a normal dev user (is_admin=False).
-#   - Navbar shows Dashboard + Logout (fully authenticated look).
-#   - /dashboard works normally; /admin/dashboard still requires real admin (if BYPASS_ADMIN=False).
-# DEV_MODE = False : full production auth — Google login required.
-app.config['DEV_MODE'] = True
 app.config['DEV_USER_EMAIL'] = "dev@cybertec8.local"
-app.config['DEV_USER_IS_ADMIN'] = False        # Set True to test admin UI
-app.config['DEV_BYPASS_ADMIN'] = True         # Set True to bypass ALL role checks
+app.config['DEV_USER_IS_ADMIN'] = False
+app.config['DEV_BYPASS_ADMIN'] = False
 
 # ---------------- BLOG UPLOAD CONFIG ----------------
 
