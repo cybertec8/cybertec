@@ -2,7 +2,7 @@ import os
 import uuid
 from flask import render_template, redirect, url_for, request, flash, current_app
 from werkzeug.utils import secure_filename
-from flask_login import current_user
+from flask_login import current_user, login_required
 from extensions import db
 from models import User, Team, TeamMember, Event, CTFTask, TaskSubmission, Activity, Blog
 from decorators import admin_required
@@ -13,6 +13,8 @@ def admin_root():
     return redirect(url_for("admin.dashboard"))
 
 @admin_bp.route("/dashboard")
+@login_required
+@admin_required
 def dashboard():
     total_events = Event.query.count()
     total_tasks = CTFTask.query.count()
