@@ -36,7 +36,7 @@ class User(db.Model, UserMixin):
     discord_handle = db.Column(db.String(100), default="")
     
     # 📈 PROGRESS DATA
-   xp = db.Column(db.Integer, nullable=False, default=0)
+  xp = db.Column(db.Integer, nullable=False, default=0)
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
