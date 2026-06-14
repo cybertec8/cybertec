@@ -30,18 +30,15 @@ class User(db.Model, UserMixin):
     avatar_filename = db.Column(db.String(255), default="avatar1.png")
     profile_completed = db.Column(db.Boolean, default=False)
 
-    # SOCIAL LINKS
+      # SOCIAL LINKS
     linkedin_url = db.Column(db.String(255), default="")
     github_url = db.Column(db.String(255), default="")
     discord_handle = db.Column(db.String(100), default="")
-    
-    # 📈 PROGRESS DATA
-  xp = db.Column(db.Integer, nullable=False, default=0)
+
+    # PROGRESS DATA
+    xp = db.Column(db.Integer, nullable=False, default=0)
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return f"<User {self.username}>"
 
 # ---------------- ACTIVITY MODEL ----------------
 
